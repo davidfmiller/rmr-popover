@@ -1,0 +1,11 @@
+{
+    "name": "popover",
+    "description": "popover",
+    "version": "0.1",
+    "url": "https://github.com/davidfmiller/popover",
+    "options": {
+        "linkNatives": "true",
+        "outdir": "./docs",
+        "paths": "."
+    }
+}

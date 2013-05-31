@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Popover</title>
+
+
+<style>
+/*
+YUI 3.5.0 (build 5089)
+Copyright 2012 Yahoo! Inc. All rights reserved.
+Licensed under the BSD License.
+http://yuilibrary.com/license/
+*/
+html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}input,textarea,select{*font-size:100%}legend{color:#000}#yui3-css-stamp.cssreset{display:none}
+
+html {
+  background: #fff;
+}
+
+body {
+  color: #000;
+  font: 13px arial;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+}
+
+div {
+  position: relative;
+  z-index: 1;
+}
+
+#doc {
+  width: 550px;
+  margin: 0 auto;
+  padding-top: 50px;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+p {
+  padding: 1em 100px 1em 0;
+}
+
+dl {
+  padding-right: 100px;
+}
+
+dd {
+  padding-left: 25px;
+  padding-bottom: 1em
+}
+
+pre, code {
+  color: #444;
+}
+
+pre {
+  background: rgba(0,0,0,0.1);
+  padding: 10px;
+}
+
+#backdrop {
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  z-index: 0;
+}
+
+</style>
+</head>
+<body>
+
+<div id="doc">
+  <h1>Popover</h1>
+  <p>
+    Popover is a simple YUI module to create popover widgets 
+  </p>
+<!--
+  <dl>
+    <dt><code>url</code></dt>
+    <dd>the path to the image that should be applied as the background image</dd>
+    <dt><code>id</code> (optional)</dt>
+    <dd>the id to apply the element ; defaults to "backdrop"</dd>
+    <dt><code>duration</code> (optional)</dt>
+    <dd>the length of time (in seconds) taken to introduce the backdrop; defaults to 1 second</dd>
+    <dt><code>styles</code> (optional)</dt>
+    <dd>object containing the background property names (ex: <code>position</code>, <code>repeat</code>, <code>size</code>) and the respective values that should be applied to the backdrop</dd>
+  </dl>
+
+  <p>
+    Two custom events are fired:
+  </p>
+
+  <dl>
+    <dt><code>start</code></dt>
+    <dd>fired when the image is loaded and the transition is about to begin</dd>
+    <dt><code>end</code></dt>
+    <dd>fired when the transition is complete</dd>
+  </dl>
+-->
+  <p>An example implementation follows:</p>
+
+  <pre>
+new Y.Popover({
+  node : Y.one('a'),
+  data : 'buh'
+}).pop()</pre>
+
+</div>
+
+<script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+<script>
+  YUI({
+    'modules' : {
+      'popover' : {
+        'fullpath' : 'popover.js',
+        'requires' : ['node', 'event', 'base', 'transition', 'event-resize']
+      }
+    }
+
+  }).use(function(Y) {
+
+    if (Y.UA.mobile) { return false; }
+
+    Y.use('popover', function(Y) {
+
+      var popover = new Y.Popover({
+            'node' : Y.one('a'),
+            'data' : 'rmr'
+          });
+
+    });
+  });
+</script>
+</body>
+</html>
