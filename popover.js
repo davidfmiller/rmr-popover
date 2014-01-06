@@ -90,6 +90,7 @@ YUI.add('popover', function(Y) {
                 offset[0] = e.target.get('region').width + data.margin;
                 offset[1] = (e.target.get('region').height - region.height) / 2;
 
+
   //              arrow.setStyle('top', (region.height - arrow.get('region').height) / 2 + 'px');
           
   //              Y.log(Y.one('body').get('winWidth'));
@@ -105,6 +106,13 @@ YUI.add('popover', function(Y) {
             }
 
             node.setXY([loc[0] + offset[0], loc[1] + offset[1]]);
+
+            // adjust location of arrow
+            if (data.orientation == 'horizontal') {
+              arrow.setXY([arrow.getXY[0], node.getXY()[1] + node.get('region').height / 2 - 5 ]);
+            } else {
+              arrow.setXY([node.getXY()[0] + node.get('region').width / 2 - 5, arrow.getXY()[1] ]);
+            }
 
             node.on('mouseenter', function() {
               if (timeouts[e.target.get('id')]) {
