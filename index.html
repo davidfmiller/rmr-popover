@@ -90,9 +90,8 @@ pre {
 
   <pre>
 new Y.Popover({
-  node : Y.one('a'),
-  data : 'buh'
-}).pop()</pre>
+  node : Y.one(document.body)
+});</pre>
 
 </div>
 
@@ -111,6 +110,14 @@ new Y.Popover({
     if (Y.UA.mobile) { return false; }
 
     Y.use('popover', function(Y) {
+
+      Y.on('popover:pop', function (obj) {
+        Y.log('pop: ' + obj.node.get('id'));
+      });
+
+      Y.on('popover:unpop', function (obj) {
+        Y.log('unpop: ' + obj.node.get('id'));
+      });
 
       var popover = new Y.Popover({
         'node' : Y.one(document.body)
