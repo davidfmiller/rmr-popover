@@ -16,20 +16,23 @@ YUI.add('popover', function(Y) {
      @constructor
      @param config (object)
      */
-    var pops = {}, Popover = function(config) {
+    var pops = {}, timeouts = {}, Popover = function(config) {
       Popover.superclass.constructor.apply(this, arguments);
 
 //      if (! this.get('node')) { return false; }
 
       Y.one(config.node).all('[data-popover]').each(function(n) {
 
-        Y.log(n);
+        var timeout = null;
+
         if (! n.get('id')) { n.set('id', Y.guid()); }
 
         n.on('mouseenter', function(e) {
 
-          Y.log('enter');
-          
+          if (pops[arguments[1].get('id')]) {
+            return;
+          }
+
           var defaults = {
             'class' : '',
             'location' : 'above',
@@ -37,7 +40,7 @@ YUI.add('popover', function(Y) {
           },
           offset = [0,0],
           json = Y.merge(defaults, Y.JSON.parse(e.target.getAttribute('data-popover'))),
-          n = Y.Node.create('<div class="popover '+ json.location + ' ' + (json.hasOwnProperty('class') ? json['class'] : '') + '"><b></b><div class="bd">' + json.content + '</div></div>'),
+          n = Y.Node.create('<div id="' + arguments[1].get('id') + '-popover" class="popover '+ json.location + ' ' + (json.hasOwnProperty('class') ? json['class'] : '') + '"><b></b><div class="bd">' + json.content + '</div></div>'),
           loc = e.target.getXY();
 
           switch (json['location']) {
@@ -53,17 +56,35 @@ YUI.add('popover', function(Y) {
           }
 
           Y.one(document.body).append(n);
+
+          n.on('mouseenter', function() {
+            if (timeouts[e.target.get('id')]) {
+              timeouts[e.target.get('id')].cancel();
+              delete timeouts[e.target.get('id')];
+            }
+          });
+          
+          n.on('mouseleave', function() {
+            timeouts[e.target.get('id')] = Y.later(300, null, function() {
+              pops[e.target.get('id')].remove();
+              delete(pops[e.target.get('id')]);
+            }, []);
+          });
+          
           n.setXY([loc[0] + offset[0], loc[1] + offset[1]]);
           pops[e.target.get('id')] = n;
           n.addClass('pop');
-        });
+        }, null, n);
 
         n.on('mouseleave', function(e) {
-          Y.log('leave');
-          Y.log(pops);
-          
-          pops[e.target.get('id')].remove();
-          delete(pops[e.target.get('id')]);
+
+          timeouts[e.target.get('id')] = Y.later(300, null, function() {
+            if (pops[e.target.get('id')]) {
+              pops[e.target.get('id')].remove();
+              delete(pops[e.target.get('id')]);
+            }
+          }, []);
+
         });
 
       });

@@ -9,6 +9,15 @@
   border-radius: 0px;
 }
 
+.popover a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.popover a:hover {
+  text-decoration: underline;
+}
+
 .popover.pop {
   -webkit-transition: opacity 0.1s;
   opacity: 1;
