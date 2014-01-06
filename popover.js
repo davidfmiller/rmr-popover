@@ -23,11 +23,10 @@ YUI.add('popover', function(Y) {
 
       Y.one(config.node).all('[data-popover]').each(function(n) {
 
-        var timeout = null;
-
         if (! n.get('id')) { n.set('id', Y.guid()); }
+        n.set('title', '');
 
-        n.on('mouseenter', function(e) {
+        var on = function(e) {
 
           if (pops[arguments[1].get('id')]) {
             return;
@@ -43,6 +42,8 @@ YUI.add('popover', function(Y) {
           n = Y.Node.create('<div id="' + arguments[1].get('id') + '-popover" class="popover '+ json.location + ' ' + (json.hasOwnProperty('class') ? json['class'] : '') + '"><b></b><div class="bd">' + json.content + '</div></div>'),
           loc = e.target.getXY();
 
+          Y.one(document.body).append(n);
+
           switch (json['location']) {
             case 'above':
               offset = [0,-30];
@@ -55,7 +56,6 @@ YUI.add('popover', function(Y) {
               offset = [0,0];
           }
 
-          Y.one(document.body).append(n);
 
           n.on('mouseenter', function() {
             if (timeouts[e.target.get('id')]) {
@@ -70,22 +70,25 @@ YUI.add('popover', function(Y) {
               delete(pops[e.target.get('id')]);
             }, []);
           });
-          
+
           n.setXY([loc[0] + offset[0], loc[1] + offset[1]]);
           pops[e.target.get('id')] = n;
           n.addClass('pop');
-        }, null, n);
-
-        n.on('mouseleave', function(e) {
-
-          timeouts[e.target.get('id')] = Y.later(300, null, function() {
-            if (pops[e.target.get('id')]) {
-              pops[e.target.get('id')].remove();
-              delete(pops[e.target.get('id')]);
+        },
+            off = function(e) {
+              timeouts[e.target.get('id')] = Y.later(300, null, function() {
+                if (pops[e.target.get('id')]) {
+                  pops[e.target.get('id')].remove();
+                  delete(pops[e.target.get('id')]);
+                }
+              }, []);
             }
-          }, []);
 
-        });
+        n.on('mouseenter', on, null, n);
+        n.on('focus', on, null, n);
+
+        n.on('mouseleave', off);
+        n.on('blur', off);
 
       });
 
