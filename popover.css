@@ -1,0 +1,68 @@
+
+.popover {
+  background: #000;
+	background: rgba(0,0,0,0.8);
+  position: absolute;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  opacity: 0;
+  color: #fff;
+  border-radius: 0px;
+}
+
+.popover.pop {
+  -webkit-transition: opacity 0.1s;
+  opacity: 1;
+}
+
+.popover .bd {
+  position: relative;
+  padding: 5px;
+}
+
+.popover .bd:after, .popover .bd:before {
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.popover.above .bd:after,
+.popover.above .bd:before {
+	top: 100%;
+	left: 50%;
+}
+
+
+.popover.below .bd:after,
+.popover.below .bd:before {
+  top: auto;
+  bottom: 100%;
+	left: 50%;
+}
+
+.popover.above .bd:after {
+	border-top-color: rgba(0,0,0,0.8);
+	border-width: 3px;
+	margin-left: -3px;
+}
+
+.popover.above .bd:before {
+	border-top-color: #000;
+	border-width: 4px;
+	margin-left: -4px;
+}
+
+
+.popover.below .bd:after {
+	border-bottom-color: #000;
+	border-width: 3px;
+	margin-left: -3px;
+}
+
+.popover.below .bd:before {
+	border-bottom-color: #000;
+	border-width: 4px;
+	margin-left: -4px;
+}

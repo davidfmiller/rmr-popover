@@ -38,6 +38,10 @@ h1 {
   font-size: 20px;
 }
 
+em {
+  border-bottom: 1px dotted #888;
+}
+
 p {
   padding: 1em 100px 1em 0;
 }
@@ -60,48 +64,19 @@ pre {
   padding: 10px;
 }
 
-#backdrop {
-  left: 0;
-  margin: 0;
-  opacity: 0;
-  padding: 0;
-  position: absolute;
-  top: 0;
-  z-index: 0;
-}
-
 </style>
+
+<link rel="stylesheet" type="text/css" href="popover.css">
+
 </head>
 <body>
 
 <div id="doc">
   <h1>Popover</h1>
   <p>
-    Popover is a simple YUI module to create popover widgets 
-  </p>
-<!--
-  <dl>
-    <dt><code>url</code></dt>
-    <dd>the path to the image that should be applied as the background image</dd>
-    <dt><code>id</code> (optional)</dt>
-    <dd>the id to apply the element ; defaults to "backdrop"</dd>
-    <dt><code>duration</code> (optional)</dt>
-    <dd>the length of time (in seconds) taken to introduce the backdrop; defaults to 1 second</dd>
-    <dt><code>styles</code> (optional)</dt>
-    <dd>object containing the background property names (ex: <code>position</code>, <code>repeat</code>, <code>size</code>) and the respective values that should be applied to the backdrop</dd>
-  </dl>
-
-  <p>
-    Two custom events are fired:
+    <a href="https://github.com/davidfmiller/popover/" data-popover='{"class":"buh","location":"above","content":"popover"}'>Popover</a> is a simple <em data-popover='{"class":"yui","location":"below","content":"yui"}'>YUI</em> module to create popover widgets.
   </p>
 
-  <dl>
-    <dt><code>start</code></dt>
-    <dd>fired when the image is loaded and the transition is about to begin</dd>
-    <dt><code>end</code></dt>
-    <dd>fired when the transition is complete</dd>
-  </dl>
--->
   <p>An example implementation follows:</p>
 
   <pre>
@@ -129,9 +104,8 @@ new Y.Popover({
     Y.use('popover', function(Y) {
 
       var popover = new Y.Popover({
-            'node' : Y.one('a'),
-            'data' : 'rmr'
-          });
+        'node' : Y.one(document.body)
+      });
 
     });
   });

@@ -9,21 +9,65 @@ YUI.add('popover', function(Y) {
 
     'use strict';
 
+
+
     /**
      @class Popover
      @constructor
      @param config (object)
      */
-    var Popover = function(config) {
+    var pops = {}, Popover = function(config) {
       Popover.superclass.constructor.apply(this, arguments);
-/*
-      this.set('url', config.hasOwnProperty('url') ? config.url : null);
-      this.set('id', config.hasOwnProperty('id') ? config.id : null);
-      this.set('duration', config.hasOwnProperty('duration') ? config.duration : null);
-      this.set('styles', config.hasOwnProperty('styles') ? config.styles : null);
-*/
-      if (! this.get('node')) { return false; }
-      
+
+//      if (! this.get('node')) { return false; }
+
+      Y.one(config.node).all('[data-popover]').each(function(n) {
+
+        Y.log(n);
+        if (! n.get('id')) { n.set('id', Y.guid()); }
+
+        n.on('mouseenter', function(e) {
+
+          Y.log('enter');
+          
+          var defaults = {
+            'class' : '',
+            'location' : 'above',
+            'content' : ''
+          },
+          offset = [0,0],
+          json = Y.merge(defaults, Y.JSON.parse(e.target.getAttribute('data-popover'))),
+          n = Y.Node.create('<div class="popover '+ json.location + ' ' + (json.hasOwnProperty('class') ? json['class'] : '') + '"><b></b><div class="bd">' + json.content + '</div></div>'),
+          loc = e.target.getXY();
+
+          switch (json['location']) {
+            case 'above':
+              offset = [0,-30];
+              break;
+            case 'below':
+              offset = [0,25];
+              break;
+            case 'left':
+            case 'right':
+              offset = [0,0];
+          }
+
+          Y.one(document.body).append(n);
+          n.setXY([loc[0] + offset[0], loc[1] + offset[1]]);
+          pops[e.target.get('id')] = n;
+          n.addClass('pop');
+        });
+
+        n.on('mouseleave', function(e) {
+          Y.log('leave');
+          Y.log(pops);
+          
+          pops[e.target.get('id')].remove();
+          delete(pops[e.target.get('id')]);
+        });
+
+      });
+
       return this;
     };
 
@@ -75,6 +119,7 @@ YUI.add('popover', function(Y) {
        @chainable
        */
       pop : function() {
+
         Y.all('.popover').remove();
         var $ = this,
             markup = '<div class="popover"><div class="bd ' + this.get('data') + '"></div></div>';
@@ -83,54 +128,7 @@ YUI.add('popover', function(Y) {
         Y.later(100, null, function() { Y.one('.popover').addClass('pop'); });
         Y.later(2000, null, function() { $.unpop(); });
 
-/*
-        if (typeof config === 'string') {
-          this.set('url', config);
-          this.set('styles', null)
-        } else if (config) {
-          if (config.hasOwnProperty('url')) { this.set('url', config.url); }
-          if (config.hasOwnProperty('duration')) { this.set('duration', config.duration); }
-          this.set('styles', config.hasOwnProperty('styles') ? config.styles : null);
-        }
-
-        var img = new Image(), o = {};
-
-        o.$ = this;
-        o.node = Y.Node.create('<div id="' + this.get('id') + '"></div>');
-
-        img.onload = function() {
-          Y.one('body').append(o.node);
-
-          var s = Y.merge(DEFAULT_STYLES, o.$.get('styles'));
-
-          o.$.fire('start', this.src);
-          s.image = 'url(' + this.src + ')';
-          o.$._applyStyles(o.node, s);
-
-          //o.node.setStyle('backgroundImage', 'url(' + this.src + ')');
-          o.$.resize();
-          o.node.transition({
-            'opacity' : 1,
-            'duration' : o.$.get('duration')
-          }, function() {
-            o.$.fire('end', o.$.get('url') );
-
-            var styles = Y.merge(DEFAULT_STYLES, o.$.get('styles')),
-                body = Y.one('body');
-
-            styles.image = 'url(' + img.src + ')';
-
-            o.$._applyStyles(body, styles);
-
-            o.node.remove();
-          });
-
-          Y.on('windowresize', function() { o.$.resize(); });
-        };
-        img.src = this.get('url');
-*/
         return this;
-
       },
 
       /**
@@ -163,5 +161,5 @@ YUI.add('popover', function(Y) {
 
     });
 
-  }, '3.3.1', { requires : ['node', 'base', 'event', 'event-resize', 'transition' ] });
+  }, '3.3.1', { requires : ['node', 'base', 'event', 'json-parse', 'event-resize', 'transition' ] });
 
