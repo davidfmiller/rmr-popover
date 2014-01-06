@@ -40,10 +40,11 @@ h1 {
 
 em {
   border-bottom: 1px dotted #888;
+/*  display: inline-block;*/
 }
 
 p {
-  padding: 1em 100px 1em 0;
+  padding: 1em 100px 0.5em 0;
 }
 
 dl {
@@ -64,6 +65,14 @@ pre {
   padding: 10px;
 }
 
+.popover.rmr .bd {
+  width: 400px;
+  height: 266px;
+  padding: 0;
+  background: url(moma.jpg);
+  border: 1px solid #000;
+}
+
 </style>
 
 <link rel="stylesheet" type="text/css" href="popover.css">
@@ -72,12 +81,12 @@ pre {
 <body>
 
 <div id="doc">
-  <h1>Popover</h1>
+  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"orientation":"vertical","content":"popover"}'>popover</a></h1>
   <p>
-    <a href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"class":"buh","location":"above","content":"popover"}'>Popover</a> is a simple <em data-popover='{"class":"yui","location":"below","content":"<a href=\"http://yuilibrary.com\" title=\"YUI\">yui</a>"}'>YUI</em> module to create popover widgets.
+    &hellip; is a simple <em tabindex="2" data-popover='{"class":"yui","orientation":"horizontal","content":"<a href=\"http://yuilibrary.com\" title=\"YUI\">YUI Library</a>"}'>YUI</em> module to create popover <em tabindex="3" data-popover='{"orientation":"horizontal","content":"widgets"}'>widgets</em>.
   </p>
 
-  <p>An example implementation follows:</p>
+  <p><em tabindex="4" data-popover='{"class":"rmr","orientation":"horizontal","margin":20}'>Example</em>:</p>
 
   <pre>
 new Y.Popover({

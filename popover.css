@@ -1,10 +1,13 @@
+@-webkit-keyframes pop-in {
+  0% { opacity: 0; -webkit-transform: scale(0.5); }
+  100% { opacity: 1; -webkit-transform: scale(1); }
+}
 
 .popover {
   background: #000;
 	background: rgba(0,0,0,0.8);
   position: absolute;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-  opacity: 0;
+  box-shadow: 1px 1px 2px rgba(48,48,48,1);
   color: #fff;
   border-radius: 0px;
 }
@@ -19,8 +22,7 @@
 }
 
 .popover.pop {
-  -webkit-transition: opacity 0.1s;
-  opacity: 1;
+  -webkit-animation:pop-in 0.1s;
 }
 
 .popover .bd {
@@ -28,7 +30,8 @@
   padding: 5px;
 }
 
-.popover .bd:after, .popover .bd:before {
+.popover b {
+  display: block;
 	border: solid transparent;
 	content: " ";
 	height: 0;
@@ -37,41 +40,56 @@
 	pointer-events: none;
 }
 
-.popover.above .bd:after,
-.popover.above .bd:before {
+.popover.top b {
 	top: 100%;
-	left: 50%;
+	left: 10px;
+	border-color: #000;
+  border-bottom: none;  
+  border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid black;
+}
+
+.popover.bottom b {
+	top: -5px;
+	left: 10px;
+	border-color: #000;
+  border-bottom: 5px solid black;
+  border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: none;
+}
+
+.popover.right b {
+  top: 50%;
+	left: -5px;
+	border-color: #000;
+  border-right: 5px solid black;
+  border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+  border-left: none;
+}
+
+.popover.left b {
+  top: 50%;
+	right: -5px;
+	border-color: #000;
+  border-left: 5px solid black;
+  border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+  border-right: none;
 }
 
 
-.popover.below .bd:after,
-.popover.below .bd:before {
-  top: auto;
-  bottom: 100%;
-	left: 50%;
-}
-
-.popover.above .bd:after {
-	border-top-color: rgba(0,0,0,0.8);
+/*
+.popover b:before {
+  border-top-color: #000;
 	border-width: 3px;
 	margin-left: -3px;
 }
 
-.popover.above .bd:before {
-	border-top-color: #000;
-	border-width: 4px;
-	margin-left: -4px;
-}
-
-
-.popover.below .bd:after {
-	border-bottom-color: #000;
-	border-width: 3px;
-	margin-left: -3px;
-}
-
-.popover.below .bd:before {
-	border-bottom-color: #000;
-	border-width: 4px;
-	margin-left: -4px;
-}
+.popover b:after {
+  border-top-color: #000;
+  border-width: 6px;
+	margin-left: -6px; 
+} */
