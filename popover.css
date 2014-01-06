@@ -3,93 +3,74 @@
   100% { opacity: 1; -webkit-transform: scale(1); }
 }
 
-.popover {
+.rmr-popover {
   background: #000;
 	background: rgba(0,0,0,0.8);
   position: absolute;
-  box-shadow: 1px 1px 2px rgba(48,48,48,1);
+  box-shadow: 1px 1px 5px rgba(48,48,48,1);
   color: #fff;
   border-radius: 0px;
+  z-index: 1;
 }
 
-.popover a {
+.rmr-popover a {
   color: #fff;
   text-decoration: none;
 }
 
-.popover a:hover {
+.rmr-popover a:hover {
   text-decoration: underline;
 }
 
-.popover.pop {
+.rmr-popover.pop {
   -webkit-animation:pop-in 0.1s;
 }
 
-.popover .bd {
+.rmr-popover .bd {
   position: relative;
   padding: 5px;
 }
 
-.popover b {
+.rmr-popover b {
   display: block;
 	border: solid transparent;
 	content: " ";
 	height: 0;
 	width: 0;
+	border-color: transparent;;
 	position: absolute;
 	pointer-events: none;
+	z-index: 1;
 }
 
-.popover.top b {
+.rmr-popover.top b {
 	top: 100%;
-	left: 10px;
-	border-color: #000;
-  border-bottom: none;  
-  border-left: 5px solid transparent;
+  border-bottom: none;
+  border-left:  5px solid transparent;
 	border-right: 5px solid transparent;
-	border-top: 5px solid black;
+	border-top:   5px solid black;
 }
 
-.popover.bottom b {
+.rmr-popover.bottom b {
 	top: -5px;
-	left: 10px;
-	border-color: #000;
   border-bottom: 5px solid black;
-  border-left: 5px solid transparent;
-	border-right: 5px solid transparent;
+  border-left:   5px solid transparent;
+	border-right:  5px solid transparent;
 	border-top: none;
 }
 
-.popover.right b {
-  top: 50%;
+.rmr-popover.right b {
 	left: -5px;
-	border-color: #000;
-  border-right: 5px solid black;
-  border-top: 5px solid transparent;
+  border-right:  5px solid black;
+  border-top:    5px solid transparent;
 	border-bottom: 5px solid transparent;
   border-left: none;
 }
 
-.popover.left b {
-  top: 50%;
+.rmr-popover.left b {
 	right: -5px;
-	border-color: #000;
-  border-left: 5px solid black;
-  border-top: 5px solid transparent;
+  border-left:   5px solid black;
+  border-top:    5px solid transparent;
 	border-bottom: 5px solid transparent;
   border-right: none;
 }
-
-
-/*
-.popover b:before {
-  border-top-color: #000;
-	border-width: 3px;
-	margin-left: -3px;
-}
-
-.popover b:after {
-  border-top-color: #000;
-  border-width: 6px;
-	margin-left: -6px; 
-} */

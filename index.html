@@ -65,12 +65,18 @@ pre {
   padding: 10px;
 }
 
-.popover.rmr .bd {
+.rmr-popover.rmr {
+  background: transparent;
+  border: 1px solid #888;
+  box-sizing: border-box;
+}
+
+.rmr-popover.rmr .bd {
   width: 400px;
   height: 266px;
   padding: 0;
   background: url(moma.jpg);
-  border: 1px solid #000;
+
 }
 
 </style>
@@ -81,12 +87,14 @@ pre {
 <body>
 
 <div id="doc">
-  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"orientation":"vertical","content":"popover"}'>popover</a></h1>
+  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"size":10,"orientation":"vertical","content":"popover"}'>popover</a></h1>
   <p>
-    &hellip; is a simple <em tabindex="2" data-popover='{"class":"yui","orientation":"horizontal","content":"<a href=\"http://yuilibrary.com\" title=\"YUI\">YUI Library</a>"}'>YUI</em> module to create popover <em tabindex="3" data-popover='{"orientation":"horizontal","content":"widgets"}'>widgets</em>.
+    &hellip; is a simple <em tabindex="2" data-popover='{"class":"yui","orientation":"horizontal","content":"<a href=\"http://yuilibrary.com\" title=\"YUI\">YUI Library</a>"}'>YUI</em>
+    <em tabindex="2" data-popover='{"class":"yui","orientation":"vertical","content":"module"}'>module</em>
+    to create popover <em tabindex="4" data-popover='{"orientation":"vertical","content":"widgets"}'>widgets</em>.
   </p>
 
-  <p><em tabindex="4" data-popover='{"class":"rmr","orientation":"horizontal","margin":20}'>Example</em>:</p>
+  <p><em tabindex="5" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
 
   <pre>
 new Y.Popover({

@@ -43,13 +43,14 @@ YUI.add('popover', function(Y) {
           var on = function(e) {
 
             // if the popover is already displayed, abort
-            if (pops[arguments[1].get('id')]) { return; }
+//            if (pops[arguments[1].get('id')]) { return; }
 
             var defaults = {
               'class' : '',
               'orientation' : 'vertical',
               'content' : '',
               'margin' : 10,
+//              'size' : 5  // arrow size
             },
             data = null,
             offset = [0,0],
@@ -68,7 +69,7 @@ YUI.add('popover', function(Y) {
             data = Y.merge(defaults, data);
             location = data.orientation == 'vertical' ? 'top' : 'right';
 
-            node = Y.Node.create('<div id="' + arguments[1].get('id') + '-popover" class="popover '+ location + ' ' + (data.hasOwnProperty('class') ? data['class'] : '') + '"><b></b><div class="bd">' + data.content + '</div></div>');
+            node = Y.Node.create('<div id="' + arguments[1].get('id') + '-popover" class="rmr-popover '+ location + ' ' + (data.hasOwnProperty('class') ? data['class'] : '') + '"><b></b><div class="bd">' + data.content + '</div></div>');
             Y.one(document.body).append(node);
             arrow = node.one('> b');
 
@@ -83,6 +84,12 @@ YUI.add('popover', function(Y) {
                 } else {
                   offset[1] = - region.height - 5;
                 }
+
+                if (data.color) {
+                  arrow.setStyle('borderTopColor', data.color);
+                  arrow.setStyle('borderBottomColor', data.color);
+                }
+                
                 break;
 
               case 'horizontal':
@@ -90,26 +97,24 @@ YUI.add('popover', function(Y) {
                 offset[0] = e.target.get('region').width + data.margin;
                 offset[1] = (e.target.get('region').height - region.height) / 2;
 
-
-  //              arrow.setStyle('top', (region.height - arrow.get('region').height) / 2 + 'px');
-          
-  //              Y.log(Y.one('body').get('winWidth'));
-  //              Y.log(region.left + parseInt(node.getComputedStyle('width'), 10));
-
-  //              if (parseInt(node.getComputedStyle('width'), 10) + region.left > Y.one('body').get('winWidth')) {
-  //                Y.log('too wide');
-  //                offset[0] = - region.width - data.margin;
-  //                node.replaceClass('right', 'left');
-  //              }
+                if (data.color) {
+                  arrow.setStyle('borderRightColor', data.color);
+                  arrow.setStyle('borderLeftColor', data.color);
+                }
 
                 break;
             }
 
             node.setXY([loc[0] + offset[0], loc[1] + offset[1]]);
+            
+            if (node.getXY()[1] < 0) {
+              node.setXY([node.getXY()[0], 10]);
+              region = node.get('region');
+            }
 
             // adjust location of arrow
             if (data.orientation == 'horizontal') {
-              arrow.setXY([arrow.getXY[0], node.getXY()[1] + node.get('region').height / 2 - 5 ]);
+              arrow.setXY([arrow.getXY[0], n.get('region').top + n.get('region').height / 2 - 5 ]);
             } else {
               arrow.setXY([node.getXY()[0] + node.get('region').width / 2 - 5, arrow.getXY()[1] ]);
             }
@@ -122,11 +127,11 @@ YUI.add('popover', function(Y) {
             });
       
             node.on('mouseleave', function() {
-              timeouts[e.target.get('id')] = Y.later(300, null, function() {
+//              timeouts[e.target.get('id')] = Y.later(300, null, function() {
                 pops[e.target.get('id')].remove();
                 delete(pops[e.target.get('id')]);
                 Y.fire('popover:unpop', { node: e.target });
-              }, []);
+//              }, []);
             });
 
 
@@ -136,13 +141,13 @@ YUI.add('popover', function(Y) {
             Y.fire('popover:pop', { node : e.target });
           },
           off = function(e) {
-            timeouts[e.target.get('id')] = Y.later(300, null, function() {
+//            timeouts[e.target.get('id')] = Y.later(100, null, function() {
               if (pops[e.target.get('id')]) {
                 pops[e.target.get('id')].remove();
                 delete(pops[e.target.get('id')]);
                 Y.fire('popover:unpop', { node: e.target });
               }
-            }, []);
+//            }, []);
           };
 
           n.on('mouseenter', on, null, n);
