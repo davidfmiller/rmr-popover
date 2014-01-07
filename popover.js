@@ -118,36 +118,40 @@ YUI.add('popover', function(Y) {
             } else {
               arrow.setXY([node.getXY()[0] + node.get('region').width / 2 - 5, arrow.getXY()[1] ]);
             }
-
-            node.on('mouseenter', function() {
-              if (timeouts[e.target.get('id')]) {
+/*
+            node.on('mouseenter', function(id) {
+              if (timeouts[id]) { timeouts[id].cancel(); }
+              if (timeouts[id]) {
                 timeouts[e.target.get('id')].cancel();
                 delete timeouts[e.target.get('id')];
               }
-            });
+            }, [node.get('id')]);
       
-            node.on('mouseleave', function() {
-//              timeouts[e.target.get('id')] = Y.later(300, null, function() {
+            node.on('mouseleave', function(id) {
+              timeouts[id] = Y.later(300, null, function() {
                 pops[e.target.get('id')].remove();
                 delete(pops[e.target.get('id')]);
                 Y.fire('popover:unpop', { node: e.target });
-//              }, []);
+              }, [node.get('id')]);
             });
+*/
 
-
-            pops[e.target.get('id')] = node;
+            pops[node.get('id')] = node;
             node.addClass('pop');
-  
+
             Y.fire('popover:pop', { node : e.target });
           },
-          off = function(e) {
-//            timeouts[e.target.get('id')] = Y.later(100, null, function() {
-              if (pops[e.target.get('id')]) {
-                pops[e.target.get('id')].remove();
-                delete(pops[e.target.get('id')]);
-                Y.fire('popover:unpop', { node: e.target });
+          off = function(id) {
+            timeouts[n.get('id')] = Y.later(100, null, function(a) {
+
+              var id = a + '-popover';
+              delete timeouts[id];
+              if (pops[a + '-popover']) {
+                pops[id].remove();
+                delete(pops[id]);
+                Y.fire('popover:unpop', { node: Y.one('#' + a) });
               }
-//            }, []);
+            }, [n.get('id')]);
           };
 
           n.on('mouseenter', on, null, n);
