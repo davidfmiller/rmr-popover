@@ -61,8 +61,9 @@ pre, code {
 }
 
 pre {
-  background: rgba(0,0,0,0.1);
+  background: rgba(192,192,192,0.1);
   padding: 10px;
+  margin-top: 0.5em;
 }
 
 .rmr-popover.rmr {
@@ -71,12 +72,16 @@ pre {
   box-sizing: border-box;
 }
 
+h1 a {
+  text-decoration: none;
+}
+
 .rmr-popover.rmr .bd {
   width: 400px;
   height: 266px;
   padding: 0;
   background: url(moma.jpg);
-
+  padding: 0;
 }
 
 </style>
@@ -100,6 +105,8 @@ pre {
 new Y.Popover({
   node : Y.one(document.body)
 });</pre>
+  
+  <p>Hosted at <a href="">GitHub</a></p>
 
 </div>
 

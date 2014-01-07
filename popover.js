@@ -59,6 +59,7 @@ YUI.add('popover', function(Y) {
             region = null;
 
             if (pops[id]) { return; }
+
             try {
               data = Y.JSON.parse(e.target.getAttribute('data-popover'));
             } catch (err) {
