@@ -1,3 +1,5 @@
 # popover
 
-YUI 3 module for creating simple popover widgets
+... is a YUI 3 module for creating simple popover widgets.
+
+TODO

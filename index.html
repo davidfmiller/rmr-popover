@@ -64,6 +64,8 @@ pre {
   background: rgba(192,192,192,0.1);
   padding: 10px;
   margin-top: 0.5em;
+  text-shadow: none;
+  color: #444;
 }
 
 .rmr-popover.rmr {
@@ -108,18 +110,18 @@ h1 a {
   <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"size":10,"orientation":"vertical","content":"popover"}'>popover</a></h1>
   <p>
     &hellip; is a simple <em tabindex="2" data-popover='{"class":"yui","orientation":"horizontal","content":"<a href=\"http://yuilibrary.com\" title=\"YUI\">YUI Library</a>"}'>YUI</em>
-    <em tabindex="2" data-popover='{"class":"yui","orientation":"vertical","content":"module"}'>module</em>
-    to create popover <em tabindex="4" data-popover='{"orientation":"vertical","content":"widgets"}'>widgets</em>.
+    <em tabindex="2" data-popover='{"class":"yui","orientation":"horizontal","content":"module"}'>module</em>
+    to create popover <em tabindex="4" data-popover='{"orientation":"vertical","content":"widgets"}'>widgets</em>. View the <a data-popover="README" tabindex="5" href="README.md">README</a> for more info.
   </p>
 
-  <p><em tabindex="5" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
+  <p><em tabindex="6" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
 
   <pre>
 new Y.Popover({
   node : Y.one(document.body)
 });</pre>
   
-  <p>Hosted by <a data-popover='{"class":"github"}' href="https://github.com/">GitHub</a></p>
+  <p>Hosted by <a tabindex="7" data-popover='{"class":"github"}' href="https://github.com/">GitHub</a></p>
 
 </div>
 
