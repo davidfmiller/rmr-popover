@@ -42,9 +42,6 @@ YUI.add('popover', function(Y) {
 
           var on = function(e) {
 
-            // if the popover is already displayed, abort
-//            if (pops[arguments[1].get('id')]) { return; }
-
             var defaults = {
               'class' : '',
               'orientation' : 'vertical',
@@ -58,8 +55,10 @@ YUI.add('popover', function(Y) {
             node = null,
             arrow = null,
             loc = e.target.getXY(),
+            id = arguments[1].get('id') + '-popover',
             region = null;
 
+            if (pops[id]) { return; }
             try {
               data = Y.JSON.parse(e.target.getAttribute('data-popover'));
             } catch (err) {
@@ -69,7 +68,7 @@ YUI.add('popover', function(Y) {
             data = Y.merge(defaults, data);
             location = data.orientation == 'vertical' ? 'top' : 'right';
 
-            node = Y.Node.create('<div id="' + arguments[1].get('id') + '-popover" class="rmr-popover '+ location + ' ' + (data.hasOwnProperty('class') ? data['class'] : '') + '"><b></b><div class="bd">' + data.content + '</div></div>');
+            node = Y.Node.create('<div id="' + id + '" class="rmr-popover '+ location + ' ' + (data.hasOwnProperty('class') ? data['class'] : '') + '"><b></b><div class="bd">' + data.content + '</div></div>');
             Y.one(document.body).append(node);
             arrow = node.one('> b');
 
