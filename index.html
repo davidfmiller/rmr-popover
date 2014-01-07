@@ -74,13 +74,26 @@ pre {
 
 h1 a {
   text-decoration: none;
+  color: #000;
+  font-weight: bold;
 }
 
 .rmr-popover.rmr .bd {
   width: 400px;
   height: 266px;
   padding: 0;
-  background: url(moma.jpg);
+  background: url(assets/moma.jpg);
+  padding: 0;
+}
+
+
+.rmr-popover.github { background: transparent; }
+.rmr-popover.github .bd {
+  background: #fff url(assets/github.png) no-repeat;
+  background-size: 57px 57px;
+  width: 57px;
+  height: 57px; 
+  border: 5px solid #222;
   padding: 0;
 }
 
@@ -106,7 +119,7 @@ new Y.Popover({
   node : Y.one(document.body)
 });</pre>
   
-  <p>Hosted at <a href="">GitHub</a></p>
+  <p>Hosted by <a data-popover='{"class":"github"}' href="https://github.com/">GitHub</a></p>
 
 </div>
 

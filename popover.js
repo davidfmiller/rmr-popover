@@ -116,7 +116,7 @@ YUI.add('popover', function(Y) {
             if (data.orientation == 'horizontal') {
               arrow.setXY([arrow.getXY[0], n.get('region').top + n.get('region').height / 2 - 5 ]);
             } else {
-              arrow.setXY([node.getXY()[0] + node.get('region').width / 2 - 5, arrow.getXY()[1] ]);
+              arrow.setXY([node.getXY()[0] + n.get('region').width / 2 - 5, arrow.getXY()[1] ]);
             }
 /*
             node.on('mouseenter', function(id) {
