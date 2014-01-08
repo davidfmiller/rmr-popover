@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <title>Popover</title>
-
+<meta charset="utf-8">
+<meta name="viewport" value="width=550">
 
 <style>
 /*
@@ -88,7 +89,6 @@ h1 a {
   padding: 0;
 }
 
-
 .rmr-popover.github { background: transparent; }
 .rmr-popover.github .bd {
   background: #fff url(assets/github.png) no-repeat;
@@ -110,18 +110,17 @@ h1 a {
   <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"size":10,"orientation":"vertical","content":"popover"}'>popover</a></h1>
   <p>
     &hellip; is a simple <em tabindex="2" data-popover='{"class":"yui","orientation":"horizontal","content":"<a href=\"http://yuilibrary.com\" title=\"YUI\">YUI Library</a>"}'>YUI</em>
-    <em tabindex="2" data-popover='{"class":"yui","orientation":"horizontal","content":"module"}'>module</em>
-    to create popover <em tabindex="4" data-popover='{"orientation":"vertical","content":"widgets"}'>widgets</em>. View the <a data-popover="README" tabindex="5" href="README.md">README</a> for more info.
+    <em tabindex="2" data-popover='{"class":"yui","orientation":"vertical","content":"module"}'>module</em>
+    to create popover <em tabindex="4" data-popover='{"orientation":"vertical","content":"widgets"}'>widgets</em>. View the <a data-popover="README" title="README" tabindex="5" href="README.md">README</a> for more info.
   </p>
 
   <p><em tabindex="6" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
 
-  <pre>
-new Y.Popover({
+  <pre data-popover="Example Popover implementation">new Y.Popover({
   node : Y.one(document.body)
 });</pre>
   
-  <p>Hosted by <a tabindex="7" data-popover='{"class":"github"}' href="https://github.com/">GitHub</a></p>
+  <p>Hosted by <a tabindex="7" data-popover='{"class":"github","id":"gh-popover"}' title="GitHub" href="https://github.com/">GitHub</a></p>
 
 </div>
 
@@ -137,17 +136,11 @@ new Y.Popover({
 
   }).use(function(Y) {
 
-    if (Y.UA.mobile) { return false; }
-
     Y.use('popover', function(Y) {
 
-      Y.on('popover:pop', function (obj) {
-        Y.log('pop: ' + obj.node.get('id'));
-      });
+      Y.on('popover:pop', function (obj) { Y.log('pop: ' + obj.node.get('id')); });
 
-      Y.on('popover:unpop', function (obj) {
-        Y.log('unpop: ' + obj.node.get('id'));
-      });
+      Y.on('popover:unpop', function (obj) { Y.log('unpop: ' + obj.node.get('id')); });
 
       new Y.Popover({
         'node' : Y.one(document.body)

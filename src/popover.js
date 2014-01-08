@@ -38,13 +38,14 @@ YUI.add('popover', function(Y) {
         Y.one(this.get('node')).all('[data-popover]').each(function(n) {
 
           if (! n.get('id')) { n.set('id', Y.guid()); }
-          n.set('title', '');
-
           var on = function(e) {
+
+n.set('title', ''); 
 
             var defaults = {
               'class' : '',
               'orientation' : 'vertical',
+              'id' : arguments[1].get('id') + '-popover',
               'content' : '',
               'margin' : 10,
 //              'size' : 5  // arrow size
@@ -55,21 +56,23 @@ YUI.add('popover', function(Y) {
             node = null,
             arrow = null,
             loc = e.target.getXY(),
-            id = arguments[1].get('id') + '-popover',
             region = null;
-
-            if (pops[id]) { return; }
 
             try {
               data = Y.JSON.parse(e.target.getAttribute('data-popover'));
             } catch (err) {
               data = { content : e.target.getAttribute('data-popover') };
             }
-
+            
             data = Y.merge(defaults, data);
+
+            if (pops[data.id]) { return; }
+
+            // if no content is specified then use the title of the target node
+
             location = data.orientation == 'vertical' ? 'top' : 'right';
 
-            node = Y.Node.create('<div id="' + id + '" class="rmr-popover '+ location + ' ' + (data.hasOwnProperty('class') ? data['class'] : '') + '"><b></b><div class="bd">' + data.content + '</div></div>');
+            node = Y.Node.create('<div id="' + data.id + '" class="rmr-popover '+ location + ' ' + (data.hasOwnProperty('class') ? data['class'] : '') + '"><b></b><div class="bd">' + (data.content ? data.content : '') + '</div></div>');
             Y.one(document.body).append(node);
             arrow = node.one('> b');
 
@@ -116,7 +119,7 @@ YUI.add('popover', function(Y) {
             if (data.orientation == 'horizontal') {
               arrow.setXY([arrow.getXY[0], n.get('region').top + n.get('region').height / 2 - 5 ]);
             } else {
-              arrow.setXY([node.getXY()[0] + n.get('region').width / 2 - 5, arrow.getXY()[1] ]);
+              arrow.setXY([node.getXY()[0] + Math.min(n.get('region').width, node.get('region').width) / 2 - 5, arrow.getXY()[1] ]);
             }
 /*
             node.on('mouseenter', function(id) {
@@ -144,9 +147,17 @@ YUI.add('popover', function(Y) {
           off = function(id) {
             timeouts[n.get('id')] = Y.later(100, null, function(a) {
 
-              var id = a + '-popover';
+              var id = a + '-popover', data = null;
+              Y.log(a);
+              try {
+                data = Y.JSON.parse(Y.one('#' + a).getAttribute('data-popover'));
+              } catch (err) {
+                
+              }
+              if (data && data.id) { id = data.id; }
+
               delete timeouts[id];
-              if (pops[a + '-popover']) {
+              if (pops[id]) {
                 pops[id].remove();
                 delete(pops[id]);
                 Y.fire('popover:unpop', { node: Y.one('#' + a) });
