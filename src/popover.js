@@ -40,7 +40,8 @@ YUI.add('popover', function(Y) {
           if (! n.get('id')) { n.set('id', Y.guid()); }
           var on = function(e) {
 
-n.set('title', ''); 
+            // clear out the title attribute to prevent the tooltip from being displayed
+            n.set('title', ''); 
 
             var defaults = {
               'class' : '',
@@ -72,9 +73,10 @@ n.set('title', '');
 
             location = data.orientation == 'vertical' ? 'top' : 'right';
 
-            node = Y.Node.create('<div id="' + data.id + '" class="rmr-popover '+ location + ' ' + (data.hasOwnProperty('class') ? data['class'] : '') + '"><b></b><div class="bd">' + (data.content ? data.content : '') + '</div></div>');
+            node = Y.Node.create('<div id="' + data.id + '" role="tooltip" class="rmr-popover '+ location + ' ' + (data.hasOwnProperty('class') ? data['class'] : '') + '"><b></b><div class="bd">' + (data.content ? data.content : '') + '</div></div>');
             Y.one(document.body).append(node);
             arrow = node.one('> b');
+            n.setAttribute('aria-describedby', data.id);
 
             region = node.get('region');
 
@@ -158,6 +160,7 @@ n.set('title', '');
 
               delete timeouts[id];
               if (pops[id]) {
+                Y.one('#' + a).removeAttribute('aria-describedby');
                 pops[id].remove();
                 delete(pops[id]);
                 Y.fire('popover:unpop', { node: Y.one('#' + a) });
