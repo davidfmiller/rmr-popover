@@ -47,15 +47,11 @@ YUI.add('popover', function(Y) {
           var target = n, on = function(e) {
 
             // clear out the title attribute to prevent the tooltip from being displayed
-            n.set('title', ''); 
+            n.set('title', '');
 
             var defaults = {
-              'class' : '',
-              'orientation' : 'vertical',
               'id' : arguments[1].get('id') + '-popover',
-              'content' : '',
-              'margin' : 10,
-//              'size' : 5  // arrow size
+              'content' : ''
             },
             data = null,
             offset = [0,0],
@@ -66,6 +62,8 @@ YUI.add('popover', function(Y) {
             loc = e.target.getXY(),
             region = null;
 
+            defaults = Y.merge(config.defaults, defaults);
+
             try {
               data = Y.JSON.parse(e.target.getAttribute('data-popover'));
             } catch (err) {
@@ -74,7 +72,10 @@ YUI.add('popover', function(Y) {
             
             data = Y.merge(defaults, data);
 
-            if (pops[data.id]) {  
+            if (! data.orientation) { data.orientation = 'vertical'; }
+            if (! data.margin) { data.margin = 10; }
+
+            if (pops[data.id]) {
               if (timeouts[tmp]) {
                 timeouts[tmp].cancel();
                 delete timeouts[tmp];
@@ -137,7 +138,7 @@ YUI.add('popover', function(Y) {
               arrow.setXY([node.getXY()[0] + Math.min(n.get('region').width, node.get('region').width) / 2 - 5, arrow.getXY()[1] ]);
             }
 
-            if (data.persist) { 
+            if (data.persist) {
               node.on('mouseenter', function(e, id) {
                 id = id[0];
                 if (timeouts[id]) {
@@ -147,7 +148,7 @@ YUI.add('popover', function(Y) {
               }, null, [n.get('id')]);
             }
 
-            node.on('mouseleave', function(e) { off.call(this, n.get('id')) }, null);
+            node.on('mouseleave', function(e) { off.call(this, n.get('id')); }, null);
 
             pops[node.get('id')] = node;
             node.addClass('pop');
@@ -157,9 +158,11 @@ YUI.add('popover', function(Y) {
           off = function(e) {
 
             var data = null;
+
             try {
               data = Y.JSON.parse(Y.one('#' + (typeof e == 'string' ? e : e.target.get('id'))).getAttribute('data-popover'));
-            } catch (err) { data = {}; }
+              data = Y.merge(config.defaults, data);
+            } catch (err) { data = config.defaults; }
 
             timeouts[n.get('id')] = Y.later(data.persist ? 500 : 1, null, function(a, b) {
 
