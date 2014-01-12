@@ -9,11 +9,6 @@ YUI.add('popover', function(Y) {
 
     'use strict';
 
-    /**
-     @class Popover
-     @constructor
-     @param config (object)
-     */
     var pops = {},
         timeouts = {},
         margin = 10,
@@ -22,6 +17,12 @@ YUI.add('popover', function(Y) {
         };
 
     Popover.ATTRS = {
+
+      /**
+        The top-level node under which popovers should be sought
+        @property node
+        @type {String}
+      */
       node : {
         value : null,
         setter : function(n) { return Y.one(n); },
@@ -31,6 +32,11 @@ YUI.add('popover', function(Y) {
 
     Y.Popover = Y.extend(Popover, Y.Base, {
 
+      /**
+       @class Popover
+       @constructor
+       @param config (object)
+       */
       initializer : function(config) {
 
         if (! this.get('node')) { return false; }
