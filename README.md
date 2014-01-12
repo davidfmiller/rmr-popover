@@ -6,6 +6,7 @@ See it in action [http://readmeansrun.com/gallery/popover/](http://readmeansrun.
 
 TODO
 
+* persist
 * id
 * class
 * orientation
