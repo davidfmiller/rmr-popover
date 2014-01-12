@@ -150,8 +150,9 @@ YUI.add('popover', function(Y) {
 
             node.on('mouseleave', function(e) { off.call(this, n.get('id')); }, null);
 
-            pops[node.get('id')] = node;
             node.addClass('pop');
+
+            pops[node.get('id')] = node;
 
             Y.fire('popover:pop', { node : e.target });
           },
@@ -164,7 +165,7 @@ YUI.add('popover', function(Y) {
               data = Y.merge(config.defaults, data);
             } catch (err) { data = config.defaults; }
 
-            timeouts[n.get('id')] = Y.later(data.persist ? 500 : 1, null, function(a, b) {
+            timeouts[n.get('id')] = Y.later(data.persist ? 300 : 1, null, function(a, b) {
 
               var id = a + '-popover', data = null;
               try {
@@ -177,9 +178,11 @@ YUI.add('popover', function(Y) {
               delete timeouts[id];
               if (pops[id]) {
                 Y.one('#' + a).removeAttribute('aria-describedby');
-                pops[id].remove();
-                delete(pops[id]);
-                delete(timeouts[id]);
+                try {
+                  pops[id].remove();
+                  delete(pops[id]);
+                  delete(timeouts[id]);
+                } catch(e) { }
                 Y.fire('popover:unpop', { node: Y.one('#' + a) });
               }
             }, [n.get('id'), target], false);

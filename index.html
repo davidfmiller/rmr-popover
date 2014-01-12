@@ -117,11 +117,11 @@ h1 a {
 
   <p><em tabindex="6" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
 
-  <pre data-popover="Example Popover implementation">new Y.Popover({
+  <pre tabindex="7" data-popover="Example Popover implementation">new Y.Popover({
   node : Y.one(document.body)
 });</pre>
   
-  <p>Hosted by <a tabindex="7" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/">GitHub</a></p>
+  <p>Hosted by <a tabindex="8" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/">GitHub</a></p>
 
 </div>
 
@@ -144,7 +144,7 @@ h1 a {
 
       new Y.Popover({
         'node' : Y.one(document.body),
-        'defaults' : { 'orientation' : 'vertical' }
+        'defaults' : { 'orientation' : 'vertical', 'exclusive' : true }
       });
 
     });
