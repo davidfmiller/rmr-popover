@@ -43,7 +43,9 @@ YUI.add('popover', function(Y) {
 
         Y.one(this.get('node')).all('[data-popover]').each(function(n) {
 
+          // ensure every node has an id attribute applied
           if (! n.get('id')) { n.set('id', Y.guid()); }
+
           var target = n, on = function(e) {
 
             // clear out the title attribute to prevent the tooltip from being displayed
@@ -108,7 +110,7 @@ YUI.add('popover', function(Y) {
                   arrow.setStyle('borderTopColor', data.color);
                   arrow.setStyle('borderBottomColor', data.color);
                 }
-                
+
                 break;
 
               case 'horizontal':
@@ -125,7 +127,7 @@ YUI.add('popover', function(Y) {
             }
 
             node.setXY([loc[0] + offset[0], loc[1] + offset[1]]);
-            
+
             if (node.getXY()[1] < 0) {
               node.setXY([node.getXY()[0], 10]);
               region = node.get('region');
