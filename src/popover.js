@@ -3,7 +3,7 @@
 /* global YUI,document,window,Image */
 
 /**
- @module Popover 
+ @module Popover
  */
 YUI.add('popover', function(Y) {
 
@@ -66,12 +66,16 @@ YUI.add('popover', function(Y) {
 
             defaults = Y.merge(config.defaults, defaults);
 
+            if (! e.target.getAttribute('data-popover')) {
+              e.target = e.target.ancestor('[data-popover]');
+            }
+
             try {
               data = Y.JSON.parse(e.target.getAttribute('data-popover'));
             } catch (err) {
               data = { content : e.target.getAttribute('data-popover') };
             }
-            
+
             data = Y.merge(defaults, data);
 
             if (! data.orientation) { data.orientation = 'vertical'; }
@@ -219,5 +223,5 @@ YUI.add('popover', function(Y) {
 
     });
 
-  }, '3.3.1', { requires : ['node', 'base', 'event', 'json-parse', 'event-resize', 'transition' ] });
+  }, '3.3.1', { requires : ['node', 'base', 'event', 'json-parse', 'event-resize', 'transition', 'event-mouseenter' ] });
 
