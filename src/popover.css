@@ -15,7 +15,7 @@
 
 .rmr-popover {
   background: #000;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.9);
   position: absolute;
   box-shadow: 1px 1px 5px rgba(48,48,48,1);
   color: #fff;
@@ -55,34 +55,10 @@
   z-index: 1;
 }
 
-.rmr-popover.top b {
+.rmr-popover b {
   top: 100%;
   border-bottom: none;
   border-left:  5px solid transparent;
   border-right: 5px solid transparent;
   border-top:   5px solid black;
-}
-
-.rmr-popover.bottom b {
-  top: -5px;
-  border-bottom: 5px solid black;
-  border-left:   5px solid transparent;
-  border-right:  5px solid transparent;
-  border-top: none;
-}
-
-.rmr-popover.right b {
-  left: -5px;
-  border-right:  5px solid black;
-  border-top:    5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: none;
-}
-
-.rmr-popover.left b {
-  right: -5px;
-  border-left:   5px solid black;
-  border-top:    5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-right: none;
 }

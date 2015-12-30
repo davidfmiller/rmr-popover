@@ -5,26 +5,11 @@
 <meta charset="utf-8">
 <meta name="viewport" value="width=550">
 
-
-<link rel="dns-prefetch" href="http://yui.yahooapis.com">
-
 <style>
-/*
-YUI 3.5.0 (build 5089)
-Copyright 2012 Yahoo! Inc. All rights reserved.
-Licensed under the BSD License.
-http://yuilibrary.com/license/
-*/
 html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}input,textarea,select{*font-size:100%}legend{color:#000}#yui3-css-stamp.cssreset{display:none}
 
 html {
   background: #fff;
-}
-
-body {
-  color: #000;
-  font: 13px arial;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
 }
 
 div {
@@ -32,44 +17,9 @@ div {
   z-index: 1;
 }
 
-#doc {
-  width: 550px;
-  margin: 0 auto;
-  padding-top: 50px;
-}
-
-h1 {
-  font-size: 20px;
-}
-
 em {
   border-bottom: 1px dotted #888;
-/*  display: inline-block;*/
-}
-
-p {
-  padding: 1em 100px 0.5em 0;
-}
-
-dl {
-  padding-right: 100px;
-}
-
-dd {
-  padding-left: 25px;
-  padding-bottom: 1em
-}
-
-pre, code {
-  color: #444;
-}
-
-pre {
-  background: rgba(192,192,192,0.1);
-  padding: 10px;
-  margin-top: 0.5em;
-  text-shadow: none;
-  color: #444;
+  font-style: normal;
 }
 
 .rmr-popover.rmr {
@@ -78,17 +28,12 @@ pre {
   box-sizing: border-box;
 }
 
-h1 a {
-  text-decoration: none;
-  color: #000;
-  font-weight: bold;
-}
-
 .rmr-popover.rmr .bd {
-  width: 400px;
-  height: 266px;
+  width: 100px;
+  height: 67px;
   padding: 0;
   background: url(assets/moma.jpg);
+  background-size: 100px 67px;
   padding: 0;
 }
 
@@ -97,12 +42,15 @@ h1 a {
   background: #fff url(assets/github.png) no-repeat;
   background-size: 57px 57px;
   width: 57px;
-  height: 57px; 
+  height: 57px;
   border: 5px solid #222;
   padding: 0;
 }
 
 </style>
+
+
+<link rel="stylesheet" type="text/css" href="http://davidfmiller.github.io/man-css/man.css">
 
 <link rel="stylesheet" type="text/css" href="src/popover.css">
 
@@ -110,48 +58,41 @@ h1 a {
 <body>
 
 <div id="doc">
-  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"size":10,"orientation":"vertical","content":"popover"}'>popover</a></h1>
+  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"popover"}'>popover</a></h1>
   <p>
     &hellip; is a simple
-    <em tabindex="2" data-popover='{"class":"yui","persist":true,"orientation":"vertical","content":"<a href=\"http://yuilibrary.com\" title=\"YUI\">YUI Library</a>"}'>YUI</em>
-    <em tabindex="2" data-popover='{"class":"module","orientation":"horizontal","content":"module"}'>module</em>
-    to create popover <em tabindex="4" data-popover='{"orientation":"vertical","content":"widgets"}'>widgets</em>. View the <a data-popover="README" title="README" tabindex="5" href="https://github.com/davidfmiller/popover/blob/master/README.md">README</a> for more info.
+    JavaScript
+    <em tabindex="1" data-popover='{"content":"module"}'>module</em>
+    to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>widgets</em>. View the <a data-popover="README" title="README" tabindex="3" href="https://github.com/davidfmiller/popover/blob/master/README.md">README</a> for more info.
   </p>
 
-  <p><em tabindex="6" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
+  <p><em tabindex="4" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
 
-  <pre tabindex="7" data-popover="Example Popover implementation">new Y.Popover({
-  node : Y.one(document.body)
-});</pre>
-  
-  <p>Hosted by <a tabindex="8" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
+  <pre tabindex="5" data-popover="Example Popover implementation">  var popover = new Popover();
+
+  popover.on(
+    'pop',
+    function(target, popover) { window.console.log('pop', target, popover); }
+  ).on(
+    'unpop',
+    function(target, popover) { window.console.log('unpop', target, popover); }
+  );</pre>
+
+  <p>Hosted by <a id="gh-a" tabindex="6" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
 
 </div>
-
-<script src="http://yui.yahooapis.com/3.11.0/build/yui/yui-min.js"></script>
-<script>
-  YUI({
-    'modules' : {
-      'popover' : {
-        'fullpath' : 'src/popover.js',
-        'requires' : ['node', 'event', 'base', 'transition']
-      }
-    }
-
-  }).use(function(Y) {
-
-    Y.use('popover', function(Y) {
-
-      Y.on('popover:pop', function (obj) { Y.log('pop: ' + obj.node.get('id')); });
-      Y.on('popover:unpop', function (obj) { Y.log('unpop: ' + obj.node.get('id')); });
-
-      new Y.Popover({
-        'node' : Y.one(document.body),
-        'defaults' : { 'orientation' : 'vertical', 'exclusive' : true }
-      });
-
-    });
-  });
+<script src="src/popover.js">
 </script>
+<script>
+  var popover = new Popover();
+  popover.on(
+    'pop',
+    function(target, popover) { window.console.log('pop', target, popover); }
+  ).on(
+    'unpop',
+    function(target, popover) { window.console.log('unpop', target, popover); }
+  );
+</script>
+
 </body>
 </html>

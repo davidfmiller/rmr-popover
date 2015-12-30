@@ -1,6 +1,6 @@
 # popover
 
-... is a YUI 3 module for creating simple popover widgets.
+... is a JavaScript module for creating simple popover widgets.
 
 See it in action [http://davidfmiller.github.io/popover/](http://davidfmiller.github.io/popover/).
 
