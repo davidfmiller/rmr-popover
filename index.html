@@ -6,21 +6,6 @@
 <meta name="viewport" value="width=550">
 
 <style>
-html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}input,textarea,select{*font-size:100%}legend{color:#000}#yui3-css-stamp.cssreset{display:none}
-
-html {
-  background: #fff;
-}
-
-div {
-  position: relative;
-  z-index: 1;
-}
-
-em {
-  border-bottom: 1px dotted #888;
-  font-style: normal;
-}
 
 .rmr-popover.rmr {
   background: transparent;
@@ -49,7 +34,6 @@ em {
 
 </style>
 
-
 <link rel="stylesheet" type="text/css" href="http://davidfmiller.github.io/man-css/man.css">
 
 <link rel="stylesheet" type="text/css" href="src/popover.css">
@@ -62,21 +46,21 @@ em {
   <p>
     &hellip; is a simple
     JavaScript
-    <em tabindex="1" data-popover='{"content":"module"}'>module</em>
-    to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>widgets</em>. View the <a data-popover="README" title="README" tabindex="3" href="https://github.com/davidfmiller/popover/blob/master/README.md">README</a> for more info.
+    <em tabindex="1" data-popover="module">module</em>
+    to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>things</em>. View the <a data-popover="README" title="README" tabindex="3" href="https://github.com/davidfmiller/popover/blob/master/README.md">README</a> for more info.
   </p>
 
   <p><em tabindex="4" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
 
-  <pre tabindex="5" data-popover="Example Popover implementation">  var popover = new Popover();
+  <pre tabindex="5" data-popover="Example Popover implementation">  <span class="kd">var</span> <span class="nx">popover</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">();</span>
 
-  popover.on(
-    'pop',
-    function(target, popover) { window.console.log('pop', target, popover); }
-  ).on(
-    'unpop',
-    function(target, popover) { window.console.log('unpop', target, popover); }
-  );</pre>
+  <span class="nx">popover</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span>
+    <span class="s1">&#39;pop&#39;</span><span class="p">,</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">).</span><span class="nx">on</span><span class="p">(</span>
+    <span class="s1">&#39;unpop&#39;</span><span class="p">,</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;unpop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">);</span></pre>
 
   <p>Hosted by <a id="gh-a" tabindex="6" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
 

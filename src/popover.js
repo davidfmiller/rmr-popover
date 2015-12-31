@@ -7,7 +7,7 @@
 
   var
   guid = function(basename) {
-    return basename + '-' + parseInt(Math.random() * 100) + '-' + parseInt(Math.random() * 1000);
+    return basename + '-' + parseInt(Math.random() * 100, 10) + '-' + parseInt(Math.random() * 1000, 10);
   },
 
   /*
@@ -76,7 +76,7 @@
       }
 
       if (generator) {
-        data.content = generator(e.target.getAttribute('id'));
+        data = generator(target);
       }
 
       data['class'] = (data['class'] ? data['class'] : '') + ' rmr-popover';
@@ -118,28 +118,29 @@
 
       n.classList.add('pop');
 
-      n.addEventListener('mouseover', function(e) {
+      n.addEventListener('mouseover', over);
 
-       var n = e.target,
-           id;
+      $.events.pop(target, n);
+    },
 
-        while (! n.classList.contains('rmr-popover')) {
-          n = n.parentNode;
-        }
+    over = function(e) {
+     var n = e.target,
+         id;
 
-        id = n.getAttribute('id').replace('-popover', '');
+      while (! n.classList.contains('rmr-popover')) {
+        n = n.parentNode;
+      }
 
-        n.addEventListener('mouseout', function(e) {
-          off({ target: document.getElementById(id) });
-        });
+      id = n.getAttribute('id').replace('-popover', '');
 
-        if (timeouts[id]) {
-          window.clearTimeout(timeouts[id]);
-          delete timeouts[id];
-        }
+      n.addEventListener('mouseout', function(e) {
+        off({ target: document.getElementById(id) });
       });
 
-      $.events.pop(target.getAttribute('id') + '', data.id);
+      if (timeouts[id]) {
+        window.clearTimeout(timeouts[id]);
+        delete timeouts[id];
+      }
     },
 
     off = function(e) {
@@ -152,7 +153,7 @@
           pop.parentNode.removeChild(pop);
           delete pops[id + '-popover'];
 
-          $.events.unpop(target.getAttribute('id'), pop.getAttribute('id'));
+          $.events.unpop(target, pop);
 
         } catch (e) { }
       }, 300);
@@ -167,12 +168,14 @@
       }
 
       // clear out title since we don't want the tooltip to obscure the popover
-      n.setAttribute('title', '');
+      if (n.hasAttribute('title')) {
+        n.setAttribute('title', '');
+      }
 
-      n.addEventListener('mouseover', on);
+      n.addEventListener('mouseenter', on);
       n.addEventListener('focus', on);
 
-      n.addEventListener('mouseout', off);
+      n.addEventListener('mouseleave', off);
       n.addEventListener('blur', off);
     }
   };
