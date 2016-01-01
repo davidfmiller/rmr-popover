@@ -42,7 +42,7 @@
 <body>
 
 <div id="doc">
-  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"popover"}'>popover</a></h1>
+  <h1><i>💬</i><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"popover"}'>popover</a></h1>
   <p>
     &hellip; is a simple
     JavaScript
@@ -52,7 +52,7 @@
 
   <p><em tabindex="4" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
 
-  <pre tabindex="5" data-popover="Example Popover implementation">  <span class="kd">var</span> <span class="nx">popover</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">();</span>
+  <pre tabindex="5" data-popover="Example Popover implementation">  <span class="kd">var</span> <span class="nx">popover</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">(<span class="s1">&#39;#doc&#39;</span>);</span>
 
   <span class="nx">popover</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span>
     <span class="s1">&#39;pop&#39;</span><span class="p">,</span>
@@ -68,7 +68,7 @@
 <script src="src/popover.js">
 </script>
 <script>
-  var popover = new Popover();
+  var popover = new Popover('#doc');
   popover.on(
     'pop',
     function(target, popover) { window.console.log('pop', target, popover); }

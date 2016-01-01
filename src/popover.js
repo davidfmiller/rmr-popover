@@ -6,12 +6,28 @@
   'use strict';
 
   var
+
+  /*
+   * Generate a unique string
+   *
+   * @param basename (String)
+   * @return string
+   */
   guid = function(basename) {
     return basename + '-' + parseInt(Math.random() * 100, 10) + '-' + parseInt(Math.random() * 1000, 10);
   },
 
+  arr = function(nodelist) {
+    var ret = [], i = 0;
+    for (i = 0; i < nodelist.length; i++) {
+      ret.push(nodelist[i]);
+    }
+
+    return ret;
+  },
+
   /*
-   * Retrieve an object containing
+   * Retrieve an object containing { top : xx, left : xx, bottom: xx, right: xx, width: xx, height: xx }
    *
    * @param node (DOMNode)
    */
@@ -36,11 +52,12 @@
   timeouts = {},
   pops = {};
 
+
   /**
    *
    *
    * @param node (node, optional) - the root element containing all elements with attached popovers
-   * @param generator (function, optional) method to retrieve the content for a
+   * @param generator (function, optional) method to retrieve the popover's data for a given node
    */
   window.Popover = function(node, generator) {
 
@@ -50,11 +67,11 @@
       'unpop' : function(target, popover) { }
     };
 
-    node = node ? node : document.body;
+    node = node ? (node instanceof HTMLElement ? node : document.querySelector(node)) : document.body;
 
     var
     $ = this,
-    nodes = node.querySelectorAll('[data-popover]'),
+    nodes = arr(node.querySelectorAll('[data-popover]')),
     i = 0,
     n,
     on = function(e) {
@@ -104,7 +121,10 @@
       targetRect = getRect(target);
       popoverRect = getRect(n);
 
-      popoverXY = [targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2), targetRect.top - popoverRect.height - 5];
+      popoverXY = [
+        targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
+        targetRect.top - popoverRect.height - 5
+      ];
 
       arrowXY = [popoverXY[0], popoverXY[1]];
       arrowXY[0] = popoverRect.width / 2 - 6;
@@ -118,22 +138,22 @@
 
       n.classList.add('pop');
 
-      n.addEventListener('mouseover', over);
+      n.addEventListener('mouseenter', over);
 
       $.events.pop(target, n);
     },
 
+    /*
+     *
+     * @param e (MouseEvent)
+     */
     over = function(e) {
      var n = e.target,
          id;
 
-      while (! n.classList.contains('rmr-popover')) {
-        n = n.parentNode;
-      }
-
       id = n.getAttribute('id').replace('-popover', '');
 
-      n.addEventListener('mouseout', function(e) {
+      n.addEventListener('mouseleave', function(e) {
         off({ target: document.getElementById(id) });
       });
 
@@ -143,6 +163,10 @@
       }
     },
 
+    /*
+     *
+     * @param e (MouseEvent)
+     */
     off = function(e) {
       var target = e.target;
       timeouts[target.getAttribute('id')] = window.setTimeout(function() {
@@ -160,9 +184,15 @@
 
     };
 
+    // add root node if it has
+    if (node.hasAttribute('data-popover')) {
+      nodes.push(node);
+    }
+
     for (i = 0; i < nodes.length; i++) {
       n = nodes[i];
 
+      // ensure target has unique id
       if (! n.getAttribute('id')) {
         n.setAttribute('id', guid('popover-target') );
       }
@@ -182,8 +212,8 @@
 
   /*!
    *
-   * @param event (string)
-   * @param method (function)
+   * @param event (string) - one of "pop" or "unpop"
+   * @param method (function) - the method that will be invoked
    */
   window.Popover.prototype.on = function(event, method) {
     this.events[event] = method;
@@ -191,6 +221,7 @@
   };
 
   /**
+   *
    *
    * @return string
    */
