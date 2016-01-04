@@ -67,6 +67,8 @@
       'unpop' : function(target, popover) { }
     };
 
+    this.enabled = true;
+
     node = node ? (node instanceof HTMLElement ? node : document.querySelector(node)) : document.body;
 
     var
@@ -75,6 +77,8 @@
     i = 0,
     n,
     on = function(e) {
+
+      if (! $.enabled) { return; }
 
       var
       target = e.target,
