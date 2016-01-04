@@ -59,7 +59,7 @@
    * @param node (node, optional) - the root element containing all elements with attached popovers
    * @param generator (function, optional) method to retrieve the popover's data for a given node
    */
-  window.Popover = function(node, generator) {
+  window.Popover = function(node, generator, delay) {
 
     // two events are fired
     this.events = {
@@ -67,7 +67,10 @@
       'unpop' : function(target, popover) { }
     };
 
+    if (arguments.length < 3) { delay = 100; }
+
     this.enabled = true;
+    this.delay = delay;
 
     node = node ? (node instanceof HTMLElement ? node : document.querySelector(node)) : document.body;
 
@@ -209,8 +212,13 @@
       n.addEventListener('mouseenter', on);
       n.addEventListener('focus', on);
 
-      n.addEventListener('mouseleave', off);
-      n.addEventListener('blur', off);
+      n.addEventListener('mouseleave', function(e) {
+       off(e, $.delay);
+      });
+
+      n.addEventListener('blur',  function(e) {
+       off(e, $.delay);
+      });
     }
   };
 
