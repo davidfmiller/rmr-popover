@@ -98,14 +98,15 @@
       popoverXY,
       arrowXY;
 
-      try {
-        data = JSON.parse(e.target.getAttribute('data-popover'));
-      } catch (err) {
-        data = { content : e.target.getAttribute('data-popover') };
-      }
-
       if (generator) {
         data = generator(target);
+      }
+      else  {
+        try {
+          data = JSON.parse(e.target.getAttribute('data-popover'));
+        } catch (err) {
+          data = { content : e.target.getAttribute('data-popover') };
+        }
       }
 
       data['class'] = (data['class'] ? data['class'] : '') + ' rmr-popover';
