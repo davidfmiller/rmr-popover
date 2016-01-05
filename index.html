@@ -68,7 +68,7 @@
 <script src="src/popover.js">
 </script>
 <script>
-  var popover = new Popover('#doc');
+  var popover = new Popover('#doc', null, 300);
   popover.on(
     'pop',
     function(target, popover) { window.console.log('pop', target, popover); }

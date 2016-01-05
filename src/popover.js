@@ -174,7 +174,7 @@
      *
      * @param e (MouseEvent)
      */
-    off = function(e) {
+    off = function(e, delay) {
       var target = e.target;
       timeouts[target.getAttribute('id')] = window.setTimeout(function() {
         var id = target.getAttribute('id');
@@ -187,7 +187,7 @@
           $.events.unpop(target, pop);
 
         } catch (e) { }
-      }, 300);
+      }, arguments.length == 1 ? $.delay : delay);
 
     };
 
