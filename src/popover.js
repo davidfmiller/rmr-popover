@@ -17,10 +17,15 @@
     return basename + '-' + parseInt(Math.random() * 100, 10) + '-' + parseInt(Math.random() * 1000, 10);
   },
 
-  arr = function(nodelist) {
+  /*
+   *
+   * @param list (array-like thing)
+   * @return Array
+   */
+  arr = function(list) {
     var ret = [], i = 0;
-    for (i = 0; i < nodelist.length; i++) {
-      ret.push(nodelist[i]);
+    for (i = 0; i < list.length; i++) {
+      ret.push(list[i]);
     }
 
     return ret;
