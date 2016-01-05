@@ -52,15 +52,22 @@
 
   <p><em tabindex="4" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
 
-  <pre tabindex="5" data-popover="Example Popover implementation">  <span class="kd">var</span> <span class="nx">popover</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">(<span class="s1">&#39;#doc&#39;</span>);</span>
+  <pre tabindex="5" data-popover="Example Popover implementation"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;popover.css&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;src/popover.js&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="kd">var</span> <span class="nx">popover</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">(<span class="s1">&#39;#doc&#39;</span>);</span>
 
-  <span class="nx">popover</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span>
-    <span class="s1">&#39;pop&#39;</span><span class="p">,</span>
-    <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
-  <span class="p">).</span><span class="nx">on</span><span class="p">(</span>
-    <span class="s1">&#39;unpop&#39;</span><span class="p">,</span>
-    <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;unpop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
-  <span class="p">);</span></pre>
+<span class="nx">popover</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span>
+  <span class="s1">&#39;pop&#39;</span><span class="p">,</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">).</span><span class="nx">on</span><span class="p">(</span>
+  <span class="s1">&#39;unpop&#39;</span><span class="p">,</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;unpop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="nt">&lt;/script&gt;</span></pre>
+
+  <p>View your browser console&rsquo;s log for example output after having viewed this page&rsquo;s popovers.</p>
 
   <p>Hosted by <a id="gh-a" tabindex="6" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
 
