@@ -6,7 +6,12 @@
   'use strict';
 
   var
-  VERSION = '0.1.1',
+
+  //
+  VERSION = '0.1.2',
+
+  // node attribute
+  ATTR = 'data-popover',
 
   /*
    * Generate a unique string
@@ -139,9 +144,9 @@
       throw Error('Invalid Popover root [' + options.root + ']');
     }
 
-    nodes = arr(node.querySelectorAll('[data-popover]'));
+    nodes = arr(node.querySelectorAll('[' + ATTR + ']'));
 
-    on = function(e) {
+    on = function(e, delay) {
 
       if (! $.enabled) { return; }
 
@@ -155,10 +160,14 @@
       popoverXY,
       arrowXY,
       popper = function() {
-        pops[data.id] = n;
-        n.classList.add('pop');
-        // fire event listener
-        $.events.pop(target, n);
+
+        if (n) {
+          n.classList.add('pop');
+          // fire event listener
+          if (pops[n.getAttribute('id')]) {
+            $.events.pop(target, n);
+          }
+        }
       }
 
       if (options.hasOwnProperty('factory') && options.factory) {
@@ -166,9 +175,9 @@
       }
       else  {
         try {
-          data = JSON.parse(e.target.getAttribute('data-popover'));
+          data = JSON.parse(e.target.getAttribute(ATTR));
         } catch (err) {
-          data = { content : e.target.getAttribute('data-popover') };
+          data = { content : e.target.getAttribute(ATTR) };
         }
       }
 
@@ -204,10 +213,11 @@
       target.setAttribute('aria-describedby', data.id);
       n.setAttribute('style', 'left: ' + parseInt(popoverXY[0], 10) + 'px; top: ' + parseInt(popoverXY[1], 10) + 'px');
 
+      pops[data.id] = n;
       arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px');
 
-      if ) {
-        window.setTimeout(function() { popper(n); }, $.delay.pop);
+      if (delay) {
+        window.setTimeout(function() { popper(); }, delay);
       } else {
         popper();
       }
@@ -250,7 +260,9 @@
           pop.parentNode.removeChild(pop);
           delete pops[id + '-popover'];
 
-          $.events.unpop(target, pop);
+          if (pop.classList.contains('pop')) {
+            $.events.unpop(target, pop);
+          }
 
         } catch (e) { window.console.log('ERROR', e); }
       }, arguments.length == 1 ? $.delay.unpop : delay);
@@ -258,7 +270,7 @@
     };
 
     // add root node if it has
-    if (node.hasAttribute('data-popover')) {
+    if (node.hasAttribute(ATTR)) {
       nodes.push(node);
     }
 
@@ -271,8 +283,13 @@
       // clear out title since we don't want the tooltip to obscure the popover
       if (n.hasAttribute('title')) { n.setAttribute('title', ''); }
 
-      n.addEventListener('mouseenter', on);
-      n.addEventListener('focus', on);
+      n.addEventListener('mouseenter', function(e) {
+        on(e, $.delay.pop);
+      });
+
+      n.addEventListener('focus', function(e) {
+        on(e, $.delay.pop);
+      });
 
       n.addEventListener('mouseleave', function(e) {
        off(e, $.delay.unpop);

@@ -72,19 +72,12 @@
     Creating a Popover controller with no arguments passed to the initializer will initialize a controller with default behaviour. However, the class&rsquo; constructor accepts an optional argument to customize its behaviour.
   </p>
 
-  <h3>Target Nodes</h3>
+  <h3>Attribute Initialization</h3>
   <p>
-    When creating a new Popover object <em>all</em> nodes under <code>document.body</code> are inspected. To restrict the search to a portion of the document pass an instance of <code>HTMLNode</code> or a query selector string to the
+    By default popover content is retrieved from the target&rsquo;s <code>data-popover</code> attribute, either as a simple string or a serialized JSON object.
   </p>
 
-  <pre>new Popover({ root : '#doc' });</pre>
-
-  <h3>Content</h3>
-  <p>
-    By default popover content is retrieved from the target&rsquo;s <code>data-popover</code> attribute, either as a string
-  </p>
-
-  <h4>JavaScript Content</h4>
+  <h3>JavaScript Content</h3>
   <p>
     However by providing a <code>factory</code> method in the constructor&rsquo;s options argument, popovers can be created via
   </p>
@@ -96,6 +89,14 @@
       return { 'content' : lookUpMethod(targetNode.getAttribute('data-id')) }
     } }
   );</pre>
+
+  <h3>Target Nodes</h3>
+  <p>
+    When creating a new Popover object <em>all</em> nodes under <code>document.body</code> are inspected. To restrict the search to a portion of the document pass an instance of <code>HTMLNode</code> or a query selector string to the
+  </p>
+
+  <pre>new Popover({ root : '#doc' });</pre>
+
 
   <h3>Timing</h3>
   <p>
