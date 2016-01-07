@@ -8,7 +8,7 @@
   var
 
   //
-  VERSION = '0.1.2',
+  VERSION = '0.1.3',
 
   // node attribute
   ATTR = 'data-popover',
@@ -153,6 +153,7 @@
       n,
       arrow,
       targetRect = getRect(target),
+//      bodyRect = getRect(document.body),
       popoverRect,
       popoverXY,
       arrowXY,
@@ -209,6 +210,14 @@
 
       arrowXY = [popoverXY[0], popoverXY[1]];
       arrowXY[0] = popoverRect.width / 2 - 6;
+
+      if (popoverXY[0] < 0) {
+        popoverXY[0] = 5;
+        arrowXY[0] = targetRect.left + targetRect.width / 2 - 10;
+      } else if (popoverXY[0] + popoverRect.width > window.innerWidth ) {
+        popoverXY[0] = window.innerWidth - popoverRect.width - 5;
+        arrowXY[0] = popoverRect.width - targetRect.width / 2;
+      }
 
       target.setAttribute('aria-describedby', data.id);
       n.setAttribute('style', 'left: ' + parseInt(popoverXY[0], 10) + 'px; top: ' + parseInt(popoverXY[1], 10) + 'px');

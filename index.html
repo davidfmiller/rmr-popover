@@ -32,9 +32,40 @@
   padding: 0;
 }
 
+
+.test {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.test span {
+  position: absolute;
+  top: 200px;
+  width: 50px;
+  height: 50px;
+  background: #f8f8f8;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.test .west {
+  left: 0;
+}
+
+.test .east {
+  right: 0;
+}
+
+
+.test:hover {
+  background: #ddd;
+}
+
 </style>
 
-<link rel="stylesheet" type="text/css" href="man.css"><!-- http://davidfmiller.github.io/man-css/-->
+<link rel="stylesheet" type="text/css" href="http://davidfmiller.github.io/man-css/man.css">
 
 <link rel="stylesheet" type="text/css" href="src/popover.css">
 
@@ -47,7 +78,7 @@
     &hellip; is a simple
     JavaScript
     <em tabindex="1" data-popover="module">module</em>
-    to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>things</em>. View the <a data-popover="README" title="README" tabindex="3" href="https://github.com/davidfmiller/popover/blob/master/README.md">README</a> for more info.
+    to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>things</em>. View the <a data-popover="📕" title="README" tabindex="3" href="https://github.com/davidfmiller/popover/blob/master/README.md">README</a> for more info.
   </p>
 
   <p><em tabindex="4" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
@@ -97,7 +128,6 @@
 
   <pre>new Popover({ root : '#doc' });</pre>
 
-
   <h3>Timing</h3>
   <p>
     By default the popovers will appear and disappear a brief period of time after the target element is either hovered over or receives focus. This timing can be modified with the following options to the initializer:
@@ -126,12 +156,20 @@
 
   <hr>
 
+  <h2 id="releases"><a href="#releases">#</a>Release Notes</h2>
+  <dl>
+    <dt>v0.1.3</dt>
+    <dd>Checks on popover creation &amp; removal</dd>
+    <dd>Prevent horizontal clipping</dd>
+  </dl>
+
+  <hr>
+
   <h2 id="todo"><a href="#todo">#</a>TODO</h2>
   <ul>
-
+    <li>Minimize clipping</li>
     <li>Debug mode</li>
     <li>Object destroyer (<a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">remove listeners</a>)</li>
-
   </ul>
 
   <hr>
@@ -139,12 +177,17 @@
   <p>Hosted by <a id="gh-a" tabindex="6" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
 
 </div>
-<script src="src/popover.js">
-</script>
+
+<div class="test">
+  <span class="west" data-popover="Long popover content goes here"></span>
+  <span class="east" data-popover="Long popover content goes here"></span>
+</div>
+
+<script src="src/popover.js"></script>
 <script>
   var popover = new Popover(
     {
-      root : '#doc',
+//      root : '#doc',
       delay : {
         pop : 200,
         unpop : 500
