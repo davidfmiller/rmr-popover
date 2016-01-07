@@ -137,9 +137,6 @@
 
     node = options.root ? (options.root instanceof HTMLElement ? options.root : document.querySelector(options.root)) : document.body;
 
-    window.console.log(options);
-    window.console.log(node);
-
     if (! node) {
       throw Error('Invalid Popover root [' + options.root + ']');
     }
