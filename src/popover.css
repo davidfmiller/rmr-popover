@@ -21,6 +21,7 @@
   color: #fff;
   border-radius: 2px;
   z-index: 1;
+  opacity: 0;
 }
 
 .rmr-popover a {
@@ -36,6 +37,7 @@
   -webkit-animation:rmr-pop-in 0.1s;
   -moz-animation:rmr-pop-in 0.1s;
   -ms-animation:rmr-pop-in 0.1s;
+  opacity: 1;
 }
 
 .rmr-popover .bd {
@@ -62,3 +64,4 @@
   border-right: 5px solid transparent;
   border-top:   5px solid black;
 }
+

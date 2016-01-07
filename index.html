@@ -34,7 +34,7 @@
 
 </style>
 
-<link rel="stylesheet" type="text/css" href="http://davidfmiller.github.io/man-css/man.css">
+<link rel="stylesheet" type="text/css" href="man.css"><!-- http://davidfmiller.github.io/man-css/-->
 
 <link rel="stylesheet" type="text/css" href="src/popover.css">
 
@@ -42,7 +42,7 @@
 <body>
 
 <div id="doc">
-  <h1><i>💬</i><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"popover"}'>popover</a></h1>
+  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"popover"}'><i>💬</i>popover</a></h1>
   <p>
     &hellip; is a simple
     JavaScript
@@ -55,19 +55,75 @@
   <pre tabindex="5" data-popover="Example Popover implementation"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;<a class="s" href="src/popover.css">popover.css</a>&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;<a href="src/popover.js" class="s">src/popover.js</a>&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;script&gt;</span>
-<span class="kd">var</span> <span class="nx">popover</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">(<span class="s1">&#39;#doc&#39;</span>);</span>
-
-<span class="nx">popover</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span>
-  <span class="s1">&#39;pop&#39;</span><span class="p">,</span>
-  <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
-<span class="p">).</span><span class="nx">on</span><span class="p">(</span>
-  <span class="s1">&#39;unpop&#39;</span><span class="p">,</span>
-  <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;unpop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
-<span class="p">);</span>
-
+  <span class="kd">var</span> <span class="nx">popover</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">();</span>
+  <span class="nx">popover</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span>
+    <span class="s1">&#39;pop&#39;</span><span class="p">,</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">).</span><span class="nx">on</span><span class="p">(</span>
+    <span class="s1">&#39;unpop&#39;</span><span class="p">,</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">)</span> <span class="p">{</span> <span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;unpop&#39;</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">popover</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">);</span>
 <span class="nt">&lt;/script&gt;</span></pre>
 
   <p>(View your browser console&rsquo;s log for example output after having viewed this page&rsquo;s popovers.)</p>
+
+  <h2>Configuring Popover Behaviour</h2>
+  <p>
+    Creating a Popover controller with no arguments passed to the initializer will initialize a controller with default behaviour. However, the class&rsquo; constructor accepts an optional argument to customize its behaviour.
+  </p>
+
+  <h3>Target Nodes</h3>
+  <p>
+    When creating a new Popover object <em>all</em> nodes under <code>document.body</code> are inspected. To restrict the search to a portion of the document pass an instance of <code>HTMLNode</code> or a query selector string to the
+  </p>
+
+  <pre>new Popover({ root : '#doc' });</pre>
+
+  <h3>Content</h3>
+  <p>
+    By default popover content is retrieved from the target&rsquo;s <code>data-popover</code> attribute, either as a string
+  </p>
+
+  <h4>JavaScript Content</h4>
+  <p>
+    However by providing a <code>factory</code> method in the constructor&rsquo;s options argument, popovers can be created via
+  </p>
+
+<pre>
+  var pop = new Popover(
+    <span class="s1">&#39;#doc&#39;</span>,
+    { factory : function(targetNode) {
+      return { 'content' : lookUpMethod(targetNode.getAttribute('data-id')) }
+    } }
+  );</pre>
+
+  <h3>Timing</h3>
+  <p>
+    By default the popovers will appear and disappear a brief period of time after the target element is either hovered over or receives focus. This timing can be modified with the following options to the initializer:
+  </p>
+
+  <dl>
+    <dt><code>delay.pop</code></dt>
+    <dd>the length of time between <code>mouseenter</code> (or <code>focus</code>) and when the popover will appear (in milliseconds)</dd>
+    <dt><code>delay.unpop</code></dt>
+    <dd>the length of time between <code>mouseleave</code> (or <code>blur</code>) and when the popover will appear (in milliseconds)</dd>
+  </dl>
+
+  <pre>new Popover({
+   delay : {
+     pop : 1000, <span class="c">// wait one second before popover appears</span>
+     unpop : 0   <span class="c">// disappear immediately</span>
+  }
+});</pre>
+
+  <h3>Enabling/disabling</h3>
+  <p>
+    Once created, popovers can be temporarily turned on and off by setting the <code>`enabled`</code> property to <code><span class="vg">true</span></code> or <code><span class="vg">false</span></code>, ex:
+  </p>
+
+  <pre>popover.enabled = false; <span class="c1">// temporarily suppress display of popovers</span></pre>
+
+  <hr>
 
   <p>Hosted by <a id="gh-a" tabindex="6" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
 
@@ -75,7 +131,17 @@
 <script src="src/popover.js">
 </script>
 <script>
-  var popover = new Popover('#doc', null, 300);
+  var popover = new Popover(
+    {
+      root : '#doc',
+      delay : {
+        pop : 1000,
+        unpop : 500
+      }
+      //generator : function(node) { return { 'content' : 'abc' } }
+    }
+  );
+
   popover.on(
     'pop',
     function(target, popover) { window.console.log('pop', target, popover); }
@@ -83,7 +149,6 @@
     'unpop',
     function(target, popover) { window.console.log('unpop', target, popover); }
   );
-
 </script>
 
 </body>

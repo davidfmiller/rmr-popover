@@ -1,11 +1,12 @@
-/* jshint undef: true,strict:true,trailing:true */
-/* global document,window */
+/* jshint undef: true,strict:true,trailing:true,loopfunc:true */
+/* global document,window,HTMLElement */
 
 (function() {
 
   'use strict';
 
   var
+  VERSION = '0.1.1',
 
   /*
    * Generate a unique string
@@ -15,6 +16,24 @@
    */
   guid = function(basename) {
     return basename + '-' + parseInt(Math.random() * 100, 10) + '-' + parseInt(Math.random() * 1000, 10);
+  },
+
+  /*
+   *
+   * @param a
+   * @param b
+
+   * @return Object
+   */
+  merge = function(a, b) {
+    var o = {};
+    for (var i in a) {
+      o[i] = a[i];
+    }
+    for (i in b) {
+      o[i] = b[i];
+    }
+    return o;
   },
 
   /*
@@ -29,6 +48,22 @@
     }
 
     return ret;
+  },
+
+  /*
+   *
+   * @param type (String)
+   * @param attrs
+   */
+  makeElement = function(type, attrs) {
+     var
+     n = document.createElement(type),
+     i = null;
+
+     for (i in attrs) {
+       n.setAttribute(i, attrs[i]);
+     }
+     return n;
   },
 
   /*
@@ -62,28 +97,50 @@
    *
    *
    * @param node (node, optional) - the root element containing all elements with attached popovers
-   * @param generator (function, optional) method to retrieve the popover's data for a given node
+   * @param options (Object, optional) method to retrieve the popover's data for a given node
    */
-  window.Popover = function(node, generator, delay) {
+  window.Popover = function(options) {
+
+    var
+    $ = this,
+    nodes,
+    i = 0,
+    n,
+    node,
+    on,
+    off,
+    over,
+    defaultOptions = {
+      root : document.body,
+      delay : { pop : 100, unpop : 1000 },
+      factory : null
+    };
+
+    if (arguments.length < 1) {
+      options = defaultOptions;
+    } else {
+      options = merge(defaultOptions, options);
+    }
 
     // two events are fired
     this.events = {
       'pop' : function(target, popover) { },
       'unpop' : function(target, popover) { }
     };
-
-    if (arguments.length < 3) { delay = 100; }
-
     this.enabled = true;
-    this.delay = delay;
+    this.delay = options.delay;
 
-    node = node ? (node instanceof HTMLElement ? node : document.querySelector(node)) : document.body;
+    node = options.root ? (options.root instanceof HTMLElement ? options.root : document.querySelector(options.root)) : document.body;
 
-    var
-    $ = this,
-    nodes = arr(node.querySelectorAll('[data-popover]')),
-    i = 0,
-    n,
+    window.console.log(options);
+    window.console.log(node);
+
+    if (! node) {
+      throw Error('Invalid Popover root [' + options.root + ']');
+    }
+
+    nodes = arr(node.querySelectorAll('[data-popover]'));
+
     on = function(e) {
 
       if (! $.enabled) { return; }
@@ -93,13 +150,19 @@
       data = {},
       n,
       arrow,
-      targetRect,
+      targetRect = getRect(target),
       popoverRect,
       popoverXY,
-      arrowXY;
+      arrowXY,
+      popper = function() {
+        pops[data.id] = n;
+        n.classList.add('pop');
+        // fire event listener
+        $.events.pop(target, n);
+      }
 
-      if (generator) {
-        data = generator(target);
+      if (options.hasOwnProperty('factory') && options.factory) {
+        data = options.factory(target);
       }
       else  {
         try {
@@ -112,10 +175,7 @@
       data['class'] = (data['class'] ? data['class'] : '') + ' rmr-popover';
       data.id = target.getAttribute('id') + '-popover';
 
-      n = document.createElement('div');
-      n.setAttribute('role', 'tooltip');
-      n.setAttribute('class', data['class']);
-      n.setAttribute('id', data.id);
+      n = makeElement('div', {'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
 
       if (pops[data.id]) {
         if (timeouts[target.getAttribute('id')]) {
@@ -131,7 +191,6 @@
 
       window.document.body.appendChild(n);
 
-      targetRect = getRect(target);
       popoverRect = getRect(n);
 
       popoverXY = [
@@ -143,18 +202,19 @@
       arrowXY[0] = popoverRect.width / 2 - 6;
 
       target.setAttribute('aria-describedby', data.id);
-      pops[data.id] = n;
-
       n.setAttribute('style', 'left: ' + parseInt(popoverXY[0], 10) + 'px; top: ' + parseInt(popoverXY[1], 10) + 'px');
 
       arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px');
 
-      n.classList.add('pop');
+      if ) {
+        window.setTimeout(function() { popper(n); }, $.delay.pop);
+      } else {
+        popper();
+      }
 
+      //
       n.addEventListener('mouseenter', over);
-
-      $.events.pop(target, n);
-    },
+    };
 
     /*
      *
@@ -174,7 +234,7 @@
         window.clearTimeout(timeouts[id]);
         delete timeouts[id];
       }
-    },
+    };
 
     /*
      *
@@ -192,8 +252,8 @@
 
           $.events.unpop(target, pop);
 
-        } catch (e) { }
-      }, arguments.length == 1 ? $.delay : delay);
+        } catch (e) { window.console.log('ERROR', e); }
+      }, arguments.length == 1 ? $.delay.unpop : delay);
 
     };
 
@@ -206,24 +266,20 @@
       n = nodes[i];
 
       // ensure target has unique id
-      if (! n.getAttribute('id')) {
-        n.setAttribute('id', guid('popover-target') );
-      }
+      if (! n.getAttribute('id')) { n.setAttribute('id', guid('popover-target') ); }
 
       // clear out title since we don't want the tooltip to obscure the popover
-      if (n.hasAttribute('title')) {
-        n.setAttribute('title', '');
-      }
+      if (n.hasAttribute('title')) { n.setAttribute('title', ''); }
 
       n.addEventListener('mouseenter', on);
       n.addEventListener('focus', on);
 
       n.addEventListener('mouseleave', function(e) {
-       off(e, $.delay);
+       off(e, $.delay.unpop);
       });
 
       n.addEventListener('blur',  function(e) {
-       off(e, $.delay);
+       off(e, $.delay.unpop);
       });
     }
   };
@@ -244,7 +300,7 @@
    * @return string
    */
   window.Popover.prototype.toString = function() {
-    return '[Popover]';
+    return '[Popover v' + VERSION + ']';
   };
 
 }());
