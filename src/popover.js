@@ -178,6 +178,9 @@
         }
       }
 
+      // if there's no content and no specific class, abort since it's an empty popover
+      if (! data.content && ! data['class']) { return; }
+
       data['class'] = (data['class'] ? data['class'] : '') + ' rmr-popover';
       data.id = target.getAttribute('id') + '-popover';
 
@@ -254,10 +257,11 @@
         target.removeAttribute('aria-describedBy');
         try {
           var pop = pops[id + '-popover'];
-          pop.parentNode.removeChild(pop);
+
           delete pops[id + '-popover'];
 
-          if (pop.classList.contains('pop')) {
+          if (pop) {
+            pop.parentNode.removeChild(pop);
             $.events.unpop(target, pop);
           }
 
