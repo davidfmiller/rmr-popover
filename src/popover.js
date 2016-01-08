@@ -211,10 +211,15 @@
       arrowXY = [popoverXY[0], popoverXY[1]];
       arrowXY[0] = popoverRect.width / 2 - 6;
 
-      if (popoverXY[0] < 0) {
+      if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
         popoverXY[0] = 5;
         arrowXY[0] = targetRect.left + targetRect.width / 2 - 10;
-      } else if (popoverXY[0] + popoverRect.width > window.innerWidth ) {
+      } else if (popoverXY[0] < targetRect.left) { // is the popover further left than the target?
+        popoverXY[0] = targetRect.left;
+        arrowXY[0] = targetRect.width / 2 - 10;
+      }
+
+      if (popoverXY[0] + popoverRect.width > window.innerWidth ) { // are we clipped on the right side of the browser window?
         popoverXY[0] = window.innerWidth - popoverRect.width - 5;
         arrowXY[0] = popoverRect.width - targetRect.width / 2;
       }

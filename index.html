@@ -73,7 +73,7 @@
 <body>
 
 <div id="doc">
-  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"popover"}'><i>💬</i>popover</a></h1>
+  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"This is a simple popover"}'><i>💬</i>popover</a></h1>
   <p>
     &hellip; is a simple
     JavaScript
@@ -123,10 +123,10 @@
 
   <h3>Target Nodes</h3>
   <p>
-    When creating a new Popover object <em>all</em> nodes under <code>document.body</code> are inspected. To restrict the search to a portion of the document pass an instance of <code>HTMLNode</code> or a query selector string to the
+    When creating a new Popover object <em>all</em> nodes under <code>document.body</code> are inspected. To restrict the search to a portion of the document pass an instance of <code>HTMLNode</code> or a query selector string to the initializer config:
   </p>
 
-  <pre>new Popover({ root : '#doc' });</pre>
+  <pre>new Popover({ root : '#doc' }); <span class="c">// new Popover({ root : document.getElementById('doc') });</span></pre>
 
   <h3>Timing</h3>
   <p>
@@ -169,7 +169,8 @@
   <ul>
     <li>Minimize clipping</li>
     <li>Debug mode</li>
-    <li>Object destroyer (<a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">remove listeners</a>)</li>
+    <li>Horizontal orientation</li>
+    <li>Object destroyer (<a data-popover="Clean up after yourself" href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">remove listeners</a>)</li>
   </ul>
 
   <hr>
