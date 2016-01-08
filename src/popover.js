@@ -95,8 +95,8 @@
     return ret;
   },
   timeouts = {},
-  pops = {};
-
+  pops = {},
+  listeners = {};
 
   /**
    *
@@ -298,21 +298,21 @@
       // clear out title since we don't want the tooltip to obscure the popover
       if (n.hasAttribute('title')) { n.setAttribute('title', ''); }
 
-      n.addEventListener('mouseenter', function(e) {
-        on(e, $.delay.pop);
-      });
+      var l = {
+        on  :  function(e) { on(e, $.delay.pop); },
+        off : function(e) { off(e, $.delay.unpop); }
+      };
 
-      n.addEventListener('focus', function(e) {
-        on(e, $.delay.pop);
-      });
+      listeners[n.getAttribute('id')] = {
+        'pop' : l.on,
+        'unpop' : l.off
+      };
 
-      n.addEventListener('mouseleave', function(e) {
-       off(e, $.delay.unpop);
-      });
+      n.addEventListener('mouseenter', l.on);
+      n.addEventListener('focus', l.on);
 
-      n.addEventListener('blur',  function(e) {
-       off(e, $.delay.unpop);
-      });
+      n.addEventListener('mouseleave', l.off);
+      n.addEventListener('blur',  l.off);
     }
   };
 
@@ -333,6 +333,25 @@
    */
   window.Popover.prototype.toString = function() {
     return '[Popover v' + VERSION + ']';
+  };
+
+  /**
+   *
+   *
+   * @return string
+   */
+  window.Popover.prototype.destroy = function() {
+
+    var n;
+    for(var i in listeners) {
+
+      n = document.getElementById(i);
+      n.removeEventListener('mouseenter', listeners[i].pop);
+      n.removeEventListener('focus', listeners[i].pop);
+
+      n.removeEventListener('mouseleave', listeners[i].unpop);
+      n.removeEventListener('blur', listeners[i].unpop);
+    }
   };
 
 }());
