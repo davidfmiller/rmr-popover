@@ -95,8 +95,7 @@
     return ret;
   },
   timeouts = {},
-  pops = {},
-  listeners = {};
+  pops = {};
 
   /**
    *
@@ -134,6 +133,7 @@
     };
     this.enabled = true;
     this.delay = options.delay;
+    this.listeners = {};
 
     node = options.root ? (options.root instanceof HTMLElement ? options.root : document.querySelector(options.root)) : document.body;
 
@@ -303,7 +303,7 @@
         off : function(e) { off(e, $.delay.unpop); }
       };
 
-      listeners[n.getAttribute('id')] = {
+      this.listeners[n.getAttribute('id')] = {
         'pop' : l.on,
         'unpop' : l.off
       };
@@ -335,23 +335,26 @@
     return '[Popover v' + VERSION + ']';
   };
 
+
   /**
+   * Remove all event listeners
    *
-   *
-   * @return string
+   * @chainable
    */
   window.Popover.prototype.destroy = function() {
 
     var n;
-    for(var i in listeners) {
+    for (var i in this.listeners) {
 
       n = document.getElementById(i);
-      n.removeEventListener('mouseenter', listeners[i].pop);
-      n.removeEventListener('focus', listeners[i].pop);
+      n.removeEventListener('mouseenter', this.listeners[i].pop);
+      n.removeEventListener('focus', this.listeners[i].pop);
 
-      n.removeEventListener('mouseleave', listeners[i].unpop);
-      n.removeEventListener('blur', listeners[i].unpop);
+      n.removeEventListener('mouseleave', this.listeners[i].unpop);
+      n.removeEventListener('blur', this.listeners[i].unpop);
     }
+
+    return this;
   };
 
 }());
