@@ -94,6 +94,27 @@
 
     return ret;
   },
+
+  /*!
+   *
+   *
+   */
+  getDataForNode = function(scope, node) {
+
+    if (scope.factory) {
+      return scope.factory(node);
+    }
+
+    var data = {};
+    try {
+      data = JSON.parse(node.getAttribute(ATTR));
+    } catch (err) {
+      data = { content : node.getAttribute(ATTR) };
+    }
+
+    return data;
+  },
+
   timeouts = {},
   pops = {};
 
@@ -115,6 +136,7 @@
     off,
     over,
     defaultOptions = {
+      debug : false,
       root : document.body,
       delay : { pop : 100, unpop : 1000 },
       factory : null
@@ -133,7 +155,11 @@
     };
     this.enabled = true;
     this.delay = options.delay;
+    this.factory = options.factory;
+    this.debug = options.debug;
     this.listeners = {};
+
+    if (this.debug) { window.console.log(this.toString()); }
 
     node = options.root ? (options.root instanceof HTMLElement ? options.root : document.querySelector(options.root)) : document.body;
 
@@ -142,6 +168,7 @@
     }
 
     nodes = arr(node.querySelectorAll('[' + ATTR + ']'));
+
 
     on = function(e, delay) {
 
@@ -153,7 +180,6 @@
       n,
       arrow,
       targetRect = getRect(target),
-//      bodyRect = getRect(document.body),
       popoverRect,
       popoverXY,
       arrowXY,
@@ -168,22 +194,16 @@
         }
       }
 
-      if (options.hasOwnProperty('factory') && options.factory) {
-        data = options.factory(target);
-      }
-      else  {
-        try {
-          data = JSON.parse(e.target.getAttribute(ATTR));
-        } catch (err) {
-          data = { content : e.target.getAttribute(ATTR) };
-        }
-      }
+      data = getDataForNode($, target);
 
       // if there's no content and no specific class, abort since it's an empty popover
       if (! data.content && ! data['class']) { return; }
 
       data['class'] = (data['class'] ? data['class'] : '') + ' rmr-popover';
       data.id = target.getAttribute('id') + '-popover';
+
+      // popover already exists
+      if (document.getElementById(data.id)) { return; }
 
       n = makeElement('div', {'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
 
@@ -215,8 +235,8 @@
         popoverXY[0] = 5;
         arrowXY[0] = targetRect.left + targetRect.width / 2 - 10;
       } else if (popoverXY[0] < targetRect.left) { // is the popover further left than the target?
-        popoverXY[0] = targetRect.left;
-        arrowXY[0] = targetRect.width / 2 - 10;
+        popoverXY[0] = targetRect.left - 5;
+        arrowXY[0] = targetRect.width / 2;
       }
 
       if (popoverXY[0] + popoverRect.width > window.innerWidth ) { // are we clipped on the right side of the browser window?
@@ -237,7 +257,9 @@
       }
 
       //
-      n.addEventListener('mouseenter', over);
+      if (! data.persist) {
+        n.addEventListener('mouseenter', over);
+      }
     };
 
     /*
@@ -262,7 +284,7 @@
 
     /*
      *
-     * @param e (MouseEvent)
+     * @param e (MouseEvent) - target is the node who will have a popover attached
      */
     off = function(e, delay) {
       var target = e.target;
@@ -275,7 +297,7 @@
           delete pops[id + '-popover'];
 
           if (pop) {
-            pop.parentNode.removeChild(pop);
+            if (! $.debug) { pop.parentNode.removeChild(pop); }
             $.events.unpop(target, pop);
           }
 
@@ -301,19 +323,43 @@
       var l = {
         on  :  function(e) { on(e, $.delay.pop); },
         off : function(e) { off(e, $.delay.unpop); }
-      };
+      },
+      data = getDataForNode(this, n);
 
       this.listeners[n.getAttribute('id')] = {
         'pop' : l.on,
         'unpop' : l.off
       };
 
-      n.addEventListener('mouseenter', l.on);
-      n.addEventListener('focus', l.on);
+      if (data.persist) {
+        l.on({ target : n });
+      } else {
 
-      n.addEventListener('mouseleave', l.off);
-      n.addEventListener('blur',  l.off);
+        n.addEventListener('mouseenter', l.on);
+        n.addEventListener('focus', l.on);
+
+        n.addEventListener('mouseleave', l.off);
+        n.addEventListener('blur',  l.off);
+      }
     }
+
+    this.destroy = function() {
+
+      var n;
+      for (var i in this.listeners) {
+
+        n = document.getElementById(i);
+        n.removeEventListener('mouseenter', this.listeners[i].pop);
+        n.removeEventListener('focus', this.listeners[i].pop);
+
+        n.removeEventListener('mouseleave', this.listeners[i].unpop);
+        n.removeEventListener('blur', this.listeners[i].unpop);
+
+        off( { target : n }, 0);
+      }
+
+      return this;
+    };
   };
 
   /*!
@@ -333,28 +379,6 @@
    */
   window.Popover.prototype.toString = function() {
     return '[Popover v' + VERSION + ']';
-  };
-
-
-  /**
-   * Remove all event listeners
-   *
-   * @chainable
-   */
-  window.Popover.prototype.destroy = function() {
-
-    var n;
-    for (var i in this.listeners) {
-
-      n = document.getElementById(i);
-      n.removeEventListener('mouseenter', this.listeners[i].pop);
-      n.removeEventListener('focus', this.listeners[i].pop);
-
-      n.removeEventListener('mouseleave', this.listeners[i].unpop);
-      n.removeEventListener('blur', this.listeners[i].unpop);
-    }
-
-    return this;
   };
 
 }());

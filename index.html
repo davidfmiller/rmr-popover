@@ -32,7 +32,6 @@
   padding: 0;
 }
 
-
 .test {
   position: absolute;
   top: 0;
@@ -58,7 +57,6 @@
   right: 0;
 }
 
-
 .test:hover {
   background: #ddd;
 }
@@ -81,7 +79,7 @@
     to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>things</em>. View the <a data-popover="📕" title="README" tabindex="3" href="https://github.com/davidfmiller/popover/blob/master/README.md">README</a> for more info.
   </p>
 
-  <p><em tabindex="4" data-popover='{"size":10,"color":"#888", "class":"rmr","orientation":"horizontal"}'>Example</em>:</p>
+  <p><em tabindex="4" data-popover='{"class":"rmr"}'>Example</em>:</p>
 
   <pre tabindex="5" data-popover="Example Popover implementation"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;<a class="s" href="src/popover.css">popover.css</a>&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;<a href="src/popover.js" class="s">src/popover.js</a>&quot;</span><span class="nt">&gt;</span>
@@ -108,9 +106,9 @@
     By default popover content is retrieved from the target&rsquo;s <code>data-popover</code> attribute, either as a simple string or a serialized JSON object, ex:
   </p>
 
-  <pre>
-
-  </pre>
+  <pre><span class="c">// the following two lines create the same popover</span>
+&lt;span data-popover='{"content":"stuff"}'&gt; <span class="c"></span>
+&lt;span data-popover="stuff"&gt; </pre>
 
   <h3>JavaScript Content</h3>
   <p>
@@ -156,30 +154,41 @@
     Once created, popovers can be temporarily turned on and off by setting the <code>`enabled`</code> property to <code><span class="vg">true</span></code> or <code><span class="vg">false</span></code>, ex:
   </p>
 
-  <pre>popover.enabled = false; <span class="c1">// temporarily suppress display of popovers</span></pre>
+  <pre>popover.enabled = false; <span class="c1">// temporarily disable popovers</span>
+
+<span class="c">// ...</span>
+
+popover.enabled = true; <span class="c">// re-enable popovers</span></pre>
+
+  <p>To permanently disable popovers &amp; clean up the listeners that have been attached to the relevant ndoes, invoke the <code>destroy</code> method:</p>
+
+  <pre>popover.destroy();</pre>
+
+  <p>After a popover instance is destroyed it will have to be created again </p>
 
   <hr>
 
-  <h2 id="releases"><a href="#releases">#</a>Release Notes</h2>
+  <h2 id="releases"><a href="#releases" title="Release Notes" data-popover='{ "content" : "Release Notes", "persist" : true }'>#</a>Release Notes</h2>
   <dl>
     <dt>v0.1.3</dt>
     <dd>Checks on popover creation &amp; removal</dd>
     <dd>Prevent horizontal clipping</dd>
-    <dd>Added <code>destroy</code> method to (<a data-popover="Clean up after yourself" href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">remove listeners</a>)</dd>
+    <dd>Added <code>destroy</code> method to remove listeners</dd>
+    <dd>Added <code>debug</code> option</dd>
+    <dd>Added <code>persistent</code> attribute</dd>
   </dl>
 
   <hr>
 
-  <h2 id="todo"><a href="#todo">#</a>TODO</h2>
+  <h2 id="todo"><a href="#todo" data-popover='{ "content" : "TODO", "persist" : true }'>#</a>TODO</h2>
   <ul>
-    <li>Minimize clipping</li>
-    <li>Debug mode</li>
+    <li>Prevent vertical clipping</li>
     <li>Horizontal orientation</li>
   </ul>
 
   <hr>
 
-  <p>Hosted by <a id="gh-a" tabindex="6" data-popover='{"class":"github","persist":true,"id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
+  <p>Hosted by <a id="gh-a" tabindex="6" data-popover='{"class":"github","id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
 
 </div>
 
@@ -192,12 +201,12 @@
 <script>
   var popover = new Popover(
     {
-//      root : '#doc',
+//      debug : true,
       delay : {
-        pop : 200,
-        unpop : 500
+        pop : 0,
+        unpop : 100
       }
-//      factory : function(node) { return { 'content' : 'abc' } }
+//      factory : function(node) { return { 'content' : 'abc', 'persist' : true }; }
     }
   );
 
