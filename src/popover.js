@@ -115,6 +115,48 @@
     return data;
   },
 
+  /*
+   *
+   *
+   * @param popover
+   * @param target
+   */
+  positionPopover = function(popover, target) {
+
+    var
+    arrow,
+    targetRect = getRect(target),
+    popoverRect = getRect(popover),
+    popoverXY,
+    arrowXY,
+
+    arrow = popover.querySelector('b');
+
+    popoverXY = [
+      targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
+      targetRect.top - popoverRect.height - 5
+    ];
+
+    arrowXY = [popoverXY[0], popoverXY[1]];
+    arrowXY[0] = popoverRect.width / 2 - 6;
+
+    if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
+      popoverXY[0] = 5;
+      arrowXY[0] = targetRect.left + targetRect.width / 2 - 10;
+    } else if (popoverXY[0] < targetRect.left) { // is the popover further left than the target?
+      popoverXY[0] = targetRect.left - 5;
+      arrowXY[0] = targetRect.width / 2;
+    }
+
+    if (popoverXY[0] + popoverRect.width > window.innerWidth ) { // are we clipped on the right side of the browser window?
+      popoverXY[0] = window.innerWidth - popoverRect.width - 5;
+      arrowXY[0] = popoverRect.width - targetRect.width / 2;
+    }
+
+    popover.setAttribute('style', 'left: ' + parseInt(popoverXY[0], 10) + 'px; top: ' + parseInt(popoverXY[1], 10) + 'px');
+    arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px');
+  },
+
   timeouts = {},
   pops = {};
 
@@ -178,34 +220,27 @@
       target = e.target,
       data = {},
       n,
-      arrow,
-      targetRect = getRect(target),
-      popoverRect,
-      popoverXY,
-      arrowXY,
       popper = function() {
-
         if (n) {
           n.classList.add('pop');
-          // fire event listener
-          if (pops[n.getAttribute('id')]) {
+          if (pops[n.getAttribute('id')]) { // fire event listener
             $.events.pop(target, n);
           }
         }
-      }
+      };
 
       data = getDataForNode($, target);
 
       // if there's no content and no specific class, abort since it's an empty popover
       if (! data.content && ! data['class']) { return; }
 
-      data['class'] = (data['class'] ? data['class'] : '') + ' rmr-popover';
+      data['class'] = (data['class'] ? data['class'] : '') + ' rmr-popover' + (data.persist ? ' persist' : '');
       data.id = target.getAttribute('id') + '-popover';
 
       // popover already exists
       if (document.getElementById(data.id)) { return; }
 
-      n = makeElement('div', {'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
+      n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
 
       if (pops[data.id]) {
         if (timeouts[target.getAttribute('id')]) {
@@ -216,39 +251,13 @@
       }
 
       n.innerHTML = '<b></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
-
-      arrow = n.querySelector('b');
-
       window.document.body.appendChild(n);
 
-      popoverRect = getRect(n);
-
-      popoverXY = [
-        targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
-        targetRect.top - popoverRect.height - 5
-      ];
-
-      arrowXY = [popoverXY[0], popoverXY[1]];
-      arrowXY[0] = popoverRect.width / 2 - 6;
-
-      if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
-        popoverXY[0] = 5;
-        arrowXY[0] = targetRect.left + targetRect.width / 2 - 10;
-      } else if (popoverXY[0] < targetRect.left) { // is the popover further left than the target?
-        popoverXY[0] = targetRect.left - 5;
-        arrowXY[0] = targetRect.width / 2;
-      }
-
-      if (popoverXY[0] + popoverRect.width > window.innerWidth ) { // are we clipped on the right side of the browser window?
-        popoverXY[0] = window.innerWidth - popoverRect.width - 5;
-        arrowXY[0] = popoverRect.width - targetRect.width / 2;
-      }
-
       target.setAttribute('aria-describedby', data.id);
-      n.setAttribute('style', 'left: ' + parseInt(popoverXY[0], 10) + 'px; top: ' + parseInt(popoverXY[1], 10) + 'px');
+
+      positionPopover(n, target);
 
       pops[data.id] = n;
-      arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px');
 
       if (delay) {
         window.setTimeout(function() { popper(); }, delay);
@@ -342,6 +351,16 @@
         n.addEventListener('blur',  l.off);
       }
     }
+
+    window.addEventListener('resize', function(e) {
+      var persists = arr(document.querySelectorAll('.rmr-popover.persist'));
+      for (var i = 0; i < persists.length; i++) {
+        positionPopover(
+          persists[i],
+          document.getElementById(persists[i].getAttribute('data-target'))
+        );
+      }
+    });
 
     this.destroy = function() {
 
