@@ -250,7 +250,7 @@
         return;
       }
 
-      n.innerHTML = '<b></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
+      n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
       window.document.body.appendChild(n);
 
       target.setAttribute('aria-describedby', data.id);

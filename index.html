@@ -49,6 +49,14 @@
   transition: background 0.2s;
 }
 
+.rmr-popover.important .bd {
+  background: red;
+}
+
+.rmr-popover.important b {
+  border-top-color: red;
+}
+
 .test .west {
   left: 0;
 }
@@ -110,11 +118,19 @@
 <span class="nt">&lt;span</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;stuff&quot;}&#39;</span><span class="nt">&gt;</span><span class="nt">&lt;/span&gt;</span>
 <span class="nt">&lt;span</span> <span class="na">data-popover=</span><span class="s">&quot;stuff&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/span&gt;</span></pre>
 
-  <p>Providing a </p>
+  <p>In most instances, using a simple string attribute will be sufficient. However, in cases where you want to style a popover or add other hooks, it&rsquo;s possible to apply a CSS class, <em style="border-bottom: 1px dotted #ddd;" data-popover='{"content" : "This is a very important popover", "class" : "important"}'>for example</em>:</p>
+
+  <pre>
+<span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+<span class="nc">.rmr-popover.important</span> <span class="nc">.bd</span>    <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.rmr-popover.important</span> <span class="nc">.arrow</span> <span class="p">{</span> <span class="k">border-top-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">&lt;/style&gt;</span>
+<span class="c">...</span>
+<span class="nt">&lt;em</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;This is a very important popover&quot;,&quot;class&quot;:&quot;important&quot;}&#39;</span><span class="nt">&gt;</span>‼️<span class="nt">&lt;/em&gt;</span></pre>
 
   <h3>JavaScript Content</h3>
   <p>
-    However by providing a <code>factory</code> method in the constructor&rsquo;s options argument, popovers can be created via
+    Rather than relying on node attributes to populate popovers, you may instead provide a <code>factory</code> method in the constructor&rsquo;s options to programmatically create popovers. The factory method receives the popover&rsquo;s target node as its sole parameter:
   </p>
 
 <pre><span class="kd">var</span> <span class="nx">pop</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span>
