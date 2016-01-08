@@ -53,7 +53,7 @@
   background: red;
 }
 
-.rmr-popover.important b {
+.rmr-popover.important .arrow {
   border-top-color: red;
 }
 
@@ -109,7 +109,7 @@
     Creating a Popover controller with no arguments passed to the initializer will initialize a controller with default behaviour. However, the class&rsquo; constructor accepts an optional argument to customize its behaviour.
   </p>
 
-  <h3>Attribute Initialization</h3>
+  <h3>Initialization via Node Attribute</h3>
   <p>
     By default popover content is retrieved from the target&rsquo;s <code>data-popover</code> attribute, either as a simple string or a serialized JSON object, ex:
   </p>
@@ -151,7 +151,7 @@
 
   <h3>Timing</h3>
   <p>
-    By default the popovers will appear and disappear a brief period of time after the target element is either hovered over or receives focus. This timing can be modified with the following options to the initializer:
+    By default the popovers will appear and disappear a brief period of time after the target element is hovered over or receives focus. This timing can be modified with the following options to the initializer:
   </p>
 
   <dl>
@@ -219,7 +219,7 @@
 <script>
   var popover = new Popover(
     {
-//      debug : true,
+      debug : true,
       delay : {
         pop : 500,
         unpop : 0
