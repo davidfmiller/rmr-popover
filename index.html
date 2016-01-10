@@ -7,6 +7,7 @@
 
 <style>
 
+
 .rmr-popover.rmr {
   background: transparent;
   border: 1px solid #888;
@@ -84,7 +85,7 @@
     &hellip; is a simple
     JavaScript
     <em tabindex="1" data-popover="module">module</em>
-    to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>things</em>. View the <a data-popover="📕" title="README" tabindex="3" href="https://github.com/davidfmiller/popover/blob/master/README.md">README</a> for more info.
+    to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>things</em>. Mouse around this page to see it in action, or comb through the <em data-popover="📕">documentation</em> below for more information.
   </p>
 
   <p><em tabindex="4" data-popover='{"class":"rmr"}'>Example</em>:</p>
@@ -102,7 +103,6 @@
   <span class="p">);</span>
 <span class="nt">&lt;/script&gt;</span></pre>
 
-  <p>(View your browser console&rsquo;s log for example output after having viewed this page&rsquo;s popovers.)</p>
 
   <h2>Configuring Popover Behaviour</h2>
   <p>
@@ -123,10 +123,17 @@
   <pre>
 <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
 <span class="nc">.rmr-popover.important</span> <span class="nc">.bd</span>    <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
-<span class="nc">.rmr-popover.important</span> <span class="nc">.arrow</span> <span class="p">{</span> <span class="k">border-top-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.rmr-popover.important</span> <span class="nc">.arrow</span> <span class="p">{</span> <span class="k" data-popover="Colors the popover arrow">border-top-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
 <span class="nt">&lt;/style&gt;</span>
 <span class="c">...</span>
-<span class="nt">&lt;em</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;This is a very important popover&quot;,&quot;class&quot;:&quot;important&quot;}&#39;</span><span class="nt">&gt;</span>‼️<span class="nt">&lt;/em&gt;</span></pre>
+<span class="nt">&lt;em</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;This is a very important popover&quot;,&quot;class&quot;:&quot;important&quot;}&#39;</span><span class="nt">&gt;</span><span data-popover="❗">❗</span><span class="nt">&lt;/em&gt;</span></pre>
+
+  <p>
+    Similarly, it&rsquo;s possible to add a visual clue to popover targets via CSS, ex:
+  </p>
+  <pre><span class="o">*[</span><span class="nt">data-popover</span><span class="o">]</span><span class="nd">:after</span> <span class="p">{</span>
+  <span class="k">content</span><span class="o">:</span> <span class="s2">&quot;💬&quot;</span>
+<span class="p">}</span></pre>
 
   <h3>JavaScript Content</h3>
   <p>
@@ -142,7 +149,7 @@
 
   <h3>Target Nodes</h3>
   <p>
-    When creating a new Popover object <em>all</em> nodes under <code>document.body</code> are inspected. To restrict the search to a portion of the document pass an instance of <code>HTMLNode</code> or a query selector string to the initializer config:
+    When creating a new Popover object all nodes under <code>document.body</code> are inspected. To restrict the search to a portion of the document pass an instance of <code>HTMLNode</code> or a query selector string to the initializer config:
   </p>
 
   <pre><span class="c">// equivalent</span>
@@ -174,14 +181,20 @@
   </p>
 
   <pre><span class="nx">popover</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// temporarily disable popovers</span>
-
 <span class="c">// ...</span>
-
 <span class="nx">popover</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="c">// re-enable popovers</span></pre>
 
   <p>To permanently disable (&amp; remove) popovers and clean up the listeners that have been attached to the relevant nodes, invoke the <code>destroy</code> method:</p>
 
   <pre>popover.destroy();</pre>
+
+  <h3>Debugging</h3>
+  <p>
+    Add a debug field to the object&rsquo;s constructor to make working with popovers easier while still in development. Information will be logged to the browser console and popovers will not be removed in <code>debug</code> mode.
+  </p>
+  <pre><span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span>
+   <span class="nx">debug</span> <span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span></pre>
 
   <hr>
 
@@ -200,6 +213,7 @@
 
   <h2 id="todo"><a href="#todo" data-popover='{ "content" : "TODO", "persist" : true }'>#</a>TODO</h2>
   <ul>
+    <li>Mobile support</li>
     <li>Prevent vertical clipping</li>
     <li>Horizontal orientation</li>
   </ul>
