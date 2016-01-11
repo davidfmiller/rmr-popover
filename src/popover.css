@@ -55,12 +55,22 @@
   position: absolute;
   pointer-events: none;
   z-index: 1;
+}
 
-
-  top: 100%;
+.rmr-popover .arrow {
   border-bottom: none;
   border-left:  5px solid transparent;
   border-right: 5px solid transparent;
   border-top:   5px solid black;
 }
 
+.rmr-popover.side .arrow {
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid black;
+}
+
+.rmr-popover.left .arrow { /* popover on the left side of target due to browser window clipping on the right */
+  border-right: 5px solid transparent;
+  border-left: 5px solid black;
+}

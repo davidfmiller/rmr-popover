@@ -8,9 +8,9 @@
   var
 
   //
-  VERSION = '0.1.3',
+  VERSION = '0.1.4',
 
-  // node attribute
+  // node attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
 
   /*
@@ -24,9 +24,10 @@
   },
 
   /*
+   * Merge two objects into one
    *
-   * @param a
-   * @param b
+   * @param a {Object}
+   * @param b {Object}
 
    * @return Object
    */
@@ -42,12 +43,16 @@
   },
 
   /*
+   * Convert an array-like thing (ex: NodeList or arguments object) into a proper array
    *
    * @param list (array-like thing)
    * @return Array
    */
   arr = function(list) {
     var ret = [], i = 0;
+
+    if (! list.length) { return ret; }
+
     for (i = 0; i < list.length; i++) {
       ret.push(list[i]);
     }
@@ -56,9 +61,12 @@
   },
 
   /*
+   * Make
    *
    * @param type (String)
-   * @param attrs
+   * @param attrs {Object}
+   *
+   * @return HTMLElement
    */
   makeElement = function(type, attrs) {
      var
@@ -101,15 +109,13 @@
    */
   getDataForNode = function(scope, node) {
 
-    if (scope.factory) {
-      return scope.factory(node);
-    }
+    var val = '', data = {};
+    val = scope.factory ? scope.factory(node) : node.getAttribute(ATTR);
 
-    var data = {};
     try {
-      data = JSON.parse(node.getAttribute(ATTR));
+      data = JSON.parse(val);
     } catch (err) {
-      data = { content : node.getAttribute(ATTR) };
+      data = { content : val };
     }
 
     return data;
@@ -121,15 +127,13 @@
    * @param popover
    * @param target
    */
-  positionPopover = function(popover, target) {
+  positionPopover = function(popover, target, data) {
 
     var
-    arrow,
     targetRect = getRect(target),
     popoverRect = getRect(popover),
     popoverXY,
     arrowXY,
-
     arrow = popover.querySelector('b');
 
     popoverXY = [
@@ -140,21 +144,40 @@
     arrowXY = [popoverXY[0], popoverXY[1]];
     arrowXY[0] = popoverRect.width / 2 - 6;
 
-    if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
-      popoverXY[0] = 5;
-      arrowXY[0] = targetRect.left + targetRect.width / 2 - 10;
-    } else if (popoverXY[0] < targetRect.left) { // is the popover further left than the target?
-      popoverXY[0] = targetRect.left - 5;
-      arrowXY[0] = targetRect.width / 2;
-    }
+    if (data.position !== "side") { // top of target
 
-    if (popoverXY[0] + popoverRect.width > window.innerWidth ) { // are we clipped on the right side of the browser window?
-      popoverXY[0] = window.innerWidth - popoverRect.width - 5;
-      arrowXY[0] = popoverRect.width - targetRect.width / 2;
+      if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
+        popoverXY[0] = 5;
+        arrowXY[0] = targetRect.left + targetRect.width / 2 - 10;
+      } else if (popoverXY[0] < targetRect.left) { // is the popover further left than the target?
+        popoverXY[0] = targetRect.left - 5;
+        arrowXY[0] = targetRect.width / 2;
+      }
+
+      if (popoverXY[0] + popoverRect.width > window.innerWidth ) { // are we clipped on the right side of the browser window?
+        popoverXY[0] = window.innerWidth - popoverRect.width - 5;
+        arrowXY[0] = popoverRect.width - targetRect.width / 2;
+      }
+
+      arrowXY[1] = popoverRect.height;
+
+    } else { // right-side of target
+
+      popoverXY[0] = targetRect.left + targetRect.width + 10;
+      popoverXY[1] = targetRect.top + targetRect.height / 2 - popoverRect.height / 2;
+
+      arrowXY[0] = -10;
+      arrowXY[1] = popoverRect.height / 2 - 5;
+
+      if (popoverXY[0] + popoverRect.width > window.innerWidth) { // if clipped on right side
+        popoverXY[0] = targetRect.left - popoverRect.width - 5;
+        popover.classList.add('left');
+        arrowXY[0] = popoverRect.width;
+      }
     }
 
     popover.setAttribute('style', 'left: ' + parseInt(popoverXY[0], 10) + 'px; top: ' + parseInt(popoverXY[1], 10) + 'px');
-    arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px');
+    arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px; top:' + parseInt(arrowXY[1], 10) + 'px');
   },
 
   timeouts = {},
@@ -180,8 +203,9 @@
     defaultOptions = {
       debug : false,
       root : document.body,
-      delay : { pop : 100, unpop : 1000 },
-      factory : null
+      delay : { pop : 0, unpop : 0 },
+      factory : null,
+      position : "top"
     };
 
     if (arguments.length < 1) {
@@ -201,16 +225,20 @@
     this.debug = options.debug;
     this.listeners = {};
 
-    if (this.debug) { window.console.log(this.toString()); }
-
     node = options.root ? (options.root instanceof HTMLElement ? options.root : document.querySelector(options.root)) : document.body;
 
     if (! node) {
       throw Error('Invalid Popover root [' + options.root + ']');
     }
 
+    this.root = node;
+
     nodes = arr(node.querySelectorAll('[' + ATTR + ']'));
 
+    // add root node if it has the data-popover attribute
+    if (node.hasAttribute(ATTR)) {
+      nodes.push(node);
+    }
 
     on = function(e, delay) {
 
@@ -234,7 +262,7 @@
       // if there's no content and no specific class, abort since it's an empty popover
       if (! data.content && ! data['class']) { return; }
 
-      data['class'] = (data['class'] ? data['class'] : '') + ' rmr-popover' + (data.persist ? ' persist' : '');
+      data['class'] = (data['class'] ? data['class'] : '') + (data.position == "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
       data.id = target.getAttribute('id') + '-popover';
 
       // popover already exists
@@ -255,7 +283,7 @@
 
       target.setAttribute('aria-describedby', data.id);
 
-      positionPopover(n, target);
+      positionPopover(n, target, data);
 
       pops[data.id] = n;
 
@@ -293,11 +321,13 @@
 
     /*
      *
-     * @param e (MouseEvent) - target is the node who will have a popover attached
+     * @param e (MouseEvent) - mouseevent for the target element
      */
     off = function(e, delay) {
-      var target = e.target;
-      timeouts[target.getAttribute('id')] = window.setTimeout(function() {
+
+      var
+      target = e.target,
+      f = function() {
         var id = target.getAttribute('id');
         target.removeAttribute('aria-describedBy');
         try {
@@ -311,14 +341,11 @@
           }
 
         } catch (e) { window.console.log('ERROR', e); }
-      }, arguments.length == 1 ? $.delay.unpop : delay);
+      };
 
+      timeouts[target.getAttribute('id')] = window.setTimeout(f, arguments.length == 1 ? $.delay.unpop : delay);
     };
 
-    // add root node if it has
-    if (node.hasAttribute(ATTR)) {
-      nodes.push(node);
-    }
 
     for (i = 0; i < nodes.length; i++) {
       n = nodes[i];
@@ -344,23 +371,29 @@
         l.on({ target : n });
       } else {
 
+        n.addEventListener('touchstart', l.on);
         n.addEventListener('mouseenter', l.on);
         n.addEventListener('focus', l.on);
 
+        n.addEventListener('touchend', l.off);
         n.addEventListener('mouseleave', l.off);
         n.addEventListener('blur',  l.off);
       }
     }
 
-    window.addEventListener('resize', function(e) {
+    this.windowResizer = function(e) {
+      var $ = this;
       var persists = arr(document.querySelectorAll('.rmr-popover.persist'));
       for (var i = 0; i < persists.length; i++) {
         positionPopover(
           persists[i],
-          document.getElementById(persists[i].getAttribute('data-target'))
+          document.getElementById(persists[i].getAttribute('data-target')),
+          getDataForNode($, persists[i])
         );
       }
-    });
+    };
+
+    window.addEventListener('resize', this.windowResizer);
 
     this.destroy = function() {
 
@@ -370,21 +403,31 @@
         n = document.getElementById(i);
         n.removeEventListener('mouseenter', this.listeners[i].pop);
         n.removeEventListener('focus', this.listeners[i].pop);
+        n.removeEventListener('touchstart', this.listeners[i].pop);
 
         n.removeEventListener('mouseleave', this.listeners[i].unpop);
         n.removeEventListener('blur', this.listeners[i].unpop);
+        n.removeEventListener('touchend', this.listeners[i].unpop);
 
+        // hide all
         off( { target : n }, 0);
       }
 
+      window.removeEventListener('resize', this.windowResizer);
+
       return this;
     };
+
+    if (this.debug) { window.console.log(this.toString()); }
   };
+
 
   /*!
    *
+   *
    * @param event (string) - one of "pop" or "unpop"
    * @param method (function) - the method that will be invoked
+   * @chainable
    */
   window.Popover.prototype.on = function(event, method) {
     this.events[event] = method;
@@ -397,7 +440,7 @@
    * @return string
    */
   window.Popover.prototype.toString = function() {
-    return '[Popover v' + VERSION + ']';
+    return 'Popover ' + JSON.stringify({root : '' + this.root, enabled : this.enabled, delay : this.delay, debug : this.debug});
   };
 
 }());

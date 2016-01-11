@@ -5,19 +5,18 @@
 <meta charset="utf-8">
 <meta name="viewport" value="width=550">
 
-<style>
+<link rel="stylesheet" type="text/css" href="src/popover.css">
 
+<style>
 
 .rmr-popover.rmr {
   background: transparent;
-  border: 1px solid #888;
   box-sizing: border-box;
 }
 
 .rmr-popover.rmr .bd {
   width: 100px;
   height: 67px;
-  padding: 0;
   background: url(assets/moma.jpg);
   background-size: 100px 67px;
   padding: 0;
@@ -50,12 +49,12 @@
   transition: background 0.2s;
 }
 
-.rmr-popover.important .bd {
+.rmr-popover.error .bd {
   background: red;
 }
 
-.rmr-popover.important .arrow {
-  border-top-color: red;
+.rmr-popover.error .arrow {
+  border-right-color: red;
 }
 
 .test .west {
@@ -66,6 +65,10 @@
   right: 0;
 }
 
+.test .side {
+  top: 100px;
+}
+
 .test:hover {
   background: #ddd;
 }
@@ -74,23 +77,22 @@
 
 <link rel="stylesheet" type="text/css" href="http://davidfmiller.github.io/man-css/man.css">
 
-<link rel="stylesheet" type="text/css" href="src/popover.css">
 
 </head>
 <body>
 
 <div id="doc">
-  <h1><a tabindex="1" href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"This is a simple popover"}'><i>💬</i>popover</a></h1>
+  <h1><a href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"This is a simple popover", "position" : "side"}'><i>💬</i>popover</a></h1>
   <p>
     &hellip; is a simple
     JavaScript
-    <em tabindex="1" data-popover="module">module</em>
-    to create popover <em tabindex="2" data-popover='{"content":"widgets"}'>things</em>. Mouse around this page to see it in action, or comb through the <em data-popover="📕">documentation</em> below for more information.
+    <em data-popover="module">module</em>
+    to create popover <em data-popover='{"content":"widgets"}'>things</em>. Mouse around this page to see it in action, or comb through the <em data-popover="📕">documentation</em> below for more information.
   </p>
 
-  <p><em tabindex="4" data-popover='{"class":"rmr"}'>Example</em>:</p>
+  <p><em data-popover='{"class":"rmr"}'>Example</em>:</p>
 
-  <pre tabindex="5" data-popover="Example Popover implementation"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;<a class="s" href="src/popover.css">popover.css</a>&quot;</span><span class="nt">&gt;</span>
+  <pre data-popover="Example Popover implementation"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;<a class="s" href="src/popover.css">popover.css</a>&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;<a href="src/popover.js" class="s">src/popover.js</a>&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;script&gt;</span>
   <span class="kd">var</span> <span class="nx">popover</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">();</span>
@@ -106,48 +108,17 @@
 
   <h2>Configuring Popover Behaviour</h2>
   <p>
-    Creating a Popover controller with no arguments passed to the initializer will initialize a controller with default behaviour. However, the class&rsquo; constructor accepts an optional argument to customize its behaviour.
+    Creating a Popover controller with no arguments passed to the initializer will initialize default behaviour. However, the class&rsquo; constructor accepts an optional argument with parameters to customize the following behaviour:
   </p>
+  <ul>
+    <li>which <a href="#target" data-popover="Target Nodes">section of the document</a> to scan for popovers</li>
+    <li>when they will <a href="#timing" data-popover='{"content" : "Timing", "position" : "side"}'>appear/disappear</a></li>
+    <li>how to <a href="#node-attribute" data-popover="Initialization via Node Attribute">generate</a> <a href="#javascript-content" data-popover="JavaScript Content">the content</a> for the popovers</li>
+    <li>where they will be <a href="#position" data-popover="Position">positioned</a> relative to their targets</li>
+    <li>turn them <a href="#enable-disable" data-popover='{"content" : "Enabling/disabling", "position" : "side"}'>on or off</a>, or make them <a href="#lifecycle" data-popover='{"content" : "Lifecycle", "position" : "side" }'>permanent</a> elements in the page</li>
+  </ul>
 
-  <h3>Initialization via Node Attribute</h3>
-  <p>
-    By default popover content is retrieved from the target&rsquo;s <code>data-popover</code> attribute, either as a simple string or a serialized JSON object, ex:
-  </p>
-
-  <pre><span class="c">// equivalent</span>
-<span class="nt">&lt;span</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;stuff&quot;}&#39;</span><span class="nt">&gt;</span><span class="nt">&lt;/span&gt;</span>
-<span class="nt">&lt;span</span> <span class="na">data-popover=</span><span class="s">&quot;stuff&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/span&gt;</span></pre>
-
-  <p>In most instances, using a simple string attribute will be sufficient. However, in cases where you want to style a popover or add other hooks, it&rsquo;s possible to apply a CSS class, <em style="border-bottom: 1px dotted #ddd;" data-popover='{"content" : "This is a very important popover", "class" : "important"}'>for example</em>:</p>
-
-  <pre>
-<span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
-<span class="nc">.rmr-popover.important</span> <span class="nc">.bd</span>    <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
-<span class="nc">.rmr-popover.important</span> <span class="nc">.arrow</span> <span class="p">{</span> <span class="k" data-popover="Colors the popover arrow">border-top-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
-<span class="nt">&lt;/style&gt;</span>
-<span class="c">...</span>
-<span class="nt">&lt;em</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;This is a very important popover&quot;,&quot;class&quot;:&quot;important&quot;}&#39;</span><span class="nt">&gt;</span><span data-popover="❗">❗</span><span class="nt">&lt;/em&gt;</span></pre>
-
-  <p>
-    Similarly, it&rsquo;s possible to add a visual clue to popover targets via CSS, ex:
-  </p>
-  <pre><span class="o">*[</span><span class="nt">data-popover</span><span class="o">]</span><span class="nd">:after</span> <span class="p">{</span>
-  <span class="k">content</span><span class="o">:</span> <span class="s2">&quot;💬&quot;</span>
-<span class="p">}</span></pre>
-
-  <h3>JavaScript Content</h3>
-  <p>
-    Rather than relying on node attributes to populate popovers, you may instead provide a <code>factory</code> method in the constructor&rsquo;s options to programmatically create popovers. The factory method receives the popover&rsquo;s target node as its sole parameter:
-  </p>
-
-<pre><span class="kd">var</span> <span class="nx">pop</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span>
-  <span class="nx">root</span> <span class="o">:</span> <span class="s1">&#39;#doc&#39;</span><span class="p">,</span>
-  <span class="nx">factory</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">targetNode</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="p">{</span> <span class="s1">&#39;content&#39;</span> <span class="o">:</span> <span class="nx">globalLookup</span><span class="p">(</span><span class="nx">targetNode</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;data-id&#39;</span><span class="p">))</span> <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">});</span></pre>
-
-  <h3>Target Nodes</h3>
+  <h3 id="target"><a href="#target">#</a>Target Nodes</h3>
   <p>
     When creating a new Popover object all nodes under <code>document.body</code> are inspected. To restrict the search to a portion of the document pass an instance of <code>HTMLNode</code> or a query selector string to the initializer config:
   </p>
@@ -156,9 +127,22 @@
 <span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span> <span class="nx">root</span> <span class="o">:</span> <span class="s1">&#39;#doc&#39;</span> <span class="p">});</span>
 <span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span> <span class="nx">root</span> <span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;doc&#39;</span><span class="p">)</span> <span class="p">});</span></pre>
 
-  <h3>Timing</h3>
+  <h3 id="enable-disable"><a href="#enable-disable">#</a>Enabling/disabling</h3>
   <p>
-    By default the popovers will appear and disappear a brief period of time after the target element is hovered over or receives focus. This timing can be modified with the following options to the initializer:
+    Once created, popovers can be temporarily turned on and off by setting the <code>`enabled`</code> property to <code><span class="vg">true</span></code> or <code><span class="vg">false</span></code>, ex:
+  </p>
+
+  <pre><span class="nx">popover</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// temporarily disable popovers</span>
+<span class="c">// ...</span>
+<span class="nx">popover</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="c">// re-enable popovers</span></pre>
+
+  <p>To permanently disable (&amp; remove) popovers and clean up the listeners that have been attached to the relevant nodes, invoke the <code>destroy</code> method:</p>
+
+  <pre>popover.destroy();</pre>
+
+  <h3 id="timing"><a href="#timing">#</a>Timing</h3>
+  <p>
+    By default the popovers will appear and disappear a brief period of time after the target element is hovered over or receives focus. This timing can be modified with the following options to the controller&rsquo;s initializer:
   </p>
 
   <dl>
@@ -175,18 +159,69 @@
   <span class="p">}</span>
 <span class="p">});</span></pre>
 
-  <h3>Enabling/disabling</h3>
+  <h3 id="node-attribute"><a href="#node-attribute">#</a>Initialization via Node Attribute</h3>
   <p>
-    Once created, popovers can be temporarily turned on and off by setting the <code>`enabled`</code> property to <code><span class="vg">true</span></code> or <code><span class="vg">false</span></code>, ex:
+    By default popover content is retrieved from the target&rsquo;s <code>data-popover</code> attribute, either as a simple string or a serialized JSON object, ex:
   </p>
 
-  <pre><span class="nx">popover</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// temporarily disable popovers</span>
-<span class="c">// ...</span>
-<span class="nx">popover</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="c">// re-enable popovers</span></pre>
+  <pre><span class="c">// equivalent</span>
+<span class="nt">&lt;span</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;stuff&quot;}&#39;</span><span class="nt">&gt;</span><span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">data-popover=</span><span class="s">&quot;stuff&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/span&gt;</span></pre>
 
-  <p>To permanently disable (&amp; remove) popovers and clean up the listeners that have been attached to the relevant nodes, invoke the <code>destroy</code> method:</p>
+  <p>In most instances, using a simple string attribute will be sufficient. However, in cases where you want to style a popover or add other hooks, it&rsquo;s possible to apply a CSS class, <em style="border-bottom: 1px dotted #ddd;" data-popover='{"content" : "This is an error popover", "class" : "error", "position" : "side" }'>for example</em>:</p>
 
-  <pre>popover.destroy();</pre>
+  <pre>
+<span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+<span class="nc">.rmr-popover.error</span> <span class="nc">.bd</span>    <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
+<span data-popover='{"content" : "Colors the popover arrow", "position" : "side"}'><span class="nc">.rmr-popover.error</span> <span class="nc">.arrow</span> <span class="p">{</span> <span class="k">border-top-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p" >}</span></span>
+<span class="nt">&lt;/style&gt;</span>
+<span class="c">...</span>
+<span class="nt">&lt;em</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;This is an error popover&quot;,&quot;class&quot;:&quot;error&quot;}&#39;</span><span class="nt">&gt;</span><span data-popover='{"class" : "error", "content" :"⚠️", "position" : "side"}'>❗</span><span class="nt">&lt;/em&gt;</span></pre>
+
+  <p>
+    Similarly, it&rsquo;s possible to add a visual clue to popover targets via CSS, ex:
+  </p>
+  <pre><span class="o">*[</span><span class="nt">data-popover</span><span class="o">]</span><span class="nd">:after</span> <span class="p">{</span>
+  <span class="k">content</span><span class="o">:</span> <span class="s2">&quot;💬&quot;</span>
+<span class="p">}</span></pre>
+
+  <h3 id="position"><a href="#position">#</a>Position</h3>
+  <p>Popovers will be positioned above their target elements unless a <code>{ "position" : "side" }</code> is included in their data.</p>
+
+
+
+  <h3 id="javascript-content"><a href="#javascript-content">#</a> JavaScript Content</h3>
+  <p>
+    Rather than relying on node attributes to populate popovers, you may instead provide a <code>factory</code> method in the constructor&rsquo;s options to programmatically generate popovers. The factory method receives the popover&rsquo;s target node as its sole parameter. Much like <code>data-popover</code> attributes, the factory method can either return a simple string or an object containing the popover content and associated metadata:
+  </p>
+
+<pre><span class="kd">var</span> <span class="nx">pop</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span>
+  <span class="nx">root</span> <span class="o">:</span> <span class="s1">&#39;#doc&#39;</span><span class="p">,</span>
+  <span class="nx">factory</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">targetNode</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span> <span class="s1">&#39;content&#39;</span> <span class="o">:</span> <span class="nx">popupLookup</span><span class="p">(</span><span class="nx">targetNode</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;data-id&#39;</span><span class="p">))</span> <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Generate popover content based on an HTMLElement&rsquo;s id attribute</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param id {String} - value of target node&rsquo;s id</span>
+<span class="cm"> * @return {Object|String} - data for</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">popupLookup</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="s2">&quot;todo-label&quot;</span><span class="o">:</span>
+      <span class="k">return</span> <span class="s2">&quot;Password must be 7 characters long&quot;</span><span class="p">;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="c1">// ...</span>
+    <span class="k">default</span><span class="o">:</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="s2">&quot;class&quot;</span> <span class="o">:</span> <span class="s2">&quot;warning&quot;</span><span class="p">,</span> <span class="nx">content</span> <span class="o">:</span> <span class="s2">&quot;Field must be entered&quot;</span> <span class="p">};</span>
+  <span class="p">}</span>
+<span class="p">}</span></pre>
+
+
+  <h3 id="lifecycle"><a href="#lifecycle">#</a><span data-popover='{"content" : "Persistent popover", "position" : "side","persist": true}'>Lifecycle</span></h3>
+  <p>Popovers are controlled by mouse events (or touch events on mobile devices). However, the presence of a <code>persist</code> flag in the popover&rsquo;s data will make the popover a permanent element in the page: created in the controller&rsquo;s initialization and only removed if/when the controller&rsquo;s <code>destory</code> method is invoked.</p>
 
   <h3>Debugging</h3>
   <p>
@@ -200,44 +235,54 @@
 
   <h2 id="releases"><a href="#releases" title="Release Notes" data-popover='{ "content" : "Release Notes", "persist" : true }'>#</a>Release Notes</h2>
   <dl>
+    <dt>v0.1.4</dt>
+    <dd>Mobile support</dd>
+    <dd>Horizontal orientation</dd>
+    <dd>Bug fixes</dd>
+    <dd>Documentation</dd>
+
     <dt>v0.1.3</dt>
-    <dd>Checks on popover creation &amp; removal</dd>
+    <dd>Sanity checks on popover creation &amp; removal</dd>
     <dd>Prevent horizontal clipping</dd>
     <dd>Added <code>destroy</code> method to remove listeners</dd>
     <dd>Added <code>debug</code> option</dd>
-    <dd>Added <code>persistent</code> attribute</dd>
+    <dd>Added <code>persist</code> attribute</dd>
     <dd>Reposition persistent popovers on window resize</dd>
   </dl>
 
   <hr>
 
-  <h2 id="todo"><a href="#todo" data-popover='{ "content" : "TODO", "persist" : true }'>#</a>TODO</h2>
+  <h2 id="todo"><a href="#todo" data-popover='{ "content" : "Todo", "persist" : true }'>#</a>TODO</h2>
   <ul>
-    <li>Mobile support</li>
-    <li>Prevent vertical clipping</li>
-    <li>Horizontal orientation</li>
+    <li>Improve delayed pop/unpop handling</li>
   </ul>
 
   <hr>
 
-  <p>Hosted by <a id="gh-a" tabindex="6" data-popover='{"class":"github","id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
+  <p>Hosted by <a id="gh-a" data-popover='{"class":"github","id":"gh-popover"}' title="GitHub" href="https://github.com/davidfmiller/popover">GitHub</a></p>
 
 </div>
 
 <div class="test">
   <span class="west" data-popover="Long popover content goes here"></span>
+  <span class="west side" data-popover='{"content" : "Long popover content goes here", "position" : "side"}'></span>
+
   <span class="east" data-popover="Long popover content goes here"></span>
+  <span class="east side" data-popover='{"content" : "Long popover content goes here", "position" : "side"}'></span>
 </div>
 
 <script src="src/popover.js"></script>
 <script>
   var popover = new Popover(
     {
-      debug : true,
+      position: "side"
+//      debug : true,
+/*
       delay : {
         pop : 500,
         unpop : 0
       }
+*/
 //      factory : function(node) { return { 'content' : 'abc', 'persist' : true }; }
     }
   );
