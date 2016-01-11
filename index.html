@@ -49,12 +49,8 @@
   transition: background 0.2s;
 }
 
-.rmr-popover.error .bd {
-  background: red;
-}
-
-.rmr-popover.error .arrow {
-  border-right-color: red;
+.rmr-popover.error  {
+  font-weight: bold;
 }
 
 .test .west {
@@ -82,7 +78,7 @@
 <body>
 
 <div id="doc">
-  <h1><a href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"This is a simple popover", "position" : "side"}'><i>💬</i>popover</a></h1>
+  <h1><a href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"This is a blue popover", "color" : "blue", "position" : "side"}'><i>💬</i>popover</a></h1>
   <p>
     &hellip; is a simple
     JavaScript
@@ -114,7 +110,7 @@
     <li>which <a href="#target" data-popover="Target Nodes">section of the document</a> to scan for popovers</li>
     <li>when they will <a href="#timing" data-popover='{"content" : "Timing", "position" : "side"}'>appear/disappear</a></li>
     <li>how to <a href="#node-attribute" data-popover="Initialization via Node Attribute">generate</a> <a href="#javascript-content" data-popover="JavaScript Content">the content</a> for the popovers</li>
-    <li>where they will be <a href="#position" data-popover="Position">positioned</a> relative to their targets</li>
+    <li>where they will be <a href="#position" data-popover="Position">positioned</a> relative to their targets &amp; what color they will be</a></li>
     <li>turn them <a href="#enable-disable" data-popover='{"content" : "Enabling/disabling", "position" : "side"}'>on or off</a>, or make them <a href="#lifecycle" data-popover='{"content" : "Lifecycle", "position" : "side" }'>permanent</a> elements in the page</li>
   </ul>
 
@@ -172,11 +168,10 @@
 
   <pre>
 <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
-<span class="nc">.rmr-popover.error</span> <span class="nc">.bd</span>    <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p">}</span>
-<span data-popover='{"content" : "Colors the popover arrow", "position" : "side"}'><span class="nc">.rmr-popover.error</span> <span class="nc">.arrow</span> <span class="p">{</span> <span class="k">border-top-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span> <span class="p" >}</span></span>
+<span class="nc">.rmr-popover.error</span> <span class="p">{</span> <span class="k">font-weight</span><span class="o">:</span> <span class="nb">bold</span><span class="p">;</span> <span class="p">}</span>
 <span class="nt">&lt;/style&gt;</span>
 <span class="c">...</span>
-<span class="nt">&lt;em</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;This is an error popover&quot;,&quot;class&quot;:&quot;error&quot;}&#39;</span><span class="nt">&gt;</span><span data-popover='{"class" : "error", "content" :"⚠️", "position" : "side"}'>❗</span><span class="nt">&lt;/em&gt;</span></pre>
+<span class="nt">&lt;em</span> <span class="na">data-popover=</span><span class="s">&#39;{&quot;content&quot;:&quot;This is an error popover&quot;,&quot;class&quot;:&quot;error&quot;}&#39;</span><span class="nt">&gt;</span><span data-popover='{"class" : "error", "content" :"Error", "position" : "side"}'>❗</span><span class="nt">&lt;/em&gt;</span></pre>
 
   <p>
     Similarly, it&rsquo;s possible to add a visual clue to popover targets via CSS, ex:
@@ -185,8 +180,9 @@
   <span class="k">content</span><span class="o">:</span> <span class="s2">&quot;💬&quot;</span>
 <span class="p">}</span></pre>
 
-  <h3 id="position"><a href="#position" data-popover="Position">#</a>Position</h3>
-  <p>Popovers will be positioned above their target elements unless a <code>{ "position" : "side" }</code> is included in their data.</p>
+  <h3 id="position"><a href="#position" data-popover="Position">#</a>Position &amp; Color</h3>
+  <p>Popovers will be positioned above their target elements unless a <code>{ "position" : "side" }</code> is included in their data, and will be a very dark grey unless <code>{ "color" : "xxx" }</code> is included.</p>
+
 
   <h3 id="javascript-content"><a href="#javascript-content" data-popover="JavaScript Content">#</a> JavaScript Content</h3>
   <p>
@@ -233,6 +229,10 @@
 
   <h2 id="releases"><a href="#releases" title="Release Notes" data-popover='{ "content" : "Release Notes", "persist" : true }'>#</a>Release Notes</h2>
   <dl>
+    <dt>v0.1.6</dt>
+    <dd>Specify background color via data</dd>
+    <dd>Fix bug in persistent popover resizing</dd>
+
     <dt>v0.1.5</dt>
     <dd>Improve delayed pop/unpop handling</dd>
     <dd>Documentation</dd>
@@ -255,9 +255,7 @@
   <hr>
 
   <h2 id="todo"><a href="#todo" data-popover='{ "content" : "Todo", "persist" : true }'>#</a>TODO</h2>
-  <ul>
-    <li>Specify background color via data</li>
-  </ul>
+  <p>...</p>
 
   <hr>
 

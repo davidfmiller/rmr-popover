@@ -14,8 +14,6 @@
 }
 
 .rmr-popover {
-  background: #000;
-  background: rgba(0,0,0,0.9);
   position: absolute;
   box-shadow: 1px 1px 5px rgba(48,48,48,1);
   color: #fff;
@@ -58,19 +56,7 @@
 }
 
 .rmr-popover .arrow {
-  border-bottom: none;
   border-left:  5px solid transparent;
   border-right: 5px solid transparent;
-  border-top:   5px solid black;
-}
-
-.rmr-popover.side .arrow {
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-right: 5px solid black;
-}
-
-.rmr-popover.left .arrow { /* popover on the left side of target due to browser window clipping on the right */
-  border-right: 5px solid transparent;
-  border-left: 5px solid black;
+  border-top:   5px solid transparent;
 }

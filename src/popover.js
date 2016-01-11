@@ -8,10 +8,13 @@
   var
 
   //
-  VERSION = '0.1.4',
+  VERSION = '0.1.6',
 
   // attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
+
+  // default color
+  COLOR = 'rgba(0,0,0,0.8)',
 
   /*
    * Generate a unique string suitable for id attributes
@@ -62,7 +65,7 @@
   },
 
   /*
-   * Make
+   * Create an element with a set of attributes/values
    *
    * @param type (String)
    * @param attrs {Object}
@@ -112,14 +115,17 @@
    */
   getDataForNode = function(scope, node) {
 
-    var val = '', data = {};
-    val = scope.factory ? scope.factory(node) : node.getAttribute(ATTR);
+    var
+    val = scope.factory ? scope.factory(node) : node.getAttribute(ATTR),
+    data = {};
 
     try {
       data = JSON.parse(val);
     } catch (err) {
       data = { content : val };
     }
+
+    if (! data.color) { data.color = COLOR; }
 
     return data;
   },
@@ -138,7 +144,9 @@
     popoverRect = getRect(popover),
     popoverXY,
     arrowXY,
-    arrow = popover.querySelector('b');
+    arrow = popover.querySelector('.arrow');
+
+    popover.style.backgroundColor = data.color;
 
     popoverXY = [
       targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
@@ -149,6 +157,8 @@
     arrowXY[0] = popoverRect.width / 2 - 6;
 
     if (! data.position || data.position !== "side") { // top of target
+
+      arrow.style.borderTopColor = data.color;
 
       if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
         popoverXY[0] = 5;
@@ -170,18 +180,28 @@
       popoverXY[0] = targetRect.left + targetRect.width + 10;
       popoverXY[1] = targetRect.top + targetRect.height / 2 - popoverRect.height / 2;
 
+      arrow.style.borderRightColor = data.color;
+
       arrowXY[0] = -10;
       arrowXY[1] = popoverRect.height / 2 - 5;
 
-      if (popoverXY[0] + popoverRect.width > window.innerWidth) { // if clipped on right side
+      if (popoverXY[0] + popoverRect.width > window.innerWidth) { // if clipped on right side, move to the left
         popoverXY[0] = targetRect.left - popoverRect.width - 5;
         popover.classList.add('left');
         arrowXY[0] = popoverRect.width;
+
+        arrow.style.borderRightColor = 'transparent';
+        arrow.style.borderLeftColor = data.color;
+
       }
     }
 
-    popover.setAttribute('style', 'left: ' + parseInt(popoverXY[0], 10) + 'px; top: ' + parseInt(popoverXY[1], 10) + 'px');
-    arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px; top:' + parseInt(arrowXY[1], 10) + 'px');
+    popover.style.left = parseInt(popoverXY[0], 10) + 'px'
+    popover.style.top = parseInt(popoverXY[1], 10) + 'px';
+
+    arrow.style.left = parseInt(arrowXY[0], 10) + 'px';
+    arrow.style.top = parseInt(arrowXY[1], 10) + 'px';
+//    arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px; top:' + parseInt(arrowXY[1], 10) + 'px');
   },
   timeouts = {}, // store window.setTimeout handles for popover hiding
   pops = {};     // store popover HTMLElements keyed by their id attribute
@@ -374,7 +394,6 @@
         'unpop' : l.off
       };
 
-
       if (data.persist) { // if this is a persistent popover, create it immediately
         l.on({ target : n });
 
@@ -394,18 +413,26 @@
      * Re-position all persistent popovers on window resize
      */
     this.windowResizer = function() {
-      var $ = this;
-      var persists = arr(document.querySelectorAll('.rmr-popover.persist'));
+
+      var persists = arr(document.querySelectorAll('.rmr-popover.persist')),
+          target = null;
+
       for (var i = 0; i < persists.length; i++) {
+
+        target = document.getElementById(persists[i].getAttribute('data-target'));
+
         positionPopover(
           persists[i],
-          document.getElementById(persists[i].getAttribute('data-target')),
-          getDataForNode($, persists[i])
+          target,
+          getDataForNode(this, target)
         );
       }
     };
 
-    window.addEventListener('resize', this.windowResizer);
+    window.addEventListener(
+      'resize',
+      function() { $.windowResizer(); }
+    );
 
     this.destroy = function() {
 
