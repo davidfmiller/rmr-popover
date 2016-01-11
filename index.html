@@ -181,7 +181,9 @@
 <span class="p">}</span></pre>
 
   <h3 id="position"><a href="#position" data-popover="Position">#</a>Position &amp; Color</h3>
-  <p>Popovers will be positioned above their target elements unless a <code>{ "position" : "side" }</code> is included in their data, and will be a very dark grey unless <code>{ "color" : "xxx" }</code> is included.</p>
+  <p>Popovers will be positioned above their target elements unless a <code>{"position" : "side"}</code> is included in their data, and will be a very dark grey unless <code>{"color" : "xxx"}</code> is included.</p>
+
+  <p>By default popovers will appear immediately next to the target node in the special You are able to pass <code>{"margin" : x}</code> (where <code>x</code> is the number of pixels to offset).</p>
 
 
   <h3 id="javascript-content"><a href="#javascript-content" data-popover="JavaScript Content">#</a> JavaScript Content</h3>
@@ -229,6 +231,11 @@
 
   <h2 id="releases"><a href="#releases" title="Release Notes" data-popover='{ "content" : "Release Notes", "persist" : true }'>#</a>Release Notes</h2>
   <dl>
+
+    <dt>v0.1.7</dt>
+    <dd>Margin</dd>
+    <dd>Provide popover defaults in initializer</dd>
+
     <dt>v0.1.6</dt>
     <dd>Specify background color via data</dd>
     <dd>Fix bug in persistent popover resizing</dd>
@@ -255,7 +262,7 @@
   <hr>
 
   <h2 id="todo"><a href="#todo" data-popover='{ "content" : "Todo", "persist" : true }'>#</a>TODO</h2>
-  <p>...</p>
+  <p></p>
 
   <hr>
 
@@ -276,14 +283,16 @@
   var popover = new Popover(
     {
 //      debug : true,
-
       delay : {
         pop : 200,
         unpop : 300
       }
-
 //      factory : function(node) { return { 'content' : 'abc', 'persist' : true }; }
+    },
+    {
+      margin: 5
     }
+
   );
 
   popover.on(
