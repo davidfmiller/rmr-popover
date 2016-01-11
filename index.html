@@ -106,7 +106,7 @@
 <span class="nt">&lt;/script&gt;</span></pre>
 
 
-  <h2>Configuring Popover Behaviour</h2>
+  <h2 id="configure"><a href="#" data-popover="Configuring Popover Behaviour">#</a>Configuring Popover Behaviour</h2>
   <p>
     Creating a Popover controller with no arguments passed to the initializer will initialize default behaviour. However, the class&rsquo; constructor accepts an optional argument with parameters to customize the following behaviour:
   </p>
@@ -127,9 +127,9 @@
 <span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span> <span class="nx">root</span> <span class="o">:</span> <span class="s1">&#39;#doc&#39;</span> <span class="p">});</span>
 <span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span> <span class="nx">root</span> <span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;doc&#39;</span><span class="p">)</span> <span class="p">});</span></pre>
 
-  <h3 id="enable-disable"><a href="#enable-disable">#</a>Enabling/disabling</h3>
+  <h3 id="enable-disable"><a href="#enable-disable" data-popover="Enabling/disabling">#</a>Enabling/disabling</h3>
   <p>
-    Once created, popovers can be temporarily turned on and off by setting the <code>`enabled`</code> property to <code><span class="vg">true</span></code> or <code><span class="vg">false</span></code>, ex:
+    Once a controller is created, its popovers can be temporarily turned on and off by setting the <code>`enabled`</code> property to <code><span class="vg">true</span></code> or <code><span class="vg">false</span></code>, ex:
   </p>
 
   <pre><span class="nx">popover</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// temporarily disable popovers</span>
@@ -140,7 +140,7 @@
 
   <pre>popover.destroy();</pre>
 
-  <h3 id="timing"><a href="#timing">#</a>Timing</h3>
+  <h3 id="timing"><a href="#timing" data-popover="Timing">#</a>Timing</h3>
   <p>
     By default the popovers will appear and disappear a brief period of time after the target element is hovered over or receives focus. This timing can be modified with the following options to the controller&rsquo;s initializer:
   </p>
@@ -159,7 +159,7 @@
   <span class="p">}</span>
 <span class="p">});</span></pre>
 
-  <h3 id="node-attribute"><a href="#node-attribute">#</a>Initialization via Node Attribute</h3>
+  <h3 id="node-attribute"><a href="#node-attribute" data-popover="Initialization via Node Attribute">#</a>Initialization via Node Attribute</h3>
   <p>
     By default popover content is retrieved from the target&rsquo;s <code>data-popover</code> attribute, either as a simple string or a serialized JSON object, ex:
   </p>
@@ -185,12 +185,10 @@
   <span class="k">content</span><span class="o">:</span> <span class="s2">&quot;💬&quot;</span>
 <span class="p">}</span></pre>
 
-  <h3 id="position"><a href="#position">#</a>Position</h3>
+  <h3 id="position"><a href="#position" data-popover="Position">#</a>Position</h3>
   <p>Popovers will be positioned above their target elements unless a <code>{ "position" : "side" }</code> is included in their data.</p>
 
-
-
-  <h3 id="javascript-content"><a href="#javascript-content">#</a> JavaScript Content</h3>
+  <h3 id="javascript-content"><a href="#javascript-content" data-popover="JavaScript Content">#</a> JavaScript Content</h3>
   <p>
     Rather than relying on node attributes to populate popovers, you may instead provide a <code>factory</code> method in the constructor&rsquo;s options to programmatically generate popovers. The factory method receives the popover&rsquo;s target node as its sole parameter. Much like <code>data-popover</code> attributes, the factory method can either return a simple string or an object containing the popover content and associated metadata:
   </p>
@@ -223,7 +221,7 @@
   <h3 id="lifecycle"><a href="#lifecycle">#</a><span data-popover='{"content" : "Persistent popover", "position" : "side","persist": true}'>Lifecycle</span></h3>
   <p>Popovers are controlled by mouse events (or touch events on mobile devices). However, the presence of a <code>persist</code> flag in the popover&rsquo;s data will make the popover a permanent element in the page: created in the controller&rsquo;s initialization and only removed if/when the controller&rsquo;s <code>destory</code> method is invoked.</p>
 
-  <h3>Debugging</h3>
+  <h3 id="debug"><a href="#debug" data-popover="Debugging">#</a>Debugging</h3>
   <p>
     Add a debug field to the object&rsquo;s constructor to make working with popovers easier while still in development. Information will be logged to the browser console and popovers will not be removed in <code>debug</code> mode.
   </p>
@@ -235,6 +233,10 @@
 
   <h2 id="releases"><a href="#releases" title="Release Notes" data-popover='{ "content" : "Release Notes", "persist" : true }'>#</a>Release Notes</h2>
   <dl>
+    <dt>v0.1.5</dt>
+    <dd>Improve delayed pop/unpop handling</dd>
+    <dd>Documentation</dd>
+
     <dt>v0.1.4</dt>
     <dd>Mobile support</dd>
     <dd>Horizontal orientation</dd>
@@ -254,7 +256,7 @@
 
   <h2 id="todo"><a href="#todo" data-popover='{ "content" : "Todo", "persist" : true }'>#</a>TODO</h2>
   <ul>
-    <li>Improve delayed pop/unpop handling</li>
+    <li>Specify background color via data</li>
   </ul>
 
   <hr>
@@ -275,14 +277,13 @@
 <script>
   var popover = new Popover(
     {
-      position: "side"
 //      debug : true,
-/*
+
       delay : {
-        pop : 500,
-        unpop : 0
+        pop : 200,
+        unpop : 300
       }
-*/
+
 //      factory : function(node) { return { 'content' : 'abc', 'persist' : true }; }
     }
   );

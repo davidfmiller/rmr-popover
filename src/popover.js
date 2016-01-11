@@ -10,11 +10,11 @@
   //
   VERSION = '0.1.4',
 
-  // node attribute on target nodes that will be inspected for popover data
+  // attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
 
   /*
-   * Generate a unique string
+   * Generate a unique string suitable for id attributes
    *
    * @param basename (String)
    * @return string
@@ -24,7 +24,7 @@
   },
 
   /*
-   * Merge two objects into one
+   * Merge two objects into one, values in b take precedence over values in a
    *
    * @param a {Object}
    * @param b {Object}
@@ -36,6 +36,7 @@
     for (var i in a) {
       o[i] = a[i];
     }
+    if (! b) { return o; }
     for (i in b) {
       o[i] = b[i];
     }
@@ -86,10 +87,9 @@
    */
   getRect = function(node) {
 
-    var rect = node.getBoundingClientRect();
-
-    // create a new object that is not read-only
-    var ret = { top : rect.top, left : rect.left, bottom: rect.bottom, right : rect.right };
+    var
+    rect = node.getBoundingClientRect(),
+    ret = { top : rect.top, left : rect.left, bottom: rect.bottom, right : rect.right }; // create a new object that is not read-only
 
     ret.top += window.pageYOffset;
     ret.left += window.pageXOffset;
@@ -103,9 +103,12 @@
     return ret;
   },
 
-  /*!
+  /*
+   * Retrieve object containing popover data for an element on the page
    *
-   *
+   * @param scope {Popover}
+   * @param node {
+   * @return {Object}
    */
   getDataForNode = function(scope, node) {
 
@@ -122,10 +125,11 @@
   },
 
   /*
+   * Position a popover relative to its target parent
    *
-   *
-   * @param popover
-   * @param target
+   * @param popover {HTMLElement} - the
+   * @param target {HTMLElement}
+   * @param data {Object} - object containing data for the popover
    */
   positionPopover = function(popover, target, data) {
 
@@ -144,7 +148,7 @@
     arrowXY = [popoverXY[0], popoverXY[1]];
     arrowXY[0] = popoverRect.width / 2 - 6;
 
-    if (data.position !== "side") { // top of target
+    if (! data.position || data.position !== "side") { // top of target
 
       if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
         popoverXY[0] = 5;
@@ -179,9 +183,8 @@
     popover.setAttribute('style', 'left: ' + parseInt(popoverXY[0], 10) + 'px; top: ' + parseInt(popoverXY[1], 10) + 'px');
     arrow.setAttribute('style', 'left: ' + parseInt(arrowXY[0], 10) + 'px; top:' + parseInt(arrowXY[1], 10) + 'px');
   },
-
-  timeouts = {},
-  pops = {};
+  timeouts = {}, // store window.setTimeout handles for popover hiding
+  pops = {};     // store popover HTMLElements keyed by their id attribute
 
   /**
    *
@@ -198,21 +201,18 @@
     n,
     node,
     on,
+    l,
+    data,
     off,
     over,
     defaultOptions = {
       debug : false,
       root : document.body,
-      delay : { pop : 0, unpop : 0 },
-      factory : null,
-      position : "top"
+      delay : { pop : 200, unpop : 300 },
+      factory : null
     };
 
-    if (arguments.length < 1) {
-      options = defaultOptions;
-    } else {
-      options = merge(defaultOptions, options);
-    }
+    options= merge(defaultOptions, options);
 
     // two events are fired
     this.events = {
@@ -233,6 +233,7 @@
 
     this.root = node;
 
+    //
     nodes = arr(node.querySelectorAll('[' + ATTR + ']'));
 
     // add root node if it has the data-popover attribute
@@ -240,6 +241,11 @@
       nodes.push(node);
     }
 
+    /* Invoked when the mouse enters the popover target element
+     *
+     * @param e {MouseEvent}
+     * @param delay {Int} - number of milliseconds to delay
+     */
     on = function(e, delay) {
 
       if (! $.enabled) { return; }
@@ -266,7 +272,7 @@
       data.id = target.getAttribute('id') + '-popover';
 
       // popover already exists
-      if (document.getElementById(data.id)) { return; }
+//      if (document.getElementById(data.id)) { return; }
 
       n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
 
@@ -299,9 +305,9 @@
       }
     };
 
-    /*
+    /* Invoked when mouse hovers over the popover element
      *
-     * @param e (MouseEvent)
+     * @param e {MouseEvent}
      */
     over = function(e) {
      var n = e.target,
@@ -321,7 +327,8 @@
 
     /*
      *
-     * @param e (MouseEvent) - mouseevent for the target element
+     * @param e {MouseEvent} - mouseevent for the target element
+     * @param delay {Int}
      */
     off = function(e, delay) {
 
@@ -356,10 +363,10 @@
       // clear out title since we don't want the tooltip to obscure the popover
       if (n.hasAttribute('title')) { n.setAttribute('title', ''); }
 
-      var l = {
+      l = {
         on  :  function(e) { on(e, $.delay.pop); },
         off : function(e) { off(e, $.delay.unpop); }
-      },
+      };
       data = getDataForNode(this, n);
 
       this.listeners[n.getAttribute('id')] = {
@@ -367,9 +374,11 @@
         'unpop' : l.off
       };
 
-      if (data.persist) {
+
+      if (data.persist) { // if this is a persistent popover, create it immediately
         l.on({ target : n });
-      } else {
+
+      } else {            // otherwise attach the necessary listeners for mouse/touch interaction
 
         n.addEventListener('touchstart', l.on);
         n.addEventListener('mouseenter', l.on);
@@ -381,7 +390,10 @@
       }
     }
 
-    this.windowResizer = function(e) {
+    /*
+     * Re-position all persistent popovers on window resize
+     */
+    this.windowResizer = function() {
       var $ = this;
       var persists = arr(document.querySelectorAll('.rmr-popover.persist'));
       for (var i = 0; i < persists.length; i++) {
@@ -409,10 +421,11 @@
         n.removeEventListener('blur', this.listeners[i].unpop);
         n.removeEventListener('touchend', this.listeners[i].unpop);
 
-        // hide all
+        // remove all popovers
         off( { target : n }, 0);
       }
 
+      // remove resize listener
       window.removeEventListener('resize', this.windowResizer);
 
       return this;
@@ -421,12 +434,11 @@
     if (this.debug) { window.console.log(this.toString()); }
   };
 
-
   /*!
+   * Attach a listener to `pop`/`unpop` events
    *
-   *
-   * @param event (string) - one of "pop" or "unpop"
-   * @param method (function) - the method that will be invoked
+   * @param event {String} - one of `pop` or `unpop`
+   * @param method {Function} - the method that will be invoked on the relevant event
    * @chainable
    */
   window.Popover.prototype.on = function(event, method) {
@@ -435,9 +447,9 @@
   };
 
   /**
+   * Return a string representation of the instance
    *
-   *
-   * @return string
+   * @return {String}
    */
   window.Popover.prototype.toString = function() {
     return 'Popover ' + JSON.stringify({root : '' + this.root, enabled : this.enabled, delay : this.delay, debug : this.debug});
