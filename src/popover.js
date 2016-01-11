@@ -300,14 +300,13 @@
 
       data = getDataForNode($, target);
 
+      if ($.debug) { window.console.log(data); }
+
       // if there's no content and no specific class, abort since it's an empty popover
       if (! data.content && ! data['class']) { return; }
 
       data['class'] = (data['class'] ? data['class'] : '') + (data.position == "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
       data.id = target.getAttribute('id') + '-popover';
-
-      // popover already exists
-//      if (document.getElementById(data.id)) { return; }
 
       n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
 

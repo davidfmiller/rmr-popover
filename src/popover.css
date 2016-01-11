@@ -22,15 +22,6 @@
   opacity: 0;
 }
 
-.rmr-popover a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.rmr-popover a:hover {
-  text-decoration: underline;
-}
-
 .rmr-popover.pop {
   -webkit-animation:rmr-pop-in 0.1s;
   -moz-animation:rmr-pop-in 0.1s;
@@ -53,9 +44,6 @@
   position: absolute;
   pointer-events: none;
   z-index: 1;
-}
-
-.rmr-popover .arrow {
   border-left:  5px solid transparent;
   border-right: 5px solid transparent;
   border-top:   5px solid transparent;
