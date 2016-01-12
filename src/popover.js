@@ -171,7 +171,7 @@
 
     if (! data.position || data.position !== "side") { // top of target
 
-      if (popoverXY[1] - popoverRect.height < 0) { // clipped at top of browser?
+      if (popoverXY[1] - window.pageYOffset < 0) { // clipped at top of browser?
         arrowXY[1] = -10;
         popoverXY[1] = targetRect.bottom + 5 + data.margin;
 
@@ -196,8 +196,6 @@
         arrowXY[0] = popoverRect.width - targetRect.width / 2;
       }
 
-
-
     } else { // right-side of target
 
       popoverXY[0] = targetRect.left + targetRect.width + 5 + data.margin;
@@ -205,8 +203,15 @@
 
       arrow.style.borderRightColor = data.color;
 
+      if (popoverXY[1] - window.pageYOffset < 0) {
+        popoverXY[1] = window.pageYOffset + data.margin;
+        arrowXY[1] = 5;
+      } else {
+        arrowXY[1] = popoverRect.height / 2 - 5;
+      }
+
       arrowXY[0] = -10;
-      arrowXY[1] = popoverRect.height / 2 - 5;
+
 
       if (popoverXY[0] + popoverRect.width > window.innerWidth) { // if clipped on right side, move to the left
         popoverXY[0] = targetRect.left - popoverRect.width - 5 - data.margin;
@@ -215,7 +220,6 @@
 
         arrow.style.borderRightColor = 'transparent';
         arrow.style.borderLeftColor = data.color;
-
       }
     }
 
