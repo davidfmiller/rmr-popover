@@ -53,6 +53,11 @@
   font-weight: bold;
 }
 
+.test .north {
+  top: 0;
+}
+
+
 .test .west {
   left: 0;
 }
@@ -262,7 +267,9 @@
   <hr>
 
   <h2 id="todo"><a href="#todo" data-popover='{ "content" : "Todo", "persist" : true }'>#</a>TODO</h2>
-  <p></p>
+  <ul>
+    <li>Prevent vertical clipping when scrolled</li>
+  </ul>
 
   <hr>
 
@@ -271,6 +278,8 @@
 </div>
 
 <div class="test">
+
+  <span class="north" data-popover="This is a bottom popover"></span>
   <span class="west" data-popover="Long popover content goes here"></span>
   <span class="west side" data-popover='{"content" : "Long popover content goes here", "position" : "side"}'></span>
 
@@ -292,7 +301,6 @@
     {
       margin: 5
     }
-
   );
 
   popover.on(

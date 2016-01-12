@@ -8,7 +8,7 @@
   var
 
   //
-  VERSION = '0.1.7',
+  VERSION = '0.1.8',
 
   // attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
@@ -171,7 +171,17 @@
 
     if (! data.position || data.position !== "side") { // top of target
 
-      arrow.style.borderTopColor = data.color;
+      if (popoverXY[1] - popoverRect.height < 0) { // clipped at top of browser?
+        arrowXY[1] = -10;
+        popoverXY[1] = targetRect.bottom + 5 + data.margin;
+
+        arrow.style.borderBottom = '5px solid ' + data.color
+        popover.classList.add('bottom');
+
+      } else { // top
+        arrowXY[1] = popoverRect.height;
+        arrow.style.borderTopColor = data.color;
+      }
 
       if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
         popoverXY[0] = 5;
@@ -186,7 +196,7 @@
         arrowXY[0] = popoverRect.width - targetRect.width / 2;
       }
 
-      arrowXY[1] = popoverRect.height;
+
 
     } else { // right-side of target
 
