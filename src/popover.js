@@ -5,6 +5,9 @@
 
   'use strict';
 
+  // prevent duplicate declaration
+  if (window.Popover) { return; }
+
   var
 
   //
