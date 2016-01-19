@@ -16,10 +16,10 @@
   // attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
 
-  // default color
+  // default background color for popovers
   COLOR = 'rgba(0,0,0,0.8)',
 
-  // default color
+  // offset of popover from target node
   MARGIN = 0,
 
   /*
@@ -178,7 +178,7 @@
         arrowXY[1] = -10;
         popoverXY[1] = targetRect.bottom + 5 + data.margin;
 
-        arrow.style.borderBottom = '5px solid ' + data.color
+        arrow.style.borderBottom = '5px solid ' + data.color;
         popover.classList.add('bottom');
 
       } else { // top
@@ -280,7 +280,7 @@
     node = config.root ? (config.root instanceof HTMLElement ? config.root : document.querySelector(config.root)) : document.body;
 
     if (! node) {
-      throw Error('Invalid Popover root [' + options.root + ']');
+      throw Error('Invalid Popover root [' + config.root + ']');
     }
 
     this.root = node;
