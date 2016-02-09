@@ -128,6 +128,11 @@
     if (typeof val != "object") {
       try {
         val = JSON.parse(val);
+
+        if (typeof val === 'number') {
+          val = { content : val };
+        }
+
       } catch (err) {
         val = { content : val };
       }
