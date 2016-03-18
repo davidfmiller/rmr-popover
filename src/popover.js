@@ -277,7 +277,7 @@
     node = config.root ? (config.root instanceof HTMLElement ? config.root : document.querySelector(config.root)) : document.body;
 
     if (! node) {
-      throw Error('Invalid Popover root [' + options.root + ']');
+      throw Error('Invalid Popover root [' + config.root + ']');
     }
 
     this.root = node;
