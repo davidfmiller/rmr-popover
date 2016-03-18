@@ -5,6 +5,9 @@
 
   'use strict';
 
+  // prevent duplicate declaration
+  if (window.Popover) { return; }
+
   var
 
   //
@@ -13,10 +16,10 @@
   // attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
 
-  // default color
+  // default background color for popovers
   COLOR = 'rgba(0,0,0,0.8)',
 
-  // default color
+  // offset of popover from target node
   MARGIN = 0,
 
   /*
@@ -125,6 +128,11 @@
     if (typeof val != "object") {
       try {
         val = JSON.parse(val);
+
+        if (typeof val === 'number') {
+          val = { content : val };
+        }
+
       } catch (err) {
         val = { content : val };
       }
@@ -175,7 +183,7 @@
         arrowXY[1] = -10;
         popoverXY[1] = targetRect.bottom + 5 + data.margin;
 
-        arrow.style.borderBottom = '5px solid ' + data.color
+        arrow.style.borderBottom = '5px solid ' + data.color;
         popover.classList.add('bottom');
 
       } else { // top
