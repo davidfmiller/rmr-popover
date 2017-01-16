@@ -11,7 +11,7 @@
   var
 
   //
-  VERSION = '0.1.8',
+  VERSION = '0.1.9',
 
   // default attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
