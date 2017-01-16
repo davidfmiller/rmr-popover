@@ -13,7 +13,7 @@
   //
   VERSION = '0.1.8',
 
-  // attribute on target nodes that will be inspected for popover data
+  // default attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
 
   // default background color for popovers
@@ -122,7 +122,7 @@
   getDataForNode = function(scope, node) {
 
     var
-    val = scope.factory ? scope.factory(node) : node.getAttribute(ATTR),
+    val = scope.factory ? scope.factory(node) : node.getAttribute(scope.attribute),
     data = scope.defaults;
 
     if (typeof val != "object") {
@@ -257,6 +257,7 @@
     off,
     over,
     defaultConfig = {
+      attribute : ATTR,
       debug : false,
       root : document.body,
       delay : { pop : 200, unpop : 300 },
@@ -277,12 +278,13 @@
       'unpop' : function(target, popover) { }
     };
     this.enabled = true;
+    this.attribute = config.attribute;
     this.delay = config.delay;
     this.factory = config.factory;
     this.debug = config.debug;
     this.listeners = {};
 
-    node = config.root ? (config.root instanceof HTMLElement ? config.root : document.querySelector(config.root)) : document.body;
+    node = config.root ? (config.root instanceof Element ? config.root : document.querySelector(config.root)) : document.body;
 
     if (! node) {
       throw Error('Invalid Popover root [' + config.root + ']');
@@ -291,10 +293,10 @@
     this.root = node;
 
     //
-    nodes = arr(node.querySelectorAll('[' + ATTR + ']'));
+    nodes = arr(node.querySelectorAll('[' + this.attribute + ']'));
 
     // add root node if it has the data-popover attribute
-    if (node.hasAttribute(ATTR)) {
+    if (node.hasAttribute(this.attribute)) {
       nodes.push(node);
     }
 
