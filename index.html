@@ -198,6 +198,7 @@
 
 <pre><span class="kd">var</span> <span class="nx">pop</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Popover</span><span class="p">({</span>
   <span class="nx">root</span> <span class="o">:</span> <span class="s1">&#39;#doc&#39;</span><span class="p">,</span>
+  <span class="nx">attribute</span> <span class="o">:</span> <span class="s1">&#39;data-name&#39;</span><span class="p">,</span>
   <span class="nx">factory</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">targetNode</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">{</span> <span class="s1">&#39;content&#39;</span> <span class="o">:</span> <span class="nx">popupLookup</span><span class="p">(</span><span class="nx">targetNode</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;data-id&#39;</span><span class="p">))</span> <span class="p">}</span>
   <span class="p">}</span>
@@ -236,6 +237,9 @@
 
   <h2 id="releases"><a href="#releases" title="Release Notes" data-popover='{ "content" : "Release Notes", "persist" : true }'>#</a>Release Notes</h2>
   <dl>
+
+    <dt>v0.1.8</dt>
+    <dd>Configurable <code>data-popvoer</code> attribute name </dd>
 
     <dt>v0.1.7</dt>
     <dd>Margin</dd>
