@@ -332,8 +332,7 @@
       data['class'] = (data['class'] ? data['class'] : '') + (data.position == "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
       data.id = target.getAttribute('id') + '-popover';
 
-      n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
-
+      // if a popover with this id already exists, don't display the one we just created
       if (pops[data.id]) {
         if (timeouts[target.getAttribute('id')]) {
           window.clearTimeout(timeouts[target.getAttribute('id')]);
@@ -341,6 +340,8 @@
         }
         return;
       }
+
+      n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id, 'title' : data.title });
 
       n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
       window.document.body.appendChild(n);
