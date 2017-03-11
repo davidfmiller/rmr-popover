@@ -1,5 +1,5 @@
 /* jshint undef: true,strict:true,trailing:true,loopfunc:true */
-/* global document,window,HTMLElement */
+/* global document,window,Element */
 
 (function() {
 
