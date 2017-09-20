@@ -1,6 +1,10 @@
+/* jshint undef: true,strict:true,trailing:true,loopfunc:true */
+/* global document,window,Element,module,require */
+
 (function() {
 
-  var module = require('./popover.js');
-  window.Popover = module;
+  "use strict";
+
+  window.Popover = require('./popover.js');
 
 }());
