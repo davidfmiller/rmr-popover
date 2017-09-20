@@ -24,7 +24,7 @@ module.exports = function(grunt) {
       dist : {
         options : {
           sassDir : 'src',
-          cssDir : 'build',
+          cssDir : 'docs/build',
           environment : 'production',
           outputStyle : 'compressed'
         }

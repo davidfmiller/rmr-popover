@@ -12,7 +12,7 @@ const
 const config = {
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'build/'),
+    path: path.resolve(__dirname, 'docs/build/'),
     filename: 'popover.bundle.js'
   },
   module : {

@@ -44,13 +44,14 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* jshint undef: true,strict:true,trailing:true,loopfunc:true */
+	/* global document,window,Element,module,require */
+
 	(function() {
 
-	var module = __webpack_require__(1);
+	  "use strict";
 
-	console.log(module);
-
-	window.Popover = module;
+	  window.Popover = __webpack_require__(1);
 
 	}());
 
