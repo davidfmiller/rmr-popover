@@ -1,17 +1,16 @@
 /* jshint undef: true,strict:true,trailing:true,loopfunc:true */
-/* global document,window,Element */
+/* global document,window,Element,module */
 
 (function() {
 
   'use strict';
 
   // prevent duplicate declaration
-  if (window.Popover) { return; }
+//  if (window.Popover) { return; }
 
   var
 
-  //
-  VERSION = '0.1.9',
+  // VERSION = '0.1.9',
 
   // default attribute on target nodes that will be inspected for popover data
   ATTR = 'data-popover',
@@ -43,11 +42,15 @@
   merge = function(a, b) {
     var o = {};
     for (var i in a) {
-      o[i] = a[i];
+      if (a.hasOwnProperty(i)) {
+        o[i] = a[i];
+      }
     }
     if (! b) { return o; }
     for (i in b) {
-      o[i] = b[i];
+      if (b.hasOwnProperty(i)) {
+        o[i] = b[i];
+      }
     }
     return o;
   },
@@ -84,7 +87,9 @@
      i = null;
 
      for (i in attrs) {
-       n.setAttribute(i, attrs[i]);
+       if (attrs.hasOwnProperty(i)) {
+         n.setAttribute(i, attrs[i]);
+       }
      }
      return n;
   },
@@ -125,7 +130,7 @@
     val = scope.factory ? scope.factory(node) : node.getAttribute(scope.attribute),
     data = scope.defaults;
 
-    if (typeof val != "object") {
+    if (typeof val !== "object") {
       try {
         val = JSON.parse(val);
 
@@ -149,7 +154,9 @@
    */
   setStyles  = function(node, styles) {
     for (var i in styles) {
-      node.style[i] = styles[i];
+      if (styles.hasOwnProperty(i)) {
+        node.style[i] = styles[i];
+      }
     }
   },
 
@@ -243,7 +250,7 @@
    * @param node (node, optional) - the root element containing all elements with attached popovers
    * @param options (Object, optional) method to retrieve the popover's data for a given node
    */
-  window.Popover = function(config, defaults) {
+  var Popover = function(config, defaults) {
 
     var
     $ = this,
@@ -274,8 +281,8 @@
 
     // two events are fired
     this.events = {
-      'pop' : function(target, popover) { },
-      'unpop' : function(target, popover) { }
+      'pop' : function(/*target, popover*/) { },
+      'unpop' : function(/*target, popover*/) { }
     };
     this.enabled = true;
     this.attribute = config.attribute;
@@ -329,7 +336,7 @@
       // if there's no content and no specific class, abort since it's an empty popover
       if (! data.content && ! data['class']) { return; }
 
-      data['class'] = (data['class'] ? data['class'] : '') + (data.position == "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
+      data['class'] = (data['class'] ? data['class'] : '') + (data.position === "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
       data.id = target.getAttribute('id') + '-popover';
 
       // if a popover with this id already exists, don't display the one we just created
@@ -374,7 +381,7 @@
 
       id = n.getAttribute('id').replace('-popover', '');
 
-      n.addEventListener('mouseleave', function(e) {
+      n.addEventListener('mouseleave', function(/*e*/) {
         off({ target: document.getElementById(id) });
       });
 
@@ -409,7 +416,7 @@
         } catch (e) { window.console.log('ERROR', e); }
       };
 
-      timeouts[target.getAttribute('id')] = window.setTimeout(f, arguments.length == 1 ? $.delay.unpop : delay);
+      timeouts[target.getAttribute('id')] = window.setTimeout(f, arguments.length === 1 ? $.delay.unpop : delay);
     };
 
 
@@ -478,6 +485,10 @@
       var n;
       for (var i in this.listeners) {
 
+        if (! this.listeners.hasOwnProperty(i)) {
+          continue;
+        }
+
         n = document.getElementById(i);
         n.removeEventListener('mouseenter', this.listeners[i].pop);
         n.removeEventListener('focus', this.listeners[i].pop);
@@ -507,7 +518,7 @@
    * @param method {Function} - the method that will be invoked on the relevant event
    * @chainable
    */
-  window.Popover.prototype.on = function(event, method) {
+  Popover.prototype.on = function(event, method) {
     this.events[event] = method;
     return this;
   };
@@ -517,8 +528,10 @@
    *
    * @return {String}
    */
-  window.Popover.prototype.toString = function() {
+  Popover.prototype.toString = function() {
     return 'Popover ' + JSON.stringify({root : '' + this.root, enabled : this.enabled, delay : this.delay, debug : this.debug});
   };
+
+  module.exports = Popover;
 
 }());

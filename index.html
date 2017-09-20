@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" value="width=550">
 
-<link rel="stylesheet" type="text/css" href="src/popover.css">
+<link rel="stylesheet" type="text/css" href="build/popover.css">
 
 <style>
 
@@ -238,6 +238,9 @@
   <h2 id="releases"><a href="#releases" title="Release Notes" data-popover='{ "content" : "Release Notes", "persist" : true }'>#</a>Release Notes</h2>
   <dl>
 
+    <dt>v0.2.0</dt>
+    <dd>ES module</dd>
+
     <dt>v0.1.9</dt>
     <dd>Configurable <code>data-popover</code> attribute name </dd>
 
@@ -292,30 +295,30 @@
   <span class="east side" data-popover='{"content" : "Long popover content goes here", "position" : "side"}'></span>
 </div>
 
-<script src="src/popover.js"></script>
+<script src="build/popover.bundle.js"></script>
 <script>
-  var popover = new Popover(
-    {
-      debug : false,
-      delay : {
-        pop : 200,
-        unpop : 300
+  document.addEventListener('DOMContentLoaded', function(event) {
+    var pop = new window.Popover(
+      {
+        debug : false,
+        delay : {
+          pop : 200,
+          unpop : 300
+        },
       },
-//      attribute : 'data-popover', // default 
-//      factory : function(node) { return { 'content' : 'abc', 'persist' : true }; }
-    },
-    {
-      margin: 5
-    }
-  );
+      {
+        margin: 5
+      }
+    );
 
-  popover.on(
-    'pop',
-    function(target, popover) { window.console.log('pop', target, popover); }
-  ).on(
-    'unpop',
-    function(target, popover) { window.console.log('unpop', target, popover); }
-  );
+    pop.on(
+      'pop',
+      function(target, popover) { window.console.log('pop', target, popover); }
+    ).on(
+      'unpop',
+      function(target, popover) { window.console.log('unpop', target, popover); }
+    );
+  });
 </script>
 
 </body>
