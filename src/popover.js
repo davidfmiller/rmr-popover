@@ -276,6 +276,12 @@
       'class' : ''
     };
 
+    if (! config.hasOwnProperty('delay')) {
+      config.delay = defaultConfig.delay;
+    } else if (typeof config.delay == 'number') {
+      config.delay = { pop : config.delay, unpop : config.delay };
+    }
+
     config = merge(defaultConfig, config);
     this.defaults = merge(defaultProperties, defaults);
 
@@ -348,7 +354,7 @@
         return;
       }
 
-      n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id, 'title' : data.title });
+      n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
 
       n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
       window.document.body.appendChild(n);
@@ -359,11 +365,7 @@
 
       pops[data.id] = n;
 
-      if (delay) {
-        window.setTimeout(function() { popper(); }, delay);
-      } else {
-        popper();
-      }
+      window.setTimeout(function() { popper(); }, delay ? delay : 0);
 
       //
       if (! data.persist) {
@@ -419,6 +421,8 @@
       timeouts[target.getAttribute('id')] = window.setTimeout(f, arguments.length === 1 ? $.delay.unpop : delay);
     };
 
+
+    // init
 
     for (i = 0; i < nodes.length; i++) {
       n = nodes[i];
