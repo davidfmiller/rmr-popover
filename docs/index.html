@@ -113,6 +113,7 @@
   </p>
   <ul>
     <li>which <a href="#target" data-popover="Target Nodes">section of the document</a> to scan for popovers</li>
+    <li>which  <a href="#events" data-popover='{"content" : "Timing", "position" : "side"}'>events</a> will trigger their appearance/removal</li>
     <li>when they will <a href="#timing" data-popover='{"content" : "Timing", "position" : "side"}'>appear/disappear</a></li>
     <li>how to <a href="#node-attribute" data-popover="Initialization via Node Attribute">generate</a> <a href="#javascript-content" data-popover="JavaScript Content">the content</a> for the popovers</li>
     <li>where they will be <a href="#position" data-popover="Position">positioned</a> relative to their targets &amp; what color they will be</a></li>
@@ -140,6 +141,23 @@
   <p>To permanently disable (&amp; remove) popovers and clean up the listeners that have been attached to the relevant nodes, invoke the <code>destroy</code> method:</p>
 
   <pre>popover.destroy();</pre>
+
+  <h3 id="events"><a href="#events" data-popover="Events">#</a>Events</h3>
+  <p>
+    By default the popovers will appear and disappear when the mouse enters &amp; leaves the node (or, in the case of touch interfaces, a touch starts and ends), respectively. To modify this behaviour, provide <code>pop</code> and <code>unpop</code> keys in the <code>events</code> property of the popover configuration object:
+  </p>
+
+  <pre><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">data-popover</span><span class="o">=</span><span class="s">&#39;{&quot;content&quot;:&quot;This popover will appear/disappear on focus and blur, respectively&quot;,&quot;events&quot;:{&quot;pop&quot;:&quot;focus&quot;,&quot;unpop&quot;:&quot;blur&quot;}}&#39;</span><span class="p">&gt;</span></pre>
+
+  In action:
+  
+  <input type="text" name="" value="" data-popover='{"content":"This popover will appear/disappear on focus and blur, respectively","events":{"pop":"focus","unpop":"blur"}}'>
+
+
+
+
+
+
 
   <h3 id="timing"><a href="#timing" data-popover="Timing">#</a>Timing</h3>
   <p>

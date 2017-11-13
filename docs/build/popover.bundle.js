@@ -337,6 +337,12 @@
 	      'class' : ''
 	    };
 
+	    if (! config.hasOwnProperty('delay')) {
+	      config.delay = defaultConfig.delay;
+	    } else if (typeof config.delay == 'number') {
+	      config.delay = { pop : config.delay, unpop : config.delay };
+	    }
+
 	    config = merge(defaultConfig, config);
 	    this.defaults = merge(defaultProperties, defaults);
 
@@ -409,7 +415,7 @@
 	        return;
 	      }
 
-	      n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id, 'title' : data.title });
+	      n = makeElement('div', {'data-target' : target.getAttribute('id'), 'role' : 'tooltip', 'class' : data['class'], 'id' : data.id });
 
 	      n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
 	      window.document.body.appendChild(n);
@@ -420,11 +426,7 @@
 
 	      pops[data.id] = n;
 
-	      if (delay) {
-	        window.setTimeout(function() { popper(); }, delay);
-	      } else {
-	        popper();
-	      }
+	      window.setTimeout(function() { popper(); }, delay ? delay : 0);
 
 	      //
 	      if (! data.persist) {
@@ -481,6 +483,8 @@
 	    };
 
 
+	    // init
+
 	    for (i = 0; i < nodes.length; i++) {
 	      n = nodes[i];
 
@@ -506,13 +510,21 @@
 
 	      } else {            // otherwise attach the necessary listeners for mouse/touch interaction
 
-	        n.addEventListener('touchstart', l.on);
-	        n.addEventListener('mouseenter', l.on);
-	        n.addEventListener('focus', l.on);
+	        console.log(n, data.on, data.off);
 
-	        n.addEventListener('touchend', l.off);
-	        n.addEventListener('mouseleave', l.off);
-	        n.addEventListener('blur',  l.off);
+	        if (data.events && data.events.pop) {
+	          n.addEventListener(data.events.pop, l.on);
+	        } else {
+	          n.addEventListener('touchstart', l.on);
+	          n.addEventListener('mouseenter', l.on);
+	        }
+
+	        if (data.events && data.events.unpop) {
+	          n.addEventListener(data.events.unpop, l.off);
+	        } else {
+	          n.addEventListener('touchend', l.off);
+	          n.addEventListener('mouseleave', l.off);
+	        }
 	      }
 	    }
 
@@ -543,7 +555,7 @@
 
 	    this.destroy = function() {
 
-	      var n;
+	      var n, data;
 	      for (var i in this.listeners) {
 
 	        if (! this.listeners.hasOwnProperty(i)) {
@@ -551,13 +563,21 @@
 	        }
 
 	        n = document.getElementById(i);
-	        n.removeEventListener('mouseenter', this.listeners[i].pop);
-	        n.removeEventListener('focus', this.listeners[i].pop);
-	        n.removeEventListener('touchstart', this.listeners[i].pop);
+	        data = getDataForNode(this, n);
 
-	        n.removeEventListener('mouseleave', this.listeners[i].unpop);
-	        n.removeEventListener('blur', this.listeners[i].unpop);
-	        n.removeEventListener('touchend', this.listeners[i].unpop);
+	        if (data.events && data.events.pop) {
+	          n.removeEventListener(data.events.pop, this.listeners[i].pop);
+	        } else {
+	          n.removeEventListener('mouseenter', this.listeners[i].pop);
+	          n.removeEventListener('touchstart', this.listeners[i].pop);
+	        }
+
+	        if (data.events && data.events.unpop) {
+	          n.removeEventListener(data.events.unpop, this.listeners[i].unpop);
+	        } else {
+	          n.removeEventListener('mouseleave', this.listeners[i].unpop);
+	          n.removeEventListener('touchend', this.listeners[i].unpop);
+	        }
 
 	        // remove all popovers
 	        off( { target : n }, 0);

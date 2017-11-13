@@ -15,6 +15,7 @@ const config = {
     path: path.resolve(__dirname, 'docs/build/'),
     filename: 'popover.bundle.js'
   },
+  watch : true,
   module : {
     rules : [
 /*
