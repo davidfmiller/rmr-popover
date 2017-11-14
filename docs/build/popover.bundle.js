@@ -501,7 +501,6 @@
      */
     off = function (e, delay) {
 
-      console.log(e);
       var target = e.target,
           f = function () {
         var id = target.getAttribute('id');
