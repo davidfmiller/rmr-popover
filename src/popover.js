@@ -447,9 +447,9 @@
       if (data.persist) { // if this is a persistent popover, create it immediately
         l.on({ target : n });
 
-      } else {            // otherwise attach the necessary listeners for mouse/touch interaction
+      } else { // otherwise attach the necessary listeners for mouse/touch interaction
 
-        console.log(n, data.on, data.off);
+//        console.log(n, data.on, data.off);
 
         if (data.events && data.events.pop) {
           n.addEventListener(data.events.pop, l.on);

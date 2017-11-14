@@ -147,16 +147,12 @@
     By default the popovers will appear and disappear when the mouse enters &amp; leaves the node (or, in the case of touch interfaces, a touch starts and ends), respectively. To modify this behaviour, provide <code>pop</code> and <code>unpop</code> keys in the <code>events</code> property of the popover configuration object:
   </p>
 
-  <pre><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">data-popover</span><span class="o">=</span><span class="s">&#39;{&quot;content&quot;:&quot;This popover will appear/disappear on focus and blur, respectively&quot;,&quot;events&quot;:{&quot;pop&quot;:&quot;focus&quot;,&quot;unpop&quot;:&quot;blur&quot;}}&#39;</span><span class="p">&gt;</span></pre>
+  <pre><span class="p">&lt;</span><span class="nt">input</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;textfield&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">data-popover</span><span class="o">=</span><span class="s">&#39;{&quot;content&quot;:&quot;This popover will appear/disappear on focus and blur, respectively&quot;,&quot;events&quot;:{&quot;pop&quot;:&quot;focus&quot;,&quot;unpop&quot;:&quot;blur&quot;}}&#39;</span><span class="p">&gt;</span></pre>
 
   In action:
   
-  <input type="text" name="" value="" data-popover='{"content":"This popover will appear/disappear on focus and blur, respectively","events":{"pop":"focus","unpop":"blur"}}'>
-
-
-
-
-
+  <input type="text" name="" placeholder="textfield" value="" data-popover='{"content":"This popover will appear/disappear on focus and blur, respectively","events":{"pop":"focus","unpop":"blur"}}'>
+  <button data-popover='{"content":"This popover will appear on click","events":{"pop":"click"}}'>Button</button>
 
 
   <h3 id="timing"><a href="#timing" data-popover="Timing">#</a>Timing</h3>
