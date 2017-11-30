@@ -7,7 +7,7 @@
   // prevent duplicate declaration
 //  if (window.Popover) { return; }
 
-  var
+  const
 
   // VERSION = '0.1.9',
 
@@ -39,7 +39,9 @@
    * @return Object
    */
   merge = function(a, b) {
-    var o = {}, i = 0;
+    let i = 0;
+    const o = {};
+
     for (i in a) {
       if (a.hasOwnProperty(i)) {
         o[i] = a[i];
@@ -63,10 +65,11 @@
    * @return Array
    */
   arr = function(list) {
-    var ret = [], i = 0;
+    const ret = [];
+    let i = 0;
 
     if (! list.length) {
-      return ret;
+      return [];
     }
 
     for (i = 0; i < list.length; i++) {
@@ -85,9 +88,8 @@
    * @return HTMLElement
    */
   makeElement = function(type, attrs) {
-     var
-     n = document.createElement(type),
-     i = null;
+     const n = document.createElement(type);
+     let i = null;
 
      for (i in attrs) {
        if (attrs.hasOwnProperty(i)) {
@@ -103,7 +105,7 @@
    * @param node (DOMNode)
    */
   getRect = function(node) {
-    var
+    const
     rect = node.getBoundingClientRect(),
     ret = { top: rect.top, left: rect.left, bottom: rect.bottom, right: rect.right }; // create a new object that is not read-only
 
@@ -127,9 +129,8 @@
    * @return {Object}
    */
   getDataForNode = function(scope, node) {
-    var
-    val = scope.factory ? scope.factory(node) : node.getAttribute(scope.attribute),
-    data = scope.defaults;
+    let val = scope.factory ? scope.factory(node) : node.getAttribute(scope.attribute);
+    const data = scope.defaults;
 
     if (typeof val !== "object") {
       try {
@@ -153,7 +154,7 @@
    * @param styles {Object}
    */
   setStyles  = function(node, styles) {
-    for (var i in styles) {
+    for (const i in styles) {
       if (styles.hasOwnProperty(i)) {
         node.style[i] = styles[i];
       }
@@ -168,12 +169,14 @@
    * @param data {Object} - object containing data for the popover
    */
   positionPopover = function(popover, target, data) {
-    var
+    const
     targetRect = getRect(target),
     popoverRect = getRect(popover),
-    popoverXY,
-    arrowXY,
     arrow = popover.querySelector('.arrow');
+
+    let
+    popoverXY = null,
+    arrowXY = null;
 
     popoverXY = [
       targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
@@ -245,18 +248,9 @@
    * @param {Object} config (optional) - the root element containing all elements with attached popovers
    * @param {Object} defaults (optional) method to retrieve the popover's data for a given node
    */
-  var Popover = function(config, defaults) {
-    var
+  const Popover = function(config, defaults) {
+    const
     self = this,
-    nodes,
-    i = 0,
-    n,
-    node,
-    on,
-    l,
-    data,
-    off,
-    over,
     defaultConfig = {
       attribute: ATTR,
       debug: false,
@@ -268,46 +262,59 @@
       color: COLOR,
       margin: MARGIN,
       'class': ''
-    };
+    },
 
-    if (! config.hasOwnProperty('delay')) {
-      config.delay = defaultConfig.delay;
-    } else if (typeof config.delay === 'number') {
-      config.delay = { pop: config.delay, unpop: config.delay };
-    }
+    /*
+     *
+     * @param e {MouseEvent} - mouseevent for the target element
+     * @param delay {Int}
+     */
+    off = function(e, delay) {
+      const
+      target = e.target,
+      f = function() {
+        const id = target.getAttribute('id');
+        target.removeAttribute('aria-describedBy');
+        try {
+          const pop = pops[id + '-popover'];
+          delete pops[id + '-popover'];
 
-    config = merge(defaultConfig, config);
-    this.defaults = merge(defaultProperties, defaults);
+          if (pop) {
+            if (! self.debug) {
+              pop.parentNode.removeChild(pop);
+            }
+            self.events.unpop(target, pop);
+          }
+        } catch (e) {
+          if (self.debug) {
+            window.console.log('ERROR', e);
+          }
+        }
+      };
 
-    // two events are fired
-    this.events = {
-      pop: function(/* target, popover*/) { },
-      unpop: function(/* target, popover*/) { }
-    };
-    this.enabled = true;
-    this.attribute = config.attribute;
-    this.delay = config.delay;
-    this.factory = config.factory;
-    this.debug = config.debug;
-    this.listeners = {};
+      timeouts[target.getAttribute('id')] = window.setTimeout(f, arguments.length === 1 ? self.delay.unpop : delay);
+    },
 
-    node = config.root ?
-      (config.root instanceof Element ? config.root : document.querySelector(config.root))
-      : document.body;
 
-    if (! node) {
-      throw Error('Invalid Popover root [' + config.root + ']');
-    }
+    /* Invoked when mouse hovers over the popover element
+     *
+     * @param e {MouseEvent}
+     */
+    over = function(e) {
+      const n = e.target;
+      let id;
 
-    this.root = node;
+      id = n.getAttribute('id').replace('-popover', '');
 
-    //
-    nodes = arr(node.querySelectorAll('[' + this.attribute + ']'));
+      n.addEventListener('mouseleave', function(/* e */) {
+        off({ target: document.getElementById(id) });
+      });
 
-    // add root node if it has the data-popover attribute
-    if (node.hasAttribute(this.attribute)) {
-      nodes.push(node);
-    }
+      if (timeouts[id]) {
+        window.clearTimeout(timeouts[id]);
+        delete timeouts[id];
+      }
+    },
 
     /* Invoked when the mouse enters the popover target element
      *
@@ -377,55 +384,55 @@
       }
     };
 
-    /* Invoked when mouse hovers over the popover element
-     *
-     * @param e {MouseEvent}
-     */
-    over = function(e) {
-     var n = e.target,
-         id;
 
-      id = n.getAttribute('id').replace('-popover', '');
 
-      n.addEventListener('mouseleave', function(/* e */) {
-        off({ target: document.getElementById(id) });
-      });
+    let
+    nodes = null,
+    i = 0,
+    n = null,
+    node = null,
+    l = null,
+    data = null;
 
-      if (timeouts[id]) {
-        window.clearTimeout(timeouts[id]);
-        delete timeouts[id];
-      }
+    if (! config.hasOwnProperty('delay')) {
+      config.delay = defaultConfig.delay;
+    } else if (typeof config.delay === 'number') {
+      config.delay = { pop: config.delay, unpop: config.delay };
+    }
+
+    config = merge(defaultConfig, config);
+    this.defaults = merge(defaultProperties, defaults);
+
+    // two events are fired
+    this.events = {
+      pop: function(/* target, popover*/) { },
+      unpop: function(/* target, popover*/) { }
     };
+    this.enabled = true;
+    this.attribute = config.attribute;
+    this.delay = config.delay;
+    this.factory = config.factory;
+    this.debug = config.debug;
+    this.listeners = {};
 
-    /*
-     *
-     * @param e {MouseEvent} - mouseevent for the target element
-     * @param delay {Int}
-     */
-    off = function(e, delay) {
-      var
-      target = e.target,
-      f = function() {
-        var id = target.getAttribute('id');
-        target.removeAttribute('aria-describedBy');
-        try {
-          var pop = pops[id + '-popover'];
+    node = config.root ?
+      (config.root instanceof Element ? config.root : document.querySelector(config.root))
+      : document.body;
 
-          delete pops[id + '-popover'];
+    if (! node) {
+      throw Error('Invalid Popover root [' + config.root + ']');
+    }
 
-          if (pop) {
-            if (! self.debug) {
-              pop.parentNode.removeChild(pop);
-            }
-            self.events.unpop(target, pop);
-          }
-        } catch (e) {
-          window.console.log('ERROR', e);
-        }
-      };
+    this.root = node;
 
-      timeouts[target.getAttribute('id')] = window.setTimeout(f, arguments.length === 1 ? self.delay.unpop : delay);
-    };
+    //
+    nodes = arr(node.querySelectorAll('[' + this.attribute + ']'));
+
+    // add root node if it has the data-popover attribute
+    if (node.hasAttribute(this.attribute)) {
+      nodes.push(node);
+    }
+
 
 
     // init
@@ -481,10 +488,13 @@
      * Re-position all persistent popovers on window resize
      */
     this.windowResizer = function() {
-      var persists = arr(document.querySelectorAll('.rmr-popover.persist')),
-          target = null;
+      let
+      target = null,
+      i = 0;
 
-      for (var i = 0; i < persists.length; i++) {
+      const persists = arr(document.querySelectorAll('.rmr-popover.persist'));
+
+      for (i = 0; i < persists.length; i++) {
         target = document.getElementById(persists[i].getAttribute('data-target'));
 
         positionPopover(
@@ -503,8 +513,8 @@
     );
 
     this.destroy = function() {
-      var n, data;
-      for (var i in this.listeners) {
+      let n, data, i;
+      for (i in this.listeners) {
         if (! this.listeners.hasOwnProperty(i)) {
           continue;
         }
