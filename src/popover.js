@@ -301,9 +301,7 @@
      * @param e {MouseEvent}
      */
     over = function(e) {
-      const n = e.target;
-      let id;
-
+      const n = e.target,
       id = n.getAttribute('id').replace('-popover', '');
 
       n.addEventListener('mouseleave', function(/* e */) {
@@ -326,10 +324,15 @@
         return;
       }
 
-      var
+      const
       target = e.target,
-      data = {},
-      n,
+      data = getDataForNode(self, target);
+
+      data.class = (data.class ? data.class : '') + (data.position === "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
+      data.id = target.getAttribute('id') + '-popover';
+
+      const
+      n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', 'class': data.class, id: data.id }),
       popper = function() {
         if (n) {
           n.classList.add('pop');
@@ -338,8 +341,6 @@
           }
         }
       };
-
-      data = getDataForNode(self, target);
 
       if (self.debug) {
         window.console.log(data);
@@ -350,8 +351,6 @@
         return;
       }
 
-      data.class = (data.class ? data.class : '') + (data.position === "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
-      data.id = target.getAttribute('id') + '-popover';
 
       // if a popover with this id already exists, don't display the one we just created
       if (pops[data.id]) {
@@ -361,8 +360,6 @@
         }
         return;
       }
-
-      n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', 'class': data.class, id: data.id });
 
       n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
       window.document.body.appendChild(n);
@@ -383,7 +380,6 @@
         n.addEventListener('mouseenter', over);
       }
     };
-
 
 
     let
@@ -432,8 +428,6 @@
     if (node.hasAttribute(this.attribute)) {
       nodes.push(node);
     }
-
-
 
     // init
 
