@@ -178,6 +178,7 @@
     popoverXY = null,
     arrowXY = null;
 
+    // set default location for popover
     popoverXY = [
       targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
       targetRect.top - popoverRect.height - 5 - data.margin
@@ -186,7 +187,19 @@
     arrowXY = [popoverXY[0], popoverXY[1]];
     arrowXY[0] = popoverRect.width / 2 - 5;
 
-    if (! data.position || data.position !== "side") { // top of target
+    const placeTopBottom = function(popoverXY, arrowXY) {
+
+      popoverXY = [
+        targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
+        targetRect.top - popoverRect.height - 5 - data.margin
+      ];
+
+      arrowXY = [popoverXY[0], popoverXY[1]];
+      arrowXY[0] = popoverRect.width / 2 - 5;
+
+      arrow.style.borderLeftColor = 'transparent';
+      arrow.style.borderRightColor = 'transparent';
+
       if (popoverXY[1] - window.pageYOffset < 0) { // clipped at top of browser?
         arrowXY[1] = -10;
         popoverXY[1] = targetRect.bottom + 5 + data.margin;
@@ -210,6 +223,16 @@
         popoverXY[0] = window.innerWidth - popoverRect.width - 5;
         arrowXY[0] = popoverRect.width - targetRect.width / 2;
       }
+
+      return [popoverXY, arrowXY];
+    };
+
+    if (! data.position || data.position !== "side") { // assume top of target
+
+      const ret = placeTopBottom(popoverXY, arrowXY);
+      popoverXY = ret[0];
+      arrowXY = ret[1];      
+
     } else { // right-side of target
       popoverXY[0] = targetRect.left + targetRect.width + 5 + data.margin;
       popoverXY[1] = targetRect.top + targetRect.height / 2 - popoverRect.height / 2;
@@ -225,14 +248,22 @@
 
       arrowXY[0] = -10;
 
-
       if (popoverXY[0] + popoverRect.width > window.innerWidth) { // if clipped on right side, move to the left
+
         popoverXY[0] = targetRect.left - popoverRect.width - 5 - data.margin;
         popover.classList.add('left');
         arrowXY[0] = popoverRect.width;
 
         arrow.style.borderRightColor = 'transparent';
         arrow.style.borderLeftColor = data.color;
+      }
+      
+
+      if (popoverXY[0] < 0) { // if also clipped on the left side, move to top/bottom
+        console.log('clipped');
+        const ret = placeTopBottom(popoverXY, arrowXY);
+        popoverXY = ret[0];
+        arrowXY = ret[1];        
       }
     }
 
