@@ -412,6 +412,7 @@
       }
     };
 
+    config = merge(defaultConfig, config);
 
     let
     nodes = null,

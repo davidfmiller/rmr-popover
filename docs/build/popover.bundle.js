@@ -499,6 +499,8 @@
       }
     };
 
+    config = merge(defaultConfig, config);
+
     let nodes = null,
         i = 0,
         n = null,
