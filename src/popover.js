@@ -1,7 +1,7 @@
 /* jshint undef: true,strict:true,trailing:true,loopfunc:true */
 /* global document,window,Element,module */
 
-(function() {
+(() => {
   'use strict';
 
   // prevent duplicate declaration
@@ -273,7 +273,7 @@
       const n = e.target,
       id = n.getAttribute('id').replace('-popover', '');
 
-      n.addEventListener('mouseleave', function(/* e */) {
+      n.addEventListener('mouseleave', () => {
         off({ target: document.getElementById(id) });
       });
 
@@ -340,7 +340,7 @@
       pops[data.id] = n;
 
       window.setTimeout(
-        function() {
+        () => {
           popper();
         }, delay ? delay : 0);
 
@@ -471,7 +471,7 @@
 
     window.addEventListener(
       'resize',
-      function() {
+      () => {
         self.windowResizer();
       }
     );
