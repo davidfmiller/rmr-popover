@@ -9,6 +9,8 @@
 
   const
 
+  RMR = require('rmr-util'),
+
   // VERSION = '0.1.9',
 
   // default attribute on target nodes that will be inspected for popover data
@@ -26,9 +28,7 @@
    * @param basename (String)
    * @return string
    */
-  guid = function(basename) {
-    return basename + '-' + parseInt(Math.random() * 100, 10) + '-' + parseInt(Math.random() * 1000, 10);
-  },
+  guid = RMR.String.guid,
 
   /*
    * Merge two objects into one, values in b take precedence over values in a
@@ -38,25 +38,7 @@
 
    * @return Object
    */
-  merge = function(a, b) {
-    let i = 0;
-    const o = {};
-
-    for (i in a) {
-      if (a.hasOwnProperty(i)) {
-        o[i] = a[i];
-      }
-    }
-    if (! b) {
-      return o;
-    }
-    for (i in b) {
-      if (b.hasOwnProperty(i)) {
-        o[i] = b[i];
-      }
-    }
-    return o;
-  },
+  merge = RMR.Object.merge,
 
   /*
    * Convert an array-like thing (ex: NodeList or arguments object) into a proper array
@@ -64,20 +46,7 @@
    * @param list (array-like thing)
    * @return Array
    */
-  arr = function(list) {
-    const ret = [];
-    let i = 0;
-
-    if (! list.length) {
-      return [];
-    }
-
-    for (i = 0; i < list.length; i++) {
-      ret.push(list[i]);
-    }
-
-    return ret;
-  },
+  arr = RMR.Array.coerce,
 
   /*
    * Create an element with a set of attributes/values
@@ -87,39 +56,14 @@
    *
    * @return HTMLElement
    */
-  makeElement = function(type, attrs) {
-     const n = document.createElement(type);
-     let i = null;
-
-     for (i in attrs) {
-       if (attrs.hasOwnProperty(i)) {
-         n.setAttribute(i, attrs[i]);
-       }
-     }
-     return n;
-  },
+  makeElement = RMR.Node.make,
 
   /*
    * Retrieve an object containing { top : xx, left : xx, bottom: xx, right: xx, width: xx, height: xx }
    *
    * @param node (DOMNode)
    */
-  getRect = function(node) {
-    const
-    rect = node.getBoundingClientRect(),
-    ret = { top: rect.top, left: rect.left, bottom: rect.bottom, right: rect.right }; // create a new object that is not read-only
-
-    ret.top += window.pageYOffset;
-    ret.left += window.pageXOffset;
-
-    ret.bottom += window.pageYOffset;
-    ret.right += window.pageYOffset;
-
-    ret.width = rect.right - rect.left;
-    ret.height = rect.bottom - rect.top;
-
-    return ret;
-  },
+  getRect = RMR.Node.getRect,
 
   /*
    * Retrieve object containing popover data for an element on the page
@@ -153,13 +97,7 @@
    * @param node {HTMLElement}
    * @param styles {Object}
    */
-  setStyles  = function(node, styles) {
-    for (const i in styles) {
-      if (styles.hasOwnProperty(i)) {
-        node.style[i] = styles[i];
-      }
-    }
-  },
+  setStyles = RMR.Node.setStyles,
 
   /*
    * Position a popover relative to its target parent
