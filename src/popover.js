@@ -197,7 +197,6 @@
       }
 
       if (popoverXY[0] < 0) { // if also clipped on the left side, move to top/bottom
-        console.log('clipped');
         const ret = placeTopBottom(popoverXY, arrowXY);
         popoverXY = ret[0];
         arrowXY = ret[1];
@@ -314,19 +313,20 @@
         window.console.log(data);
       }
 
-      const reference = null;
-      if (data.node) {
+      let reference = null;
+      if (! data.content && data.node) {
         reference = RMR.Node.get(data.node);
         if (! reference) {
           console.warn('Invalid reference node ' + data.node + ' for popover');
         }
+        reference = reference.cloneNode(true);
+        reference.removeAttribute('aria-hidden');
       }
 
-      // if there's no content and no specific class, abort since it's an empty popover
-      if (! data.content && ! data.class) {
+      // if there's no content and no specific class and no template, abort since it's an empty popover
+      if (! data.content && ! data.class && ! reference) {
         return;
       }
-
 
       // if a popover with this id already exists, don't display the one we just created
       if (pops[data.id]) {
@@ -338,6 +338,13 @@
       }
 
       n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
+
+      if (reference) {
+        const bd = n.querySelector('div.bd');
+        bd.innerHTML = '';
+        bd.appendChild(reference);
+      }
+
       window.document.body.appendChild(n);
 
       target.setAttribute('aria-describedby', data.id);

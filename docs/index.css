@@ -67,3 +67,7 @@
 .test:hover {
   background: #ddd;
 }
+
+body > .popover-template {
+  display: none;
+}

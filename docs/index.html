@@ -9,17 +9,14 @@
 <link rel="stylesheet" type="text/css" href="build/popover.css">
 <link rel="stylesheet" type="text/css" href="index.css">
 
-
 </head>
 <body>
 
 <div id="doc">
-  <h1><a href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"content":"Blue popover", "color" : "blue", "position" : "left"}'><i>💬</i>popover</a></h1>
+  <h1><a href="https://github.com/davidfmiller/popover/" title="Popover" data-popover='{"node":".popover-template", "color" : "blue", "position" : "left"}'><i>💬</i>popover</a></h1>
   <p>
-    &hellip; is a simple
-    JavaScript
-    <em data-popover="module">module</em>
-    to create popover <em data-popover='{"content":"widgets","title":"... and these widgets can, in turn, have their own tooltip"}'>things</em>. Mouse around this page to see it in action, or comb through the <em data-popover="📕">documentation</em> below for more information.
+    &hellip; is a simple JavaScript <em data-popover='{"content":"module","node":".popover-template", "color" : "blue", "position" : "left"}'>module</em> to create popover
+    <em data-popover='{"content":"widgets","title":"... and these widgets can, in turn, have their own tooltip"}'>things</em>. Mouse around this page to see it in action, or comb through the <em data-popover="📕">documentation</em> below for more information.
   </p>
 
   <p><em data-popover='{"class":"rmr"}'>Example</em>:</p>
@@ -235,6 +232,10 @@
     );
   });
 </script>
+
+<div class="popover-template" aria-hidden="true">
+  This popover contains cloned content from another node in the document
+</div>
 
 </body>
 </html>
