@@ -169,7 +169,7 @@
 
       const ret = placeTopBottom(popoverXY, arrowXY);
       popoverXY = ret[0];
-      arrowXY = ret[1];      
+      arrowXY = ret[1];
 
     } else { // right-side of target
       popoverXY[0] = targetRect.left + targetRect.width + 5 + data.margin;
@@ -195,13 +195,12 @@
         arrow.style.borderRightColor = 'transparent';
         arrow.style.borderLeftColor = data.color;
       }
-      
 
       if (popoverXY[0] < 0) { // if also clipped on the left side, move to top/bottom
         console.log('clipped');
         const ret = placeTopBottom(popoverXY, arrowXY);
         popoverXY = ret[0];
-        arrowXY = ret[1];        
+        arrowXY = ret[1];
       }
     }
 
@@ -315,6 +314,14 @@
         window.console.log(data);
       }
 
+      const reference = null;
+      if (data.node) {
+        reference = RMR.Node.get(data.node);
+        if (! reference) {
+          console.warn('Invalid reference node ' + data.node + ' for popover');
+        }
+      }
+
       // if there's no content and no specific class, abort since it's an empty popover
       if (! data.content && ! data.class) {
         return;
@@ -335,11 +342,12 @@
 
       target.setAttribute('aria-describedby', data.id);
 
+      positionPopover(n, target, data);
+
       pops[data.id] = n;
 
       window.setTimeout(
         () => {
-          positionPopover(n, target, data);
           popper();
         }, delay ? delay : 0);
 
