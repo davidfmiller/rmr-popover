@@ -335,12 +335,11 @@
 
       target.setAttribute('aria-describedby', data.id);
 
-      positionPopover(n, target, data);
-
       pops[data.id] = n;
 
       window.setTimeout(
         () => {
+          positionPopover(n, target, data);
           popper();
         }, delay ? delay : 0);
 
