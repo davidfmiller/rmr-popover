@@ -4,9 +4,6 @@
 (() => {
   'use strict';
 
-  // prevent duplicate declaration
-//  if (window.Popover) { return; }
-
   const
 
   RMR = require('rmr-util'),
@@ -314,7 +311,7 @@
         window.console.log(data);
       }
 
-      const reference = null;
+      let reference = null;
       if (data.node) {
         reference = RMR.Node.get(data.node);
         if (! reference) {
@@ -323,12 +320,11 @@
       }
 
       // if there's no content and no specific class, abort since it's an empty popover
-      if (! data.content && ! data.class) {
+      if (! data.content && ! data.class && ! reference && ! data.url) {
         return;
       }
 
-
-      // if a popover with this id already exists, don't display the one we just created
+     // if a popover with this id already exists, don't display the one we just created
       if (pops[data.id]) {
         if (timeouts[target.getAttribute('id')]) {
           window.clearTimeout(timeouts[target.getAttribute('id')]);
@@ -337,23 +333,34 @@
         return;
       }
 
-      n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
-      window.document.body.appendChild(n);
+      const show = function(content) {
 
-      target.setAttribute('aria-describedby', data.id);
+        n.innerHTML = '<b class="arrow"></b><div class="bd">' + (content) + '</div>';
+        window.document.body.appendChild(n);
 
-      positionPopover(n, target, data);
+        target.setAttribute('aria-describedby', data.id);
 
-      pops[data.id] = n;
+        positionPopover(n, target, data);
 
-      window.setTimeout(
-        () => {
-          popper();
-        }, delay ? delay : 0);
+        pops[data.id] = n;
 
-      //
-      if (! data.persist) {
-        n.addEventListener('mouseenter', over);
+        window.setTimeout(
+          () => {
+            popper();
+          }, delay ? delay : 0);
+
+        //
+        if (! data.persist) {
+          n.addEventListener('mouseenter', over);
+        }
+      }
+
+      if (data.url) { 
+        RMR.XHR.request({url: data.url}, function(xhr) {
+          show(xhr.responseText);
+        })
+      } else {
+        show(data.content ? data.content : '');
       }
     };
 

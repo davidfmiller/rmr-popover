@@ -8,6 +8,16 @@
   box-sizing: border-box;
 }
 
+.rmr-popover.h1 h3{
+  color: #fff;
+  padding: 10px;
+  margin: 0;
+}
+
+.rmr-popover.h1 h3 time {
+  font-style: italic;
+}
+
 .rmr-popover.rmr .bd {
   width: 100px;
   height: 67px;
