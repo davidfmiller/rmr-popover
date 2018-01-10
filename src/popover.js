@@ -380,6 +380,8 @@
         RMR.XHR.request({url: data.url}, function(xhr) {
           if (xhr.status == 200) {
             show(xhr.responseText);
+          } else {
+            if (self.debug) { window.console.error('Popover XHR request failed', data.url); }
           }
         });
       } else {
