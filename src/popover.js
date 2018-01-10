@@ -4,9 +4,6 @@
 (() => {
   'use strict';
 
-  // prevent duplicate declaration
-//  if (window.Popover) { return; }
-
   const
 
   RMR = require('rmr-util'),
@@ -314,7 +311,9 @@
       }
 
       let reference = null;
-      if (! data.content && data.node) {
+
+      if (data.node) {
+
         reference = RMR.Node.get(data.node);
         if (! reference) {
           console.warn('Invalid reference node ' + data.node + ' for popover');
@@ -323,12 +322,20 @@
         reference.removeAttribute('aria-hidden');
       }
 
+
       // if there's no content and no specific class and no template, abort since it's an empty popover
       if (! data.content && ! data.class && ! reference) {
         return;
       }
 
       // if a popover with this id already exists, don't display the one we just created
+
+      // if there's no content and no specific class, abort since it's an empty popover
+      if (! data.content && ! data.class && ! reference && ! data.url) {
+        return;
+      }
+
+     // if a popover with this id already exists, don't display the one we just created
       if (pops[data.id]) {
         if (timeouts[target.getAttribute('id')]) {
           window.clearTimeout(timeouts[target.getAttribute('id')]);
@@ -338,29 +345,44 @@
       }
 
       n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
-
-      if (reference) {
-        const bd = n.querySelector('div.bd');
-        bd.innerHTML = '';
-        bd.appendChild(reference);
-      }
-
       window.document.body.appendChild(n);
 
-      target.setAttribute('aria-describedby', data.id);
+      const show = function(content) {
 
-      positionPopover(n, target, data);
+        n.innerHTML = '<b class="arrow"></b><div class="bd">' + (content) + '</div>';
 
-      pops[data.id] = n;
+        window.document.body.appendChild(n);
 
-      window.setTimeout(
-        () => {
-          popper();
-        }, delay ? delay : 0);
+        if (reference) {
+          const bd = n.querySelector('div.bd');
+          bd.innerHTML = '';
+          bd.appendChild(reference);
+        }
 
-      //
-      if (! data.persist) {
-        n.addEventListener('mouseenter', over);
+        target.setAttribute('aria-describedby', data.id);
+
+        positionPopover(n, target, data);
+
+        pops[data.id] = n;
+
+        window.setTimeout(
+          () => {
+            popper();
+          }, delay ? delay : 0);
+
+        //
+        if (! data.persist) {
+          n.addEventListener('mouseenter', over);
+        }
+      };
+
+      if (data.url) {
+      alert(data.url);
+        RMR.XHR.request({url: data.url}, function(xhr) {
+          show(xhr.responseText);
+        });
+      } else {
+        show(data.content ? data.content : '');
       }
     };
 
