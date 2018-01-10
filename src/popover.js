@@ -377,9 +377,10 @@
       };
 
       if (data.url) {
-      alert(data.url);
         RMR.XHR.request({url: data.url}, function(xhr) {
-          show(xhr.responseText);
+          if (xhr.status == 200) {
+            show(xhr.responseText);
+          }
         });
       } else {
         show(data.content ? data.content : '');
