@@ -99,8 +99,8 @@
   /*
    * Position a popover relative to its target parent
    *
-   * @param popover {HTMLElement} - the
-   * @param target {HTMLElement}
+   * @param popover {HTMLElement} - the popover element
+   * @param target {HTMLElement} - the reference element for the popover
    * @param data {Object} - object containing data for the popover
    */
   positionPopover = function(popover, target, data) {
@@ -284,9 +284,12 @@
      * @param delay {Int} - number of milliseconds to delay
      */
     on = function(e, delay) {
+
       if (! self.enabled) {
         return;
       }
+
+      console.log('on', e.target);
 
       const
       target = e.target,
@@ -320,12 +323,6 @@
         }
         reference = reference.cloneNode(true);
         reference.removeAttribute('aria-hidden');
-      }
-
-
-      // if there's no content and no specific class and no template, abort since it's an empty popover
-      if (! data.content && ! data.class && ! reference) {
-        return;
       }
 
       // if a popover with this id already exists, don't display the one we just created
@@ -377,9 +374,12 @@
       };
 
       if (data.url) {
-      alert(data.url);
-        RMR.XHR.request({url: data.url}, function(xhr) {
-          show(xhr.responseText);
+        RMR.XHR.request({url: data.url}, (xhr) => {
+          if (xhr.status == 200) {
+            show(xhr.responseText);
+          } else {
+            if (self.debug) { window.console.error('Popover XHR request failed', data.url); }
+          }
         });
       } else {
         show(data.content ? data.content : '');
@@ -467,6 +467,7 @@
 
       if (data.persist) { // if this is a persistent popover, create it immediately
         l.on({ target: n });
+//        positionPopover(RMR.Node.get('#' + n.getAttribute('aria-describedby')), n, getDataForNode(self, n));
       } else {            // otherwise attach the necessary listeners for mouse/touch interaction
         if (data.events && data.events.pop) {
           n.addEventListener(data.events.pop, l.on);
@@ -507,10 +508,16 @@
 
     window.addEventListener(
       'resize',
-      () => {
+      function windowResize(){
         self.windowResizer();
       }
     );
+
+    // position persistent popovers 
+    window.setTimeout(function() {
+      self.windowResizer();
+    }, 0);
+
 
     this.destroy = function() {
       let n, data, i;
@@ -549,6 +556,8 @@
     if (this.debug) {
       window.console.log(this.toString());
     }
+
+    this.windowResizer();
   };
 
   /**
