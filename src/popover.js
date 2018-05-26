@@ -513,11 +513,17 @@
       }
     );
 
-    // position persistent popovers 
+    // position persistent popovers
     window.setTimeout(function() {
       self.windowResizer();
     }, 0);
 
+    this.set = function(key, value) {
+      if (! this.defaults.hasOwnProperty(key)) {
+        throw new Error('Invalid key ', key);
+      }
+      this.defaults[key] = value;
+    };
 
     this.destroy = function() {
       let n, data, i;
