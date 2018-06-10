@@ -225,7 +225,7 @@
     defaultProperties = {
       color: COLOR,
       margin: MARGIN,
-      destroy:false,
+      destroy:true,
       'class': ''
     },
 
