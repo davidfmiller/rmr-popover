@@ -209,8 +209,8 @@
   /**
    *
    *
-   * @param {Object} config (optional) - the root element containing all elements with attached popovers
-   * @param {Object} defaults (optional) method to retrieve the popover's data for a given node
+   * @param {Object} config (optional) - control behaviour of Popover object
+   * @param {Object} defaults (optional) - default properties for individual popover elements
    */
   const Popover = function(config, defaults) {
     const
@@ -225,6 +225,7 @@
     defaultProperties = {
       color: COLOR,
       margin: MARGIN,
+      destroy:false,
       'class': ''
     },
 
@@ -236,18 +237,25 @@
     off = function(e, delay) {
       const
       target = e.target,
-      f = function() {
+      f = function(scope) {
         const id = target.getAttribute('id');
         target.removeAttribute('aria-describedBy');
         try {
           const pop = pops[id + '-popover'];
-          delete pops[id + '-popover'];
+          const data = getDataForNode(self,target);
+
+//          console.log(data);
 
           if (pop) {
             if (! self.debug) {
-              pop.parentNode.removeChild(pop);
+              self.events.unpop(target, pop);
+              if (data.destroy) {
+                delete pops[id + '-popover'];
+                pop.parentNode.removeChild(pop);
+              } else {
+                pop.classList.remove('pop');
+              }
             }
-            self.events.unpop(target, pop);
           }
         } catch (e) {
           if (self.debug) {
@@ -289,7 +297,7 @@
         return;
       }
 
-      console.log('on', e.target);
+//      console.log('on', e.target);
 
       const
       target = e.target,
@@ -298,8 +306,12 @@
       data.class = (data.class ? data.class : '') + (data.position === "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
       data.id = target.getAttribute('id') + '-popover';
 
+      let n = document.querySelector('#' + data.id);
+      if (! n) {
+        n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
+      }
+
       const
-      n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', 'class': data.class, id: data.id }),
       popper = function() {
         if (n) {
           n.classList.add('pop');
@@ -333,12 +345,19 @@
       }
 
      // if a popover with this id already exists, don't display the one we just created
-      if (pops[data.id]) {
-        if (timeouts[target.getAttribute('id')]) {
-          window.clearTimeout(timeouts[target.getAttribute('id')]);
-          delete timeouts[target.getAttribute('id')];
+//       if (pops[data.id]) {
+//         if (timeouts[target.getAttribute('id')]) {
+//           window.clearTimeout(timeouts[target.getAttribute('id')]);
+//           delete timeouts[target.getAttribute('id')];
+//         }
+//         return;
+//       }
+
+      if (data.content) {
+        let reference = document.querySelector(data.content);
+        if (reference) {
+          data.content = reference.innerHTML;
         }
-        return;
       }
 
       n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
@@ -346,9 +365,10 @@
 
       const show = function(content) {
 
-        n.innerHTML = '<b class="arrow"></b><div class="bd">' + (content) + '</div>';
-
-        window.document.body.appendChild(n);
+        if (! n.parentNode) {
+          n.innerHTML = '<b class="arrow"></b><div class="bd">' + (content) + '</div>';
+          window.document.body.appendChild(n);
+        }
 
         if (reference) {
           const bd = n.querySelector('div.bd');
@@ -413,6 +433,7 @@
     this.enabled = true;
     this.attribute = config.attribute;
     this.delay = config.delay;
+    this.destroy = config.destroy;
     this.factory = config.factory;
     this.debug = config.debug;
     this.listeners = {};

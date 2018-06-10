@@ -219,11 +219,11 @@
           unpop : 300
         },
       },
-      { margin: 5 }
+      { margin: 5 /*, destroy: false */ }
     );
 
     window.Man({pre: true});
-
+/*
     pop.on(
       'pop',
       function(target, popover) { window.console.log('pop', target, popover); }
@@ -231,6 +231,7 @@
       'unpop',
       function(target, popover) { window.console.log('unpop', target, popover); }
     );
+*/
   });
 </script>
 
