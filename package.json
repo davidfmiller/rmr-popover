@@ -1,6 +1,6 @@
 {
   "name": "popover",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "... is a JavaScript module for creating simple popover widgets.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

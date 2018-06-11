@@ -225,7 +225,7 @@
     defaultProperties = {
       color: COLOR,
       margin: MARGIN,
-      destroy:true,
+      destroy: true,
       'class': ''
     },
 
@@ -237,7 +237,7 @@
     off = function(e, delay) {
       const
       target = e.target,
-      f = function(scope) {
+      f = function() {
         const id = target.getAttribute('id');
         target.removeAttribute('aria-describedBy');
         try {
@@ -344,29 +344,10 @@
         return;
       }
 
-     // if a popover with this id already exists, don't display the one we just created
-//       if (pops[data.id]) {
-//         if (timeouts[target.getAttribute('id')]) {
-//           window.clearTimeout(timeouts[target.getAttribute('id')]);
-//           delete timeouts[target.getAttribute('id')];
-//         }
-//         return;
-//       }
-
-      if (data.content) {
-        let reference = document.querySelector(data.content);
-        if (reference) {
-          data.content = reference.innerHTML;
-        }
-      }
-
-      n.innerHTML = '<b class="arrow"></b><div class="bd">' + (data.content ? data.content : '') + '</div>';
-      window.document.body.appendChild(n);
-
       const show = function(content) {
 
         if (! n.parentNode) {
-          n.innerHTML = '<b class="arrow"></b><div class="bd">' + (content) + '</div>';
+          n.innerHTML = '<b class="arrow"></b><div class="bd">' + content + '</div>';
           window.document.body.appendChild(n);
         }
 
@@ -391,17 +372,22 @@
         if (! data.persist) {
           n.addEventListener('mouseenter', over);
         }
+
+//        n.setAttribute('data-shown', true);
       };
 
-      if (data.url) {
+      if (data.url && ! n.parentNode) {
         RMR.XHR.request({url: data.url}, (xhr) => {
-          if (xhr.status == 200) {
+          if (xhr.status === 200) {
             show(xhr.responseText);
           } else {
-            if (self.debug) { window.console.error('Popover XHR request failed', data.url); }
+            if (self.debug) {
+              window.console.error('Popover XHR request failed', data.url);
+            }
           }
         });
       } else {
+//        window.document.body.appendChild(n);
         show(data.content ? data.content : '');
       }
     };
@@ -529,7 +515,7 @@
 
     window.addEventListener(
       'resize',
-      function windowResize(){
+      function windowResize() {
         self.windowResizer();
       }
     );
