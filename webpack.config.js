@@ -11,6 +11,7 @@ const
 
 const config = {
   entry: './src/index.js',
+  mode: 'production',
   output: {
     path: path.resolve(__dirname, 'docs/build/'),
     filename: 'popover.bundle.js'
@@ -42,8 +43,8 @@ const config = {
         }
       }]
     }
-    
-    
+
+
     ]
   }
 };

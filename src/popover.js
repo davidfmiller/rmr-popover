@@ -540,6 +540,9 @@
         }
 
         n = document.getElementById(i);
+        if (!n) {
+          continue;
+        }
         data = getDataForNode(this, n);
 
         if (data.events && data.events.pop) {
