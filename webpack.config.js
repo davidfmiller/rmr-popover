@@ -1,6 +1,4 @@
-/*jshint esnext:true */
 /* globals require, __dirname, module */
-
 
 const
   path = require('path'),
