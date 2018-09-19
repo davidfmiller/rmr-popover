@@ -29,6 +29,7 @@
 .rmr-popover.github { background: transparent; }
 .rmr-popover.github .bd {
   background: #fff url(assets/github.png) no-repeat;
+  background-position: 50% 50%;
   background-size: 57px 57px;
   width: 57px;
   height: 57px;
