@@ -307,7 +307,11 @@
       data.id = target.getAttribute('id') + '-popover';
 
       let n = document.querySelector('#' + data.id);
-      if (! n) {
+      if (n) { // if the node exists, then the popover is visible & don't need to proceed
+        window.clearTimeout(timeouts[target.getAttribute('id')]);
+        return;
+      }
+      else {
         n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
       }
 
