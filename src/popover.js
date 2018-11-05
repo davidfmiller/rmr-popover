@@ -85,7 +85,7 @@
       }
     }
 
-    var ret = merge(data, val)
+    const ret = merge(data, val);
     return ret;
   },
 
@@ -309,11 +309,10 @@
       if (n) { // if the node exists, then the popover is visible & don't need to proceed
         window.clearTimeout(timeouts[target.getAttribute('id')]);
         return;
-      }
-      else {
-        n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
+
       }
 
+      n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
 
       const
       popper = function() {
@@ -467,6 +466,7 @@
 
       l = {
         on: function(e) {
+
           if (e.type === 'click') { e.preventDefault(); } // ???????
           on(e, self.delay.pop);
         },
