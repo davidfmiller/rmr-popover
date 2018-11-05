@@ -85,7 +85,8 @@
       }
     }
 
-    return merge(data, val);
+    var ret = merge(data, val)
+    return ret;
   },
 
 
@@ -297,8 +298,6 @@
         return;
       }
 
-//      console.log('on', e.target);
-
       const
       target = e.target,
       data = getDataForNode(self, target);
@@ -314,6 +313,7 @@
       else {
         n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
       }
+
 
       const
       popper = function() {
@@ -438,14 +438,18 @@
 
     this.root = node;
 
-    //
-    nodes = arr(node.querySelectorAll('[' + this.attribute + ']'));
-
-    // add root node if it has the data-popover attribute
-    if (node.hasAttribute(this.attribute)) {
-      nodes.push(node);
+    if (this.factory) {
+      nodes = [this.root];
     }
+    else {
+      //
+      nodes = arr(node.querySelectorAll('[' + this.attribute + ']'));
 
+      // add root node if it has the data-popover attribute
+      if (node.hasAttribute(this.attribute)) {
+        nodes.push(node);
+      }
+    }
     // init
 
     for (i = 0; i < nodes.length; i++) {
@@ -463,7 +467,7 @@
 
       l = {
         on: function(e) {
-          if (e.type === 'click') { e.preventDefault(); }
+          if (e.type === 'click') { e.preventDefault(); } // ???????
           on(e, self.delay.pop);
         },
         off: function(e) {
@@ -545,9 +549,7 @@
         }
 
         n = document.getElementById(i);
-        if (!n) {
-          continue;
-        }
+        if (! n) { continue; }
         data = getDataForNode(this, n);
 
         if (data.events && data.events.pop) {
