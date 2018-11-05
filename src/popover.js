@@ -86,6 +86,8 @@
     }
 
     const ret = merge(data, val);
+    ret.id = ret.hasOwnProperty('id') && ret.id ? ret.id : node.getAttribute('id') + '-popover';
+
     return ret;
   },
 
@@ -245,8 +247,6 @@
           const pop = pops[id + '-popover'];
           const data = getDataForNode(self,target);
 
-//          console.log(data);
-
           if (pop) {
             if (! self.debug) {
               self.events.unpop(target, pop);
@@ -303,13 +303,11 @@
       data = getDataForNode(self, target);
 
       data.class = (data.class ? data.class : '') + (data.position === "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
-      data.id = target.getAttribute('id') + '-popover';
 
       let n = document.querySelector('#' + data.id);
       if (n) { // if the node exists, then the popover is visible & don't need to proceed
         window.clearTimeout(timeouts[target.getAttribute('id')]);
         return;
-
       }
 
       n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
@@ -456,7 +454,7 @@
 
       // ensure target has unique id
       if (! n.getAttribute('id')) {
-        n.setAttribute('id', guid('popover-target') );
+        n.setAttribute('id', guid('popover-target-') );
       }
 
       // clear out title since we don't want the tooltip to obscure the popover
@@ -466,8 +464,6 @@
 
       l = {
         on: function(e) {
-
-          if (e.type === 'click') { e.preventDefault(); } // ???????
           on(e, self.delay.pop);
         },
         off: function(e) {
