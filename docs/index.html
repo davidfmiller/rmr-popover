@@ -50,8 +50,10 @@
     <li>which  <a href="#events" data-popover='{"content" : "Timing", "position" : "side"}'>events</a> will trigger their appearance/removal</li>
     <li>when they will <a href="#timing" data-popover='{"content" : "Timing", "position" : "side"}'>appear/disappear</a></li>
     <li>how to <a href="#node-attribute" data-popover="Initialization via Node Attribute">generate</a> <a href="#javascript-content" data-popover="JavaScript Content">the content</a> for the popovers</li>
-    <li>where they will be <a href="#position" data-popover="Position">positioned</a> relative to their targets &amp; what color they will be</a></li>
+    <li>where they will be <a href="#position" data-popover="Position">positioned</a> relative to their targets</li>
+    <li>specify which <a href="#color" data-popover='{"content":"popover color", "color": "#ff00ff"}'>color</a> they will be</li>
     <li>turn them <a href="#enable-disable" data-popover='{"content" : "Enabling/disabling", "position" : "side"}'>on or off</a>, or make them <a href="#lifecycle" data-popover='{"content" : "Lifecycle", "position" : "side" }'>permanent</a> elements in the page</li>
+    <li>how to <a href="#cache" data-popover='{"content" : "Caching popover elements", "position" : "side"}'>cache</a> popover elements so they aren't created repeatedly</li>
   </ul>
 
   <h3 id="target"><a href="#target">#</a>Target Nodes</h3>
@@ -171,7 +173,14 @@
 
 
   <h3 id="lifecycle"><a href="#lifecycle">#</a><span data-popover='{"content" : "Persistent popover", "position" : "side","persist": true}'>Lifecycle</span></h3>
-  <p>Popovers are controlled by mouse events (or touch events on mobile devices). However, the presence of a <code>persist</code> flag in the popover&rsquo;s data will make the popover a permanent element in the page: created in the controller&rsquo;s initialization and only removed if/when the controller&rsquo;s <code>destory</code> method is invoked.</p>
+  <p>
+    Popovers are controlled by mouse events (or touch events on mobile devices). However, the presence of a <code>persist</code> flag in the popover&rsquo;s data will make the popover a permanent element in the page: created in the controller&rsquo;s initialization and only removed if/when the controller&rsquo;s <code>destory</code> method is invoked.
+  </p>
+  
+  <h4 id="cache">Caching Elements</h4>
+  <p>
+    Popover elements will be created when required and destroyed when no longer needed. Specifying a <code>cache</code> value of <code>true</code> in an individual field will create the popover element once and then toggle the visibility of the element if/when it is to be displayed in the future.
+  </p>
 
   <h3 id="debug"><a href="#debug" data-popover="Debugging">#</a>Debugging</h3>
   <p>
