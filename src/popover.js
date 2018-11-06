@@ -228,7 +228,7 @@
     defaultProperties = {
       color: COLOR,
       margin: MARGIN,
-      destroy: true,
+      cache: false,
       'class': ''
     },
 
@@ -244,14 +244,18 @@
         const id = target.getAttribute('id');
         target.removeAttribute('aria-describedBy');
         try {
-          const pop = pops[id + '-popover'];
-          const data = getDataForNode(self,target);
+          const
+          data = getDataForNode(self,target),
+          pop = pops[data.id];
 
           if (pop) {
             if (! self.debug) {
+
               self.events.unpop(target, pop);
-              if (data.destroy) {
-                delete pops[id + '-popover'];
+              if (! data.cache) {
+
+                delete timeouts[target.getAttribute('id')];
+                delete pops[data.id];
                 pop.parentNode.removeChild(pop);
               } else {
                 pop.classList.remove('pop');
@@ -275,7 +279,7 @@
      */
     over = function(e) {
       const n = e.target,
-      id = n.getAttribute('id').replace('-popover', '');
+      id = n.getAttribute('data-target');
 
       n.addEventListener('mouseleave', () => {
         off({ target: document.getElementById(id) });
@@ -305,12 +309,9 @@
       data.class = (data.class ? data.class : '') + (data.position === "side" ? ' side' : ' top')  +' rmr-popover' + (data.persist ? ' persist' : '');
 
       let n = document.querySelector('#' + data.id);
-      if (n) { // if the node exists, then the popover is visible & don't need to proceed
-        window.clearTimeout(timeouts[target.getAttribute('id')]);
-        return;
+      if (! n) { // if the node exists, then the popover is visible & don't need to proceed
+        n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
       }
-
-      n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
 
       const
       popper = function() {
@@ -420,7 +421,7 @@
     this.enabled = true;
     this.attribute = config.attribute;
     this.delay = config.delay;
-    this.destroy = config.destroy;
+    this.cache = config.cache;
     this.factory = config.factory;
     this.debug = config.debug;
     this.listeners = {};
