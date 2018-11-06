@@ -312,6 +312,12 @@
       if (! n) { // if the node exists, then the popover is visible & don't need to proceed
         n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
       }
+      else {
+        window.clearTimeout(timeouts[target.getAttribute('id')]);
+        n.classList.add('pop');
+        return;
+      }
+
 
       const
       popper = function() {
