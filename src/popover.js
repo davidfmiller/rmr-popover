@@ -107,40 +107,42 @@
    * @param data {Object} - object containing data for the popover
    */
   positionPopover = function(popover, target, data) {
+
     const
-    targetRect = getRect(target),
-    popoverRect = getRect(popover),
-    arrow = popover.querySelector('.arrow');
+      targetRect = getRect(target),
+      popoverRect = getRect(popover),
+      arrow = popover.querySelector('.arrow'),
+      arrowOffset = 5;
 
     let
-    popoverXY = null,
-    arrowXY = null;
+      popoverXY = [0,0], // position of the popover in absolute window coordinates
+      arrowXY = [0,0];   // position of the arrow relative to the popover rect
 
     // set default location for popover
     popoverXY = [
       targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
-      targetRect.top - popoverRect.height - 5 - data.margin
+      targetRect.top - popoverRect.height - arrowOffset - data.margin
     ];
 
     arrowXY = [popoverXY[0], popoverXY[1]];
-    arrowXY[0] = popoverRect.width / 2 - 5;
+    arrowXY[0] = popoverRect.width / 2 - arrowOffset;
 
     const placeTopBottom = function(popoverXY, arrowXY) {
 
       popoverXY = [
         targetRect.left + (targetRect.width / 2) - (popoverRect.width / 2),
-        targetRect.top - popoverRect.height - 5 - data.margin
+        targetRect.top - popoverRect.height - arrowOffset - data.margin
       ];
 
       arrowXY = [popoverXY[0], popoverXY[1]];
-      arrowXY[0] = popoverRect.width / 2 - 5;
+      arrowXY[0] = popoverRect.width / 2 - arrowOffset;
 
       arrow.style.borderLeftColor = 'transparent';
       arrow.style.borderRightColor = 'transparent';
 
       if (popoverXY[1] - window.pageYOffset < 0) { // clipped at top of browser?
-        arrowXY[1] = -10;
-        popoverXY[1] = targetRect.bottom + 5 + data.margin;
+        arrowXY[1] = 0 - arrowOffset * 2;
+        popoverXY[1] = targetRect.bottom + arrowOffset + data.margin;
 
         arrow.style.borderBottom = '5px solid ' + data.color;
         popover.classList.add('bottom');
@@ -150,16 +152,17 @@
       }
 
       if (popoverXY[0] < 0) { // are we clipped on the left of the browser window ?
-        popoverXY[0] = 5;
-        arrowXY[0] = targetRect.left + targetRect.width / 2 - 10;
+        popoverXY[0] = arrowOffset;
+        arrowXY[0] = targetRect.left + targetRect.width / 2 - 2 * arrowOffset;
       } else if (popoverXY[0] < targetRect.left) { // is the popover further left than the target?
-        popoverXY[0] = targetRect.left - 5;
+        popoverXY[0] = targetRect.left - arrowOffset;
         arrowXY[0] = targetRect.width / 2;
       }
 
       if (popoverXY[0] + popoverRect.width > window.innerWidth ) { // are we clipped on the right side of the browser window?
         popoverXY[0] = window.innerWidth - popoverRect.width - 5;
-        arrowXY[0] = popoverRect.width - targetRect.width / 2;
+        arrowXY[0] = targetRect.left - popoverXY[0] + targetRect.width / 2 - arrowOffset;
+        console.log(arrowXY[0]);
       }
 
       return [popoverXY, arrowXY];
@@ -172,19 +175,19 @@
       arrowXY = ret[1];
 
     } else { // right-side of target
-      popoverXY[0] = targetRect.left + targetRect.width + 5 + data.margin;
+      popoverXY[0] = targetRect.left + targetRect.width + arrowOffset + data.margin;
       popoverXY[1] = targetRect.top + targetRect.height / 2 - popoverRect.height / 2;
 
       arrow.style.borderRightColor = data.color;
 
       if (popoverXY[1] - window.pageYOffset < 0) {
         popoverXY[1] = window.pageYOffset + data.margin;
-        arrowXY[1] = 5;
+        arrowXY[1] = arrowOffset;
       } else {
-        arrowXY[1] = popoverRect.height / 2 - 5;
+        arrowXY[1] = popoverRect.height / 2 - arrowOffset;
       }
 
-      arrowXY[0] = -10;
+      arrowXY[0] = 0 - 2 * arrowOffset;
 
       if (popoverXY[0] + popoverRect.width > window.innerWidth) { // if clipped on right side, move to the left
 
