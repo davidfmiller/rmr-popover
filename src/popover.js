@@ -162,7 +162,6 @@
       if (popoverXY[0] + popoverRect.width > window.innerWidth ) { // are we clipped on the right side of the browser window?
         popoverXY[0] = window.innerWidth - popoverRect.width - 5;
         arrowXY[0] = targetRect.left - popoverXY[0] + targetRect.width / 2 - arrowOffset;
-        console.log(arrowXY[0]);
       }
 
       return [popoverXY, arrowXY];
