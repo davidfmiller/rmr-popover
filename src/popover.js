@@ -243,7 +243,7 @@
       const
       target = e.target,
       f = function() {
-        const id = target.getAttribute('id');
+        // const id = target.getAttribute('id');
         target.removeAttribute('aria-describedBy');
         try {
           const
@@ -313,8 +313,7 @@
       let n = document.querySelector('#' + data.id);
       if (! n) { // if the node exists, then the popover is visible & don't need to proceed
         n = makeElement('div', {'data-target': target.getAttribute('id'), role: 'tooltip', class: data.class, id: data.id });
-      }
-      else {
+      } else {
         window.clearTimeout(timeouts[target.getAttribute('id')]);
         n.classList.add('pop');
         return;
@@ -446,8 +445,7 @@
 
     if (this.factory) {
       nodes = [this.root];
-    }
-    else {
+    } else {
       //
       nodes = arr(node.querySelectorAll('[' + this.attribute + ']'));
 
@@ -554,7 +552,9 @@
         }
 
         n = document.getElementById(i);
-        if (! n) { continue; }
+        if (! n) {
+          continue;
+        }
         data = getDataForNode(this, n);
 
         if (data.events && data.events.pop) {
