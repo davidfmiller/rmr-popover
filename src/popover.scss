@@ -1,21 +1,28 @@
+@import "../node_modules/rmr-util/src/styles/_rmr-mixins.scss";
+//@import "../../node_modules/rmr-util/src/styles/_rmr-vars.scss";
+
 @-webkit-keyframes rmr-pop-in {
-  0% { opacity: 0; -webkit-transform: scale(0.5); }
+  0% { opacity: 0; -webkit-transform: scale(1.25); }
   100% { opacity: 1; -webkit-transform: scale(1); }
 }
 
 @-moz-keyframes rmr-pop-in {
-  0% { opacity: 0; -moz-transform: scale(0.5); }
+  0% { opacity: 0; -moz-transform: scale(1.25); }
   100% { opacity: 1; -moz-transform: scale(1); }
 }
 
 @keyframes rmr-pop-in {
-  0% { opacity: 0; transform: scale(0.5); }
+  0% { opacity: 0; transform: scale(1.25); }
   100% { opacity: 1; transform: scale(1); }
 }
 
 .rmr-popover {
   position: absolute;
   box-shadow: 1px 1px 5px rgba(48,48,48,1);
+  @include rmr-dark {
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+  }
+
   color: #fff;
   border-radius: 2px;
   z-index: 1;
@@ -42,9 +49,9 @@
   }
 
   &.pop {
-    -webkit-animation:rmr-pop-in 0.1s;
-    -moz-animation:rmr-pop-in 0.1s;
-    -ms-animation:rmr-pop-in 0.1s;
+    -webkit-animation:rmr-pop-in 0.2s;
+    -moz-animation:rmr-pop-in 0.2s;
+    -ms-animation:rmr-pop-in 0.2s;
     opacity: 1;
   }
 }
