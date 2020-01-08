@@ -1,5 +1,5 @@
 {
-  "name": "popover",
+  "name": "rmr-popover",
   "version": "0.3.5",
   "description": "... is a JavaScript module for creating simple popover widgets.",
   "scripts": {
