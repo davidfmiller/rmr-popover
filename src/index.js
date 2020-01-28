@@ -5,6 +5,6 @@
 
   "use strict";
 
-  window.Popover = require('./popover.js');
+  window.Popover = require('./scripts/rmr-popover.js');
 
 }());

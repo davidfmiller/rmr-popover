@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     compass : {
       dist : {
         options : {
-          sassDir : 'src',
+          sassDir : 'src/styles',
           cssDir : 'docs/build',
           environment : 'production',
           outputStyle : 'compressed'
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 
     watch : {
       css : {
-        files : ['src/*.scss'],
+        files : ['src/styles/*.scss'],
         tasks : ['compass']
       }
       /*,
@@ -47,7 +47,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-compass');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
 

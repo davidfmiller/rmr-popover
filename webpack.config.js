@@ -10,7 +10,7 @@ const config = {
   mode: 'production',
   output: {
     path: path.resolve(__dirname, 'docs/build/'),
-    filename: 'popover.bundle.js'
+    filename: 'rmr-popover.bundle.js'
   },
   watch : true,
   plugins : [
