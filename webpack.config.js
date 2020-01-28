@@ -6,8 +6,8 @@ const
 
 const config = {
   entry: './src/index.js',
-//  mode: 'development',
-  mode: 'production',
+  mode: 'development',
+//  mode: 'production',
   output: {
     path: path.resolve(__dirname, 'docs/build/'),
     filename: 'rmr-popover.bundle.js'

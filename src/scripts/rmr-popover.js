@@ -53,7 +53,7 @@
    *
    * @return HTMLElement
    */
-  makeElement = RMR.Node.make,
+  makeElement = RMR.Node.create,
 
   /*
    * Retrieve an object containing { top : xx, left : xx, bottom: xx, right: xx, width: xx, height: xx }
