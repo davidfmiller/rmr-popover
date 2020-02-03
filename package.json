@@ -2,8 +2,7 @@
   "name": "rmr-popover",
   "version": "0.4.1",
   "description": "... is a JavaScript module for creating simple popover widgets.",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/davidfmiller/popover.git"
@@ -23,10 +22,8 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-uglify": "^3.1.0",
     "grunt-contrib-watch": "^1.1.0",
-    "rmr-util": "^1.1.46",
+    "rmr-util": "^1.1.64",
     "webpack": "^4.23.1"
   },
-  "dependencies": {
-    "rmr-util": "^1.1.0"
-  }
+  "dependencies": {}
 }
