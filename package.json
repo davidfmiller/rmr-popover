@@ -24,6 +24,5 @@
     "grunt-contrib-watch": "^1.1.0",
     "rmr-util": "^1.1.86",
     "webpack": "^4.42.0"
-  },
-  "dependencies": {}
+  }
 }
