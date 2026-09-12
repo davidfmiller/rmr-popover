@@ -1,6 +1,6 @@
 {
   "name": "rmr-popover",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "... is a JavaScript module for creating simple popover widgets.",
   "scripts": {},
   "repository": {
@@ -15,14 +15,16 @@
   "homepage": "https://github.com/davidfmiller/popover#readme",
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.2",
-    "babel-preset-es2015": "^6.24.1",
-    "grunt": "^1.1.0",
-    "grunt-contrib-compass": "^0.8.0",
+    "babel-loader": "^9.1.3",
+    "babel-preset-env": "^1.7.0",
+    "grunt": "^1.3.0",
+    "grunt-contrib-compass": "^1.1.1",
     "grunt-contrib-jshint": "^3.2.0",
-    "grunt-contrib-uglify": "^3.1.0",
+    "grunt-contrib-uglify": "^3.3.0",
     "grunt-contrib-watch": "^1.1.0",
-    "rmr-util": "^1.1.86",
     "webpack": "^5.94.0"
+  },
+  "dependencies": {
+    "rmr-util": "^1.1.147"
   }
 }
